@@ -551,10 +551,10 @@ function Coverage() {
                 style={{
                   transform:
                     i === 0
-                      ? "translate(-108%, -180%)"
+                      ? "translate(-112%, -50%)"
                       : i === 1
-                        ? "translate(14%, -50%)"
-                        : "translate(14%, 40%)",
+                        ? "translate(-112%, -240%)"
+                        : "translate(-112%, 150%)",
                 }}
               >
                 {c.name}
