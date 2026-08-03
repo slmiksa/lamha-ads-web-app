@@ -115,15 +115,10 @@ function Index() {
 function GooglePlayIcon({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 512 512" className={className} xmlns="http://www.w3.org/2000/svg" aria-hidden>
-      <path
-        fill="#34A853"
-        d="M78 21 305 248l-60 60L60 123c-8-8-13-19-13-31 0-27 15-58 31-71z"
-        transform="translate(0,0)"
-      />
-      <path fill="#EA4335" d="M60 21c11-7 26-6 40 2l205 118-63 63L60 21z" />
-      <path fill="#34A853" d="M60 491c-8-6-13-18-13-33V54c0-15 5-27 13-33l182 225L60 491z" />
-      <path fill="#4285F4" d="M242 246l63 63L100 427c-14 8-29 9-40 2l182-183z" />
-      <path fill="#FBBC04" d="M305 189l77 44c25 15 25 31 0 46l-77 44-63-63 63-71z" />
+      <path fill="#00A0FF" d="M47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0z" />
+      <path fill="#00E676" d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1z" />
+      <path fill="#FFC107" d="M472.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8z" />
+      <path fill="#FF3D00" d="M104.6 499l280.8-161.2-60.1-60.1L104.6 499z" />
     </svg>
   );
 }
