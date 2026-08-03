@@ -483,11 +483,11 @@ function Steps() {
 
 function Packages() {
   const packs = [
-    { name: "اعلانات عامة", price: "٠ ريال", note: "الإعلانات العامة والشخصية", gold: true },
-    { name: "دعوات الزواج", price: "١ ريال", note: "بطاقة دعوة زواجك لكل مدينتك" },
-    { name: "اعلانات اسر منتجة", price: "١٠٠ ريال", note: "مكانك الحقيقي لأسرتك المنتجة", gold: true },
-    { name: "اعلانات تجارية", price: "٤٠٠ ريال", note: "اعرض إعلانك التجاري وتميّز" },
-    { name: "اعلانات عقارية", price: "٤٠٠ ريال", note: "عقارك - استراحتك - شقتك" },
+    { name: "اعلانات عامة", note: "الإعلانات العامة والشخصية", gold: true },
+    { name: "دعوات الزواج", note: "بطاقة دعوة زواجك لكل مدينتك" },
+    { name: "اعلانات اسر منتجة", note: "مكانك الحقيقي لأسرتك المنتجة", gold: true },
+    { name: "اعلانات تجارية", note: "اعرض إعلانك التجاري وتميّز" },
+    { name: "اعلانات عقارية", note: "عقارك - استراحتك - شقتك" },
   ];
   return (
     <section id="packages" className="bg-secondary/60">
@@ -495,7 +495,7 @@ function Packages() {
         <SectionTitle
           kicker="الباقات"
           title="باقة تناسب كل إعلان"
-          desc="أسعار الباقات لمدة ٣٠ يوم — والإعلان المميز إضافة ٥٠ ريال."
+          desc="اختر الباقة المناسبة لنوع إعلانك داخل التطبيق."
         />
         <div className="mt-12 grid gap-5 md:grid-cols-3">
           {packs.map((p) => (
@@ -508,22 +508,85 @@ function Packages() {
                   : undefined
               }
             >
-              <div className="flex items-start justify-between gap-4">
+              <div className="flex items-start gap-4">
+                <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-primary-soft text-primary">
+                  <Megaphone className="size-5" />
+                </span>
                 <div>
                   <h3 className="text-lg">{p.name}</h3>
                   <p className="mt-2 text-sm text-muted-foreground">{p.note}</p>
                 </div>
-                <span
-                  className={`shrink-0 font-display text-xl font-extrabold ${p.gold ? "text-gold" : "text-primary"}`}
-                >
-                  {p.price}
-                </span>
-              </div>
-              <div className="mt-4 flex items-center gap-2 text-xs text-muted-foreground">
-                <Sparkles className="size-3.5 text-gold" /> الإعلان المميز: +٥٠ ريال
               </div>
             </article>
           ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+const coverage = [
+  { name: "محافظة القنفذة", x: 30.64, y: 82.44 },
+  { name: "مركز القوز - محافظة القنفذة", x: 31.38, y: 79.32 },
+  { name: "مركز حلي - محافظة القنفذة", x: 32.48, y: 85.87 },
+];
+
+function Coverage() {
+  return (
+    <section id="coverage" className="mx-auto max-w-6xl px-5 py-20">
+      <div className="grid items-center gap-12 md:grid-cols-2">
+        <div className="relative order-2 md:order-1">
+          <SaudiDotMap className="w-full text-muted-foreground" />
+          {coverage.map((c, i) => (
+            <div
+              key={c.name}
+              className="absolute"
+              style={{ left: `${c.x}%`, top: `${c.y}%` }}
+            >
+              <span className="absolute -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary p-1.5 ring-4 ring-primary/20" />
+              <span
+                className="absolute whitespace-nowrap rounded-full bg-primary px-3 py-1 text-[11px] font-bold text-primary-foreground shadow-md"
+                style={{
+                  transform:
+                    i === 0
+                      ? "translate(-108%, -180%)"
+                      : i === 1
+                        ? "translate(14%, -50%)"
+                        : "translate(14%, 40%)",
+                }}
+              >
+                {c.name}
+              </span>
+            </div>
+          ))}
+        </div>
+
+        <div className="order-1 text-center md:order-2 md:text-right">
+          <h2 className="font-display text-3xl md:text-4xl">
+            قريباً في جميع مناطق المملكة
+          </h2>
+          <p className="mt-4 leading-relaxed text-muted-foreground">
+            تطبيق لمحة كأول تطبيق يجمع إعلانات المتاجر والإعلانات الشخصية بكل تفاصيلها يتطلع
+            لتغطية كافة مناطق المملكة لأنكم تستحقون الأفضل. توسيع مناطق التغطية يحتاج منا المزيد
+            من الوقت والجهد لضمان أعلى مستوى جودة للخدمة، ويمكنك تصفح كافة المناطق المدعومة داخل
+            التطبيق في كل مرة نقوم بالتوسع إلى مناطق جديدة.
+          </p>
+          <ul className="mt-6 flex flex-wrap justify-center gap-2 md:justify-start">
+            {coverage.map((c) => (
+              <li
+                key={c.name}
+                className="inline-flex items-center gap-2 rounded-full bg-primary-soft px-4 py-2 text-sm font-bold text-primary"
+              >
+                <MapPin className="size-4" /> {c.name}
+              </li>
+            ))}
+          </ul>
+          <a
+            href="#download"
+            className="mt-7 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90"
+          >
+            المناطق المدعومة <ArrowLeft className="size-4" />
+          </a>
         </div>
       </div>
     </section>
