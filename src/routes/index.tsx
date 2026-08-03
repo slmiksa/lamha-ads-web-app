@@ -629,6 +629,9 @@ function Footer() {
         </div>
         <p>جميع الحقوق محفوظة © {new Date().getFullYear()} تطبيق لمحة</p>
       </div>
+      <div className="border-t border-border/60 py-5 text-center text-sm font-bold text-foreground">
+        صنع بـ<span className="text-primary">♥</span> في السعودية 🇸🇦
+      </div>
     </footer>
   );
 }
