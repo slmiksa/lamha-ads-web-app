@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import heroShot from "@/assets/IMG_2764.webp.asset.json";
+import { SaudiDotMap } from "@/components/SaudiDotMap";
 import {
   Megaphone,
   MapPin,
