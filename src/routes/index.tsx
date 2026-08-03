@@ -107,6 +107,7 @@ function Index() {
       <Content />
       <Steps />
       <Packages />
+      <Coverage />
       <Download />
       <Footer />
     </div>
