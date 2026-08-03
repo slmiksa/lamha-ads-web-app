@@ -18,6 +18,8 @@ import {
   ShieldCheck,
   Heart,
   Eye,
+  Zap,
+  Users,
 } from "lucide-react";
 
 const APP_STORE_URL = "https://lamha.trndsky.com";
@@ -44,6 +46,8 @@ export const Route = createFileRoute("/")({
   }),
   component: Index,
 });
+
+const chips = ["🏪 متاجر", "💍 دعوات زواج", "🏠 عقارات", "🎁 أكواد خصم"];
 
 const features = [
   {
@@ -96,7 +100,7 @@ function Index() {
     <div className="min-h-screen bg-background text-foreground">
       <Nav />
       <Hero />
-      <Stats />
+      <Services />
       <Features />
       <Influencer />
       <Content />
@@ -108,14 +112,14 @@ function Index() {
   );
 }
 
-function StoreButtons({ compact = false }: { compact?: boolean }) {
+function StoreButtons({ center = false }: { center?: boolean }) {
   return (
-    <div className="flex flex-wrap items-center gap-3">
+    <div className={`flex flex-wrap items-center gap-3 ${center ? "justify-center" : ""}`}>
       <a
         href={APP_STORE_URL}
-        className="glow inline-flex items-center gap-3 rounded-2xl bg-brand px-6 py-3.5 text-primary-foreground transition-transform hover:-translate-y-0.5"
+        className="inline-flex items-center gap-3 rounded-2xl bg-foreground px-6 py-3.5 text-background transition-transform hover:-translate-y-0.5"
       >
-        <Apple className="size-6" />
+        <Apple className="size-7" />
         <span className="text-right leading-tight">
           <span className="block text-[11px] opacity-80">حمّل من</span>
           <span className="block text-base font-bold">App Store</span>
@@ -123,40 +127,47 @@ function StoreButtons({ compact = false }: { compact?: boolean }) {
       </a>
       <a
         href={PLAY_STORE_URL}
-        className="inline-flex items-center gap-3 rounded-2xl border border-border bg-card px-6 py-3.5 text-foreground transition-colors hover:bg-accent"
+        className="inline-flex items-center gap-3 rounded-2xl bg-foreground px-6 py-3.5 text-background transition-transform hover:-translate-y-0.5"
       >
-        <Play className="size-6 text-primary" />
+        <Play className="size-7" />
         <span className="text-right leading-tight">
-          <span className="block text-[11px] text-muted-foreground">حمّل من</span>
+          <span className="block text-[11px] opacity-80">حمّل من</span>
           <span className="block text-base font-bold">Google Play</span>
         </span>
       </a>
-      {!compact && (
-        <span className="text-sm text-muted-foreground">مجاناً — بدون رسوم اشتراك</span>
-      )}
     </div>
   );
 }
 
 function Nav() {
   return (
-    <header className="sticky top-0 z-50 border-b border-border/60 bg-background/80 backdrop-blur-xl">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-3.5">
+    <header className="sticky top-0 z-50 bg-background/70 backdrop-blur-xl">
+      <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
         <a href="#top" className="flex items-center gap-2.5">
           <span className="grid size-9 place-items-center rounded-xl bg-brand text-primary-foreground">
             <Sparkles className="size-5" />
           </span>
           <span className="font-display text-xl font-extrabold">لمحة</span>
         </a>
-        <nav className="hidden items-center gap-7 text-sm text-muted-foreground md:flex">
-          <a className="transition-colors hover:text-foreground" href="#features">المميزات</a>
-          <a className="transition-colors hover:text-foreground" href="#influencer">دعم المشاهير</a>
-          <a className="transition-colors hover:text-foreground" href="#steps">كيف يعمل</a>
-          <a className="transition-colors hover:text-foreground" href="#packages">الباقات</a>
+        <nav className="hidden items-center gap-2 rounded-full bg-secondary p-1.5 text-sm text-muted-foreground md:flex">
+          {[
+            { l: "المميزات", h: "#features" },
+            { l: "دعم المشاهير", h: "#influencer" },
+            { l: "كيف يعمل", h: "#steps" },
+            { l: "الباقات", h: "#packages" },
+          ].map((i) => (
+            <a
+              key={i.h}
+              href={i.h}
+              className="rounded-full px-4 py-1.5 transition-colors hover:bg-card hover:text-foreground"
+            >
+              {i.l}
+            </a>
+          ))}
         </nav>
         <a
           href="#download"
-          className="rounded-xl bg-primary px-4 py-2 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90"
+          className="rounded-full bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90"
         >
           تحميل التطبيق
         </a>
@@ -168,41 +179,71 @@ function Nav() {
 function Hero() {
   return (
     <section id="top" className="bg-hero-glow relative overflow-hidden">
-      <div className="mx-auto grid max-w-6xl items-center gap-14 px-5 py-16 md:grid-cols-2 md:py-24">
-        <div>
-          <span className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-1.5 text-xs font-bold text-primary">
-            <Star className="size-3.5" /> الأول في السعودية والشرق الأوسط
+      <div className="mx-auto grid max-w-6xl items-center gap-14 px-5 pb-24 pt-12 md:grid-cols-2 md:pb-32 md:pt-16">
+        <div className="order-2 md:order-1">
+          <div className="relative mx-auto w-full max-w-[320px]">
+            <PhoneFrame>
+              <img
+                src={heroShot.url}
+                alt="واجهة تطبيق لمحة تعرض الإعلانات المميزة والتغطيات"
+                className="h-full w-full object-cover"
+                loading="eager"
+              />
+            </PhoneFrame>
+
+            <div className="float-card absolute -right-6 top-16 flex items-center gap-3 px-4 py-3 md:-right-14">
+              <span className="grid size-10 place-items-center rounded-xl bg-primary-soft text-2xl">🛍️</span>
+              <span className="text-right leading-tight">
+                <span className="block text-[11px] text-muted-foreground">إعلانك وصل</span>
+                <span className="block text-sm font-extrabold">+١٢٠٠ مشاهدة</span>
+              </span>
+            </div>
+
+            <div className="float-card absolute -left-6 bottom-20 flex items-center gap-3 px-4 py-3 md:-left-14">
+              <span className="grid size-10 place-items-center rounded-xl bg-gold-grad text-lg">⭐</span>
+              <span className="text-right leading-tight">
+                <span className="block text-[11px] text-muted-foreground">دعم مشهور</span>
+                <span className="block text-sm font-extrabold">انتشار أوسع</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div className="order-1 text-center md:order-2 md:text-right">
+          <span className="inline-flex items-center gap-2 rounded-full bg-card/80 px-4 py-1.5 text-xs font-bold text-primary shadow-sm">
+            <span className="size-2 rounded-full bg-primary" /> الأول في السعودية والشرق الأوسط
           </span>
-          <h1 className="mt-6 font-display text-4xl leading-[1.15] md:text-6xl">
-            كل إعلان يهمك… <span className="text-gradient-brand">في لمحة</span>
+          <h1 className="mt-6 font-display text-5xl leading-[1.1] md:text-7xl">
+            كل إعلان… <span className="text-gradient-brand">في لمحة!</span>
           </h1>
-          <p className="mt-5 max-w-xl text-lg leading-relaxed text-muted-foreground">
-            تطبيق لمحة يجمع بين العميل وإعلانات المتاجر والإعلانات الشخصية بكامل تفاصيلها: صور
-            وفيديوهات، موقع الإعلان على الخريطة، ووسائل تواصل مباشرة — مع أكواد خصم حصرية لكل متجر.
+          <p className="mt-5 text-lg leading-relaxed text-muted-foreground md:text-xl">
+            لمحة.. يجمع عميلك بإعلانك بكل تفاصيله — صور وفيديو وموقع وتواصل مباشر.
           </p>
-          <div className="mt-8">
+
+          <div className="mt-6 flex flex-wrap justify-center gap-2 md:justify-start">
+            {chips.map((c) => (
+              <span
+                key={c}
+                className="rounded-full bg-card px-4 py-2 text-sm font-bold shadow-sm"
+              >
+                {c}
+              </span>
+            ))}
+          </div>
+
+          <div className="mt-8 flex justify-center md:justify-start">
             <StoreButtons />
           </div>
-          <div className="mt-8 flex flex-wrap items-center gap-5 text-sm text-muted-foreground">
+
+          <div className="mt-7 flex flex-wrap items-center justify-center gap-5 text-sm text-muted-foreground md:justify-start">
             <span className="inline-flex items-center gap-2">
               <ShieldCheck className="size-4 text-primary" /> إعلانات موثقة ومراجعة
             </span>
+            <span className="hidden h-4 w-px bg-border md:block" />
             <span className="inline-flex items-center gap-2">
               <MapPin className="size-4 text-primary" /> تغطية لكل مدن المملكة
             </span>
           </div>
-        </div>
-
-        <div className="relative mx-auto w-full max-w-[330px]">
-          <div className="absolute -inset-10 -z-10 rounded-full bg-primary/20 blur-3xl" />
-          <PhoneFrame>
-            <img
-              src={heroShot.url}
-              alt="واجهة تطبيق لمحة تعرض الإعلانات المميزة والتغطيات"
-              className="h-full w-full object-cover"
-              loading="eager"
-            />
-          </PhoneFrame>
         </div>
       </div>
     </section>
@@ -211,30 +252,47 @@ function Hero() {
 
 function PhoneFrame({ children }: { children: React.ReactNode }) {
   return (
-    <div className="glow rounded-[2.75rem] border border-border bg-card p-2.5">
-      <div className="relative aspect-[9/19.5] overflow-hidden rounded-[2.25rem] bg-background">
-        <div className="absolute left-1/2 top-2 z-10 h-6 w-24 -translate-x-1/2 rounded-full bg-background/90" />
+    <div className="glow rounded-[2.75rem] border-[6px] border-foreground bg-foreground p-0">
+      <div className="relative aspect-[9/19.5] overflow-hidden rounded-[2.25rem] bg-card">
+        <div className="absolute left-1/2 top-2 z-10 h-6 w-24 -translate-x-1/2 rounded-full bg-foreground" />
         {children}
       </div>
     </div>
   );
 }
 
-function Stats() {
+function Services() {
   const items = [
     { v: "+٢٠", l: "تصنيف ونشاط" },
-    { v: "١٠٠٪", l: "إعلانات بالتفاصيل الكاملة" },
-    { v: "٢٤/٧", l: "نشر ومتابعة إعلانك" },
-    { v: "مجاناً", l: "باقة إعلانات عامة" },
+    { v: "١٠٠٪", l: "تفاصيل كاملة للإعلان" },
+    { v: "٢٤/٧", l: "نشر ومتابعة" },
+    { v: "٠ ريال", l: "باقة إعلانات عامة" },
+  ];
+  const cards = [
+    { icon: Zap, title: "نشر سريع", desc: "أضف إعلانك بدقائق وانشره لعملاء منطقتك." },
+    { icon: Users, title: "وصول أوسع", desc: "إعلانك يظهر للعملاء وللمشاهير المختارين." },
+    { icon: Ticket, title: "خصومات حصرية", desc: "أكواد خصم لكل متجر مع نظام مسح فوري." },
   ];
   return (
-    <section className="border-y border-border bg-card/40">
-      <div className="mx-auto grid max-w-6xl grid-cols-2 gap-6 px-5 py-10 md:grid-cols-4">
+    <section className="mx-auto max-w-6xl px-5 py-20">
+      <SectionTitle kicker="خدماتنا" title="كل اللي يحتاجه إعلانك في مكان واحد" />
+      <div className="mt-12 grid grid-cols-2 gap-4 md:grid-cols-4">
         {items.map((i) => (
-          <div key={i.l} className="text-center">
-            <div className="font-display text-2xl font-extrabold text-primary md:text-3xl">{i.v}</div>
+          <div key={i.l} className="surface-card px-4 py-7 text-center">
+            <div className="font-display text-3xl font-extrabold text-primary">{i.v}</div>
             <div className="mt-1 text-sm text-muted-foreground">{i.l}</div>
           </div>
+        ))}
+      </div>
+      <div className="mt-5 grid gap-5 md:grid-cols-3">
+        {cards.map((c) => (
+          <article key={c.title} className="rounded-3xl bg-accent/70 p-7">
+            <span className="grid size-12 place-items-center rounded-2xl bg-card text-primary shadow-sm">
+              <c.icon className="size-6" />
+            </span>
+            <h3 className="mt-5 text-lg">{c.title}</h3>
+            <p className="mt-2 text-sm text-muted-foreground">{c.desc}</p>
+          </article>
         ))}
       </div>
     </section>
@@ -244,8 +302,10 @@ function Stats() {
 function SectionTitle({ kicker, title, desc }: { kicker: string; title: string; desc?: string }) {
   return (
     <div className="mx-auto max-w-2xl text-center">
-      <span className="text-sm font-bold text-primary">{kicker}</span>
-      <h2 className="mt-2 font-display text-3xl md:text-4xl">{title}</h2>
+      <span className="inline-block rounded-full bg-primary-soft px-4 py-1 text-sm font-bold text-primary">
+        {kicker}
+      </span>
+      <h2 className="mt-4 font-display text-3xl md:text-4xl">{title}</h2>
       {desc && <p className="mt-3 text-muted-foreground">{desc}</p>}
     </div>
   );
@@ -253,22 +313,27 @@ function SectionTitle({ kicker, title, desc }: { kicker: string; title: string; 
 
 function Features() {
   return (
-    <section id="features" className="mx-auto max-w-6xl px-5 py-20">
-      <SectionTitle
-        kicker="المميزات"
-        title="كل ما يحتاجه إعلانك… وكل ما يبحث عنه عميلك"
-        desc="تجربة إعلانية متكاملة من النشر حتى وصول العميل إلى باب متجرك."
-      />
-      <div className="mt-12 grid gap-5 md:grid-cols-3">
-        {features.map((f) => (
-          <article key={f.title} className="surface-card group p-6 transition-transform hover:-translate-y-1">
-            <span className="grid size-12 place-items-center rounded-2xl bg-primary/12 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-              <f.icon className="size-6" />
-            </span>
-            <h3 className="mt-5 text-lg">{f.title}</h3>
-            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{f.desc}</p>
-          </article>
-        ))}
+    <section id="features" className="bg-secondary/60">
+      <div className="mx-auto max-w-6xl px-5 py-20">
+        <SectionTitle
+          kicker="المميزات"
+          title="كل ما يحتاجه إعلانك… وكل ما يبحث عنه عميلك"
+          desc="تجربة إعلانية متكاملة من النشر حتى وصول العميل إلى باب متجرك."
+        />
+        <div className="mt-12 grid gap-5 md:grid-cols-3">
+          {features.map((f) => (
+            <article
+              key={f.title}
+              className="surface-card group p-7 transition-transform hover:-translate-y-1"
+            >
+              <span className="grid size-12 place-items-center rounded-2xl bg-primary-soft text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
+                <f.icon className="size-6" />
+              </span>
+              <h3 className="mt-5 text-lg">{f.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{f.desc}</p>
+            </article>
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -276,8 +341,8 @@ function Features() {
 
 function Influencer() {
   return (
-    <section id="influencer" className="border-y border-border bg-card/40">
-      <div className="mx-auto grid max-w-6xl items-center gap-12 px-5 py-20 md:grid-cols-2">
+    <section id="influencer" className="mx-auto max-w-6xl px-5 py-20">
+      <div className="grid items-center gap-12 md:grid-cols-2">
         <div>
           <span className="inline-flex items-center gap-2 rounded-full bg-gold-grad px-4 py-1.5 text-xs font-bold text-primary-foreground">
             <Sparkles className="size-3.5" /> ميزة جوهرية
@@ -296,7 +361,7 @@ function Influencer() {
               "تفاعل أعلى وعملاء أكثر لإعلانك المميز",
             ].map((t) => (
               <li key={t} className="flex items-start gap-3">
-                <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-primary/15 text-primary">
+                <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-primary-soft text-primary">
                   <Star className="size-3" />
                 </span>
                 <span className="text-muted-foreground">{t}</span>
@@ -320,9 +385,9 @@ function Influencer() {
             ].map((a) => (
               <div
                 key={a.name}
-                className="flex items-center gap-4 rounded-2xl border border-border bg-secondary/60 p-4"
+                className="flex items-center gap-4 rounded-2xl bg-secondary/70 p-4"
               >
-                <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-primary/12 text-primary">
+                <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-primary-soft text-primary">
                   <Store className="size-5" />
                 </span>
                 <div className="min-w-0 flex-1">
@@ -351,24 +416,26 @@ function Influencer() {
 
 function Content() {
   return (
-    <section className="mx-auto max-w-6xl px-5 py-20">
-      <SectionTitle
-        kicker="أكثر من مجرد إعلانات"
-        title="بودكاست، تغطيات، ومسابقات"
-        desc="محتوى يومي يقرّب المتاجر من عملائها ويجعل التطبيق وجهة يومية."
-      />
-      <div className="mt-12 grid gap-5 md:grid-cols-3">
-        {contentCards.map((c) => (
-          <article key={c.title} className="surface-card overflow-hidden">
-            <div className="bg-brand p-8 text-primary-foreground">
-              <c.icon className="size-8" />
-            </div>
-            <div className="p-6">
-              <h3 className="text-lg">{c.title}</h3>
-              <p className="mt-2 text-sm text-muted-foreground">{c.desc}</p>
-            </div>
-          </article>
-        ))}
+    <section className="bg-secondary/60">
+      <div className="mx-auto max-w-6xl px-5 py-20">
+        <SectionTitle
+          kicker="أكثر من مجرد إعلانات"
+          title="بودكاست، تغطيات، ومسابقات"
+          desc="محتوى يومي يقرّب المتاجر من عملائها ويجعل التطبيق وجهة يومية."
+        />
+        <div className="mt-12 grid gap-5 md:grid-cols-3">
+          {contentCards.map((c) => (
+            <article key={c.title} className="surface-card overflow-hidden">
+              <div className="bg-brand p-9 text-primary-foreground">
+                <c.icon className="size-8" />
+              </div>
+              <div className="p-6">
+                <h3 className="text-lg">{c.title}</h3>
+                <p className="mt-2 text-sm text-muted-foreground">{c.desc}</p>
+              </div>
+            </article>
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -376,20 +443,18 @@ function Content() {
 
 function Steps() {
   return (
-    <section id="steps" className="border-y border-border bg-card/40">
-      <div className="mx-auto max-w-6xl px-5 py-20">
-        <SectionTitle kicker="كيف يعمل" title="انشر إعلانك في أربع خطوات" />
-        <div className="mt-12 grid gap-5 md:grid-cols-4">
-          {steps.map((s) => (
-            <div key={s.n} className="surface-card p-6">
-              <span className="grid size-11 place-items-center rounded-2xl bg-brand font-display text-lg font-extrabold text-primary-foreground">
-                {s.n}
-              </span>
-              <h3 className="mt-4 text-base">{s.title}</h3>
-              <p className="mt-2 text-sm text-muted-foreground">{s.desc}</p>
-            </div>
-          ))}
-        </div>
+    <section id="steps" className="mx-auto max-w-6xl px-5 py-20">
+      <SectionTitle kicker="كيف يعمل" title="انشر إعلانك في أربع خطوات" />
+      <div className="mt-12 grid gap-5 md:grid-cols-4">
+        {steps.map((s) => (
+          <div key={s.n} className="rounded-3xl bg-accent/70 p-7">
+            <span className="grid size-11 place-items-center rounded-2xl bg-brand font-display text-lg font-extrabold text-primary-foreground">
+              {s.n}
+            </span>
+            <h3 className="mt-4 text-base">{s.title}</h3>
+            <p className="mt-2 text-sm text-muted-foreground">{s.desc}</p>
+          </div>
+        ))}
       </div>
     </section>
   );
@@ -404,35 +469,41 @@ function Packages() {
     { name: "اعلانات عقارية", price: "٤٠٠ ريال", note: "عقارك - استراحتك - شقتك" },
   ];
   return (
-    <section id="packages" className="mx-auto max-w-6xl px-5 py-20">
-      <SectionTitle
-        kicker="الباقات"
-        title="باقة تناسب كل إعلان"
-        desc="أسعار الباقات لمدة ٣٠ يوم — والإعلان المميز إضافة ٥٠ ريال."
-      />
-      <div className="mt-12 grid gap-5 md:grid-cols-3">
-        {packs.map((p) => (
-          <article
-            key={p.name}
-            className={`surface-card p-6 ${p.gold ? "border-gold/40" : ""}`}
-            style={p.gold ? { borderColor: "color-mix(in oklab, var(--gold) 45%, transparent)" } : undefined}
-          >
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <h3 className="text-lg">{p.name}</h3>
-                <p className="mt-2 text-sm text-muted-foreground">{p.note}</p>
+    <section id="packages" className="bg-secondary/60">
+      <div className="mx-auto max-w-6xl px-5 py-20">
+        <SectionTitle
+          kicker="الباقات"
+          title="باقة تناسب كل إعلان"
+          desc="أسعار الباقات لمدة ٣٠ يوم — والإعلان المميز إضافة ٥٠ ريال."
+        />
+        <div className="mt-12 grid gap-5 md:grid-cols-3">
+          {packs.map((p) => (
+            <article
+              key={p.name}
+              className="surface-card p-7"
+              style={
+                p.gold
+                  ? { borderColor: "color-mix(in oklab, var(--gold) 55%, transparent)" }
+                  : undefined
+              }
+            >
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <h3 className="text-lg">{p.name}</h3>
+                  <p className="mt-2 text-sm text-muted-foreground">{p.note}</p>
+                </div>
+                <span
+                  className={`shrink-0 font-display text-xl font-extrabold ${p.gold ? "text-gold" : "text-primary"}`}
+                >
+                  {p.price}
+                </span>
               </div>
-              <span
-                className={`shrink-0 font-display text-xl font-extrabold ${p.gold ? "text-gold" : "text-primary"}`}
-              >
-                {p.price}
-              </span>
-            </div>
-            <div className="mt-4 flex items-center gap-2 text-xs text-muted-foreground">
-              <Sparkles className="size-3.5 text-gold" /> الإعلان المميز: +٥٠ ريال
-            </div>
-          </article>
-        ))}
+              <div className="mt-4 flex items-center gap-2 text-xs text-muted-foreground">
+                <Sparkles className="size-3.5 text-gold" /> الإعلان المميز: +٥٠ ريال
+              </div>
+            </article>
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -440,14 +511,14 @@ function Packages() {
 
 function Download() {
   return (
-    <section id="download" className="bg-hero-glow border-t border-border">
-      <div className="mx-auto max-w-4xl px-5 py-20 text-center">
-        <h2 className="font-display text-3xl md:text-5xl">حمّل لمحة الآن وابدأ البيع اليوم</h2>
+    <section id="download" className="bg-hero-glow">
+      <div className="mx-auto max-w-4xl px-5 py-24 text-center">
+        <h2 className="font-display text-4xl md:text-5xl">حمّل لمحة الآن وابدأ البيع اليوم</h2>
         <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
           إعلانك يوصل لآلاف العملاء في منطقتك، وعميلك يلقى كل التفاصيل وأكواد الخصم في مكان واحد.
         </p>
         <div className="mt-8 flex justify-center">
-          <StoreButtons compact />
+          <StoreButtons center />
         </div>
         <a
           href={APP_STORE_URL}
@@ -462,7 +533,7 @@ function Download() {
 
 function Footer() {
   return (
-    <footer className="border-t border-border bg-card/50">
+    <footer className="bg-card">
       <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-5 py-8 text-sm text-muted-foreground md:flex-row">
         <div className="flex items-center gap-2.5">
           <span className="grid size-8 place-items-center rounded-lg bg-brand text-primary-foreground">
