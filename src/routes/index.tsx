@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import heroShot from "@/assets/IMG_2764.webp.asset.json";
 import { SaudiDotMap } from "@/components/SaudiDotMap";
+import { Logo, SiteFooter, StoreButtons, APP_STORE_URL } from "@/components/site";
+import { Link } from "@tanstack/react-router";
 import {
   Megaphone,
   MapPin,
@@ -14,17 +16,12 @@ import {
   Store,
   Sparkles,
   ArrowLeft,
-  Apple,
-  Play,
   ShieldCheck,
   Heart,
   Eye,
   Zap,
   Users,
 } from "lucide-react";
-
-const APP_STORE_URL = "https://lamha.trndsky.com";
-const PLAY_STORE_URL = "https://lamha.trndsky.com";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -109,55 +106,7 @@ function Index() {
       <Packages />
       <Coverage />
       <Download />
-      <Footer />
-    </div>
-  );
-}
-
-function GooglePlayIcon({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 512 512" className={className} xmlns="http://www.w3.org/2000/svg" aria-hidden>
-      <path fill="#00A0FF" d="M47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0z" />
-      <path fill="#00E676" d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1z" />
-      <path fill="#FFC107" d="M472.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8z" />
-      <path fill="#FF3D00" d="M104.6 499l280.8-161.2-60.1-60.1L104.6 499z" />
-    </svg>
-  );
-}
-
-function AppleIcon({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 384 512" className={className} fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-      <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z" />
-    </svg>
-  );
-}
-
-function StoreButtons({ center = false }: { center?: boolean }) {
-  return (
-    <div className={`flex flex-wrap items-center gap-3 ${center ? "justify-center" : ""}`} dir="ltr">
-      <a
-        href={PLAY_STORE_URL}
-        aria-label="حمّل تطبيق لمحة من Google Play"
-        className="inline-flex items-center gap-3 rounded-2xl border border-foreground/15 bg-foreground px-5 py-2.5 text-background transition-transform hover:-translate-y-0.5"
-      >
-        <GooglePlayIcon className="size-7" />
-        <span className="text-left leading-tight">
-          <span className="block text-[10px] uppercase tracking-wide opacity-80">GET IT ON</span>
-          <span className="block text-lg font-semibold leading-tight">Google Play</span>
-        </span>
-      </a>
-      <a
-        href={APP_STORE_URL}
-        aria-label="حمّل تطبيق لمحة من App Store"
-        className="inline-flex items-center gap-3 rounded-2xl border border-foreground/15 bg-foreground px-5 py-2.5 text-background transition-transform hover:-translate-y-0.5"
-      >
-        <AppleIcon className="size-7" />
-        <span className="text-left leading-tight">
-          <span className="block text-[10px] opacity-80">Download on the</span>
-          <span className="block text-lg font-semibold leading-tight">App Store</span>
-        </span>
-      </a>
+      <SiteFooter />
     </div>
   );
 }
@@ -165,14 +114,11 @@ function StoreButtons({ center = false }: { center?: boolean }) {
 function Nav() {
   return (
     <header className="sticky top-0 z-50 bg-background/70 backdrop-blur-xl">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
-        <a href="#top" className="flex items-center gap-2.5">
-          <span className="grid size-9 place-items-center rounded-xl bg-brand text-primary-foreground">
-            <Sparkles className="size-5" />
-          </span>
-          <span className="font-display text-xl font-extrabold">لمحة</span>
+      <div className="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-3 sm:px-5 sm:py-4 md:flex md:justify-between">
+        <a href="#top" className="min-w-0">
+          <Logo size={38} />
         </a>
-        <nav className="hidden items-center gap-2 rounded-full bg-secondary p-1.5 text-sm text-muted-foreground md:flex">
+        <nav className="hidden items-center gap-2 rounded-full bg-secondary p-1.5 text-sm text-muted-foreground lg:flex">
           {[
             { l: "المميزات", h: "#features" },
             { l: "دعم المشاهير", h: "#influencer" },
@@ -188,12 +134,20 @@ function Nav() {
             </a>
           ))}
         </nav>
-        <a
-          href="#download"
-          className="rounded-full bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90"
-        >
-          تحميل التطبيق
-        </a>
+        <div className="flex shrink-0 items-center gap-2">
+          <Link
+            to="/support"
+            className="hidden rounded-full px-3 py-2 text-sm font-bold text-muted-foreground transition-colors hover:text-foreground sm:inline-flex"
+          >
+            الدعم الفني
+          </Link>
+          <a
+            href="#download"
+            className="rounded-full bg-primary px-4 py-2 text-xs font-bold text-primary-foreground transition-opacity hover:opacity-90 sm:px-5 sm:py-2.5 sm:text-sm"
+          >
+            تحميل التطبيق
+          </a>
+        </div>
       </div>
     </header>
   );
@@ -202,9 +156,9 @@ function Nav() {
 function Hero() {
   return (
     <section id="top" className="bg-hero-glow relative overflow-hidden">
-      <div className="mx-auto grid max-w-6xl items-center gap-14 px-5 pb-24 pt-12 md:grid-cols-2 md:pb-32 md:pt-16">
+      <div className="mx-auto grid max-w-6xl items-center gap-12 px-5 pb-16 pt-10 sm:gap-14 md:grid-cols-2 md:pb-32 md:pt-16">
         <div className="order-2 md:order-1">
-          <div className="relative mx-auto w-full max-w-[320px]">
+          <div className="relative mx-auto w-[75%] max-w-[320px] sm:w-full">
             <PhoneFrame>
               <img
                 src={heroShot.url}
@@ -214,32 +168,34 @@ function Hero() {
               />
             </PhoneFrame>
 
-            <div className="float-card absolute -right-6 top-16 flex items-center gap-3 px-4 py-3 md:-right-14">
-              <span className="grid size-10 place-items-center rounded-xl bg-primary-soft text-2xl">🛍️</span>
+            <div className="float-card absolute -right-4 top-16 flex items-center gap-2 px-3 py-2 sm:-right-6 sm:gap-3 sm:px-4 sm:py-3 md:-right-14">
+              <span className="grid size-8 place-items-center rounded-xl bg-primary-soft text-xl sm:size-10 sm:text-2xl">🛍️</span>
               <span className="text-right leading-tight">
-                <span className="block text-[11px] text-muted-foreground">إعلانك وصل</span>
-                <span className="block text-sm font-extrabold">+١٢٠٠ مشاهدة</span>
+                <span className="block text-[10px] text-muted-foreground sm:text-[11px]">إعلانك وصل</span>
+                <span className="block text-xs font-extrabold sm:text-sm">+١٢٠٠ مشاهدة</span>
               </span>
             </div>
 
-            <div className="float-card absolute -left-6 bottom-20 flex items-center gap-3 px-4 py-3 md:-left-14">
-              <span className="grid size-10 place-items-center rounded-xl bg-gold-grad text-lg">⭐</span>
+            <div className="float-card absolute -left-4 bottom-16 flex items-center gap-2 px-3 py-2 sm:-left-6 sm:bottom-20 sm:gap-3 sm:px-4 sm:py-3 md:-left-14">
+              <span className="grid size-8 place-items-center rounded-xl bg-gold-grad text-base sm:size-10 sm:text-lg">⭐</span>
               <span className="text-right leading-tight">
-                <span className="block text-[11px] text-muted-foreground">دعم مشهور</span>
-                <span className="block text-sm font-extrabold">انتشار أوسع</span>
+                <span className="block text-[10px] text-muted-foreground sm:text-[11px]">دعم مشهور</span>
+                <span className="block text-xs font-extrabold sm:text-sm">انتشار أوسع</span>
               </span>
             </div>
           </div>
         </div>
 
+
         <div className="order-1 text-center md:order-2 md:text-right">
           <span className="inline-flex items-center gap-2 rounded-full bg-card/80 px-4 py-1.5 text-xs font-bold text-primary shadow-sm">
             <span className="size-2 rounded-full bg-primary" /> الأول في السعودية والشرق الأوسط
           </span>
-          <h1 className="mt-6 font-display text-5xl leading-[1.1] md:text-7xl">
+          <h1 className="mt-6 font-display text-[2.25rem] leading-[1.15] sm:text-5xl sm:leading-[1.1] md:text-7xl">
             كل إعلان… <span className="text-gradient-brand">في لمحة!</span>
           </h1>
-          <p className="mt-5 text-lg leading-relaxed text-muted-foreground md:text-xl">
+          <p className="mt-5 text-base leading-relaxed text-muted-foreground sm:text-lg md:text-xl">
+
             لمحة.. يجمع عميلك بإعلانك بكل تفاصيله — صور وفيديو وموقع وتواصل مباشر.
           </p>
 
@@ -297,7 +253,7 @@ function Services() {
     { icon: Ticket, title: "خصومات حصرية", desc: "أكواد خصم لكل متجر مع نظام مسح فوري." },
   ];
   return (
-    <section className="mx-auto max-w-6xl px-5 py-20">
+    <section className="mx-auto max-w-6xl px-5 py-14 sm:py-20">
       <SectionTitle kicker="خدماتنا" title="كل اللي يحتاجه إعلانك في مكان واحد" />
       <div className="mt-12 grid grid-cols-2 gap-4 md:grid-cols-4">
         {items.map((i) => (
@@ -328,7 +284,7 @@ function SectionTitle({ kicker, title, desc }: { kicker: string; title: string; 
       <span className="inline-block rounded-full bg-primary-soft px-4 py-1 text-sm font-bold text-primary">
         {kicker}
       </span>
-      <h2 className="mt-4 font-display text-3xl md:text-4xl">{title}</h2>
+      <h2 className="mt-4 font-display text-2xl sm:text-3xl md:text-4xl">{title}</h2>
       {desc && <p className="mt-3 text-muted-foreground">{desc}</p>}
     </div>
   );
@@ -337,7 +293,7 @@ function SectionTitle({ kicker, title, desc }: { kicker: string; title: string; 
 function Features() {
   return (
     <section id="features" className="bg-secondary/60">
-      <div className="mx-auto max-w-6xl px-5 py-20">
+      <div className="mx-auto max-w-6xl px-5 py-14 sm:py-20">
         <SectionTitle
           kicker="المميزات"
           title="كل ما يحتاجه إعلانك… وكل ما يبحث عنه عميلك"
@@ -364,13 +320,13 @@ function Features() {
 
 function Influencer() {
   return (
-    <section id="influencer" className="mx-auto max-w-6xl px-5 py-20">
+    <section id="influencer" className="mx-auto max-w-6xl px-5 py-14 sm:py-20">
       <div className="grid items-center gap-12 md:grid-cols-2">
         <div>
           <span className="inline-flex items-center gap-2 rounded-full bg-gold-grad px-4 py-1.5 text-xs font-bold text-primary-foreground">
             <Sparkles className="size-3.5" /> ميزة جوهرية
           </span>
-          <h2 className="mt-5 font-display text-3xl md:text-4xl">
+          <h2 className="mt-5 font-display text-2xl sm:text-3xl md:text-4xl">
             دع <span className="text-gradient-brand">شخصية مشهورة</span> تدعم إعلانك
           </h2>
           <p className="mt-4 leading-relaxed text-muted-foreground">
@@ -440,7 +396,7 @@ function Influencer() {
 function Content() {
   return (
     <section className="bg-secondary/60">
-      <div className="mx-auto max-w-6xl px-5 py-20">
+      <div className="mx-auto max-w-6xl px-5 py-14 sm:py-20">
         <SectionTitle
           kicker="أكثر من مجرد إعلانات"
           title="بودكاست، تغطيات، ومسابقات"
@@ -466,7 +422,7 @@ function Content() {
 
 function Steps() {
   return (
-    <section id="steps" className="mx-auto max-w-6xl px-5 py-20">
+    <section id="steps" className="mx-auto max-w-6xl px-5 py-14 sm:py-20">
       <SectionTitle kicker="كيف يعمل" title="انشر إعلانك في أربع خطوات" />
       <div className="mt-12 grid gap-5 md:grid-cols-4">
         {steps.map((s) => (
@@ -493,7 +449,7 @@ function Packages() {
   ];
   return (
     <section id="packages" className="bg-secondary/60">
-      <div className="mx-auto max-w-6xl px-5 py-20">
+      <div className="mx-auto max-w-6xl px-5 py-14 sm:py-20">
         <SectionTitle
           kicker="الباقات"
           title="باقة تناسب كل إعلان"
@@ -535,26 +491,22 @@ const coverage = [
 
 function Coverage() {
   return (
-    <section id="coverage" className="mx-auto max-w-6xl px-5 py-20">
-      <div className="grid items-center gap-12 md:grid-cols-2">
-        <div className="relative order-2 md:order-1">
+    <section id="coverage" className="mx-auto max-w-6xl px-5 py-14 sm:py-20">
+      <div className="grid items-center gap-10 md:grid-cols-2 md:gap-12">
+        <div className="relative order-2 mx-auto w-full max-w-md md:order-1 md:max-w-none">
           <SaudiDotMap className="w-full text-muted-foreground" />
           {coverage.map((c, i) => (
-            <div
-              key={c.name}
-              className="absolute"
-              style={{ left: `${c.x}%`, top: `${c.y}%` }}
-            >
-              <span className="absolute -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary p-1.5 ring-4 ring-primary/20" />
+            <div key={c.name} className="absolute" style={{ left: `${c.x}%`, top: `${c.y}%` }}>
+              <span className="absolute size-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary ring-4 ring-primary/20" />
               <span
-                className="absolute whitespace-nowrap rounded-full bg-primary px-3 py-1 text-[11px] font-bold text-primary-foreground shadow-md"
+                className="pointer-events-none absolute hidden whitespace-nowrap rounded-full bg-primary px-2.5 py-1 text-[10px] font-bold text-primary-foreground shadow-md lg:inline-block"
                 style={{
                   transform:
                     i === 0
-                      ? "translate(-112%, -50%)"
+                      ? "translate(14%, -50%)"
                       : i === 1
-                        ? "translate(-112%, -240%)"
-                        : "translate(-112%, 150%)",
+                        ? "translate(14%, -290%)"
+                        : "translate(14%, 200%)",
                 }}
               >
                 {c.name}
@@ -564,10 +516,8 @@ function Coverage() {
         </div>
 
         <div className="order-1 text-center md:order-2 md:text-right">
-          <h2 className="font-display text-3xl md:text-4xl">
-            قريباً في جميع مناطق المملكة
-          </h2>
-          <p className="mt-4 leading-relaxed text-muted-foreground">
+          <h2 className="font-display text-2xl sm:text-3xl md:text-4xl">قريباً في جميع مناطق المملكة</h2>
+          <p className="mt-4 text-sm leading-relaxed text-muted-foreground sm:text-base">
             تطبيق لمحة كأول تطبيق يجمع إعلانات المتاجر والإعلانات الشخصية بكل تفاصيلها يتطلع
             لتغطية كافة مناطق المملكة لأنكم تستحقون الأفضل. توسيع مناطق التغطية يحتاج منا المزيد
             من الوقت والجهد لضمان أعلى مستوى جودة للخدمة، ويمكنك تصفح كافة المناطق المدعومة داخل
@@ -577,9 +527,9 @@ function Coverage() {
             {coverage.map((c) => (
               <li
                 key={c.name}
-                className="inline-flex items-center gap-2 rounded-full bg-primary-soft px-4 py-2 text-sm font-bold text-primary"
+                className="inline-flex items-center gap-2 rounded-full bg-primary-soft px-3.5 py-2 text-xs font-bold text-primary sm:text-sm"
               >
-                <MapPin className="size-4" /> {c.name}
+                <MapPin className="size-4 shrink-0" /> {c.name}
               </li>
             ))}
           </ul>
@@ -598,8 +548,8 @@ function Coverage() {
 function Download() {
   return (
     <section id="download" className="bg-hero-glow">
-      <div className="mx-auto max-w-4xl px-5 py-24 text-center">
-        <h2 className="font-display text-4xl md:text-5xl">حمّل لمحة الآن وابدأ البيع اليوم</h2>
+      <div className="mx-auto max-w-4xl px-5 py-16 sm:py-24 text-center">
+        <h2 className="font-display text-3xl sm:text-4xl md:text-5xl">حمّل لمحة الآن وابدأ البيع اليوم</h2>
         <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
           إعلانك يوصل لآلاف العملاء في منطقتك، وعميلك يلقى كل التفاصيل وأكواد الخصم في مكان واحد.
         </p>
@@ -614,24 +564,5 @@ function Download() {
         </a>
       </div>
     </section>
-  );
-}
-
-function Footer() {
-  return (
-    <footer className="bg-card">
-      <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-5 py-8 text-sm text-muted-foreground md:flex-row">
-        <div className="flex items-center gap-2.5">
-          <span className="grid size-8 place-items-center rounded-lg bg-brand text-primary-foreground">
-            <Sparkles className="size-4" />
-          </span>
-          <span className="font-display font-extrabold text-foreground">لمحة</span>
-        </div>
-        <p>جميع الحقوق محفوظة © {new Date().getFullYear()} تطبيق لمحة</p>
-      </div>
-      <div className="border-t border-border/60 py-5 text-center text-sm font-bold text-foreground">
-        صنع بـ<span className="text-primary">♥</span> في السعودية 🇸🇦
-      </div>
-    </footer>
   );
 }

@@ -77,14 +77,27 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "تطبيق لمحة للتسويق والإعلان" },
+      {
+        name: "description",
+        content:
+          "تطبيق لمحة للتسويق والإعلان — إعلانات المتاجر والإعلانات الشخصية بالصور والفيديو والموقع، أكواد خصم حصرية، بودكاست وتغطيات ومسابقات.",
+      },
+      { name: "author", content: "تطبيق لمحة للتسويق والإعلان" },
+      { name: "application-name", content: "تطبيق لمحة للتسويق والإعلان" },
+      { name: "apple-mobile-web-app-title", content: "تطبيق لمحة" },
+      { name: "theme-color", content: "#0f2b4a" },
+      { property: "og:site_name", content: "تطبيق لمحة للتسويق والإعلان" },
+      { property: "og:title", content: "تطبيق لمحة للتسويق والإعلان" },
+      {
+        property: "og:description",
+        content:
+          "التطبيق الأول في السعودية الذي يجمع العميل بإعلانات المتاجر والإعلانات الشخصية بكل تفاصيلها.",
+      },
       { property: "og:type", content: "website" },
+      { property: "og:image", content: "https://lamha.trndsky.com/og-image.png" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:image", content: "https://lamha.trndsky.com/og-image.png" },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -97,9 +110,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "icon", type: "image/png", href: "/favicon.png" },
+      { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
     ],
   }),
+
   shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
