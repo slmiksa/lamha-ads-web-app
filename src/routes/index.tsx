@@ -116,14 +116,11 @@ function Index() {
 function Nav() {
   return (
     <header className="sticky top-0 z-50 bg-background/70 backdrop-blur-xl">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
-        <a href="#top" className="flex items-center gap-2.5">
-          <span className="grid size-9 place-items-center rounded-xl bg-brand text-primary-foreground">
-            <Sparkles className="size-5" />
-          </span>
-          <span className="font-display text-xl font-extrabold">لمحة</span>
+      <div className="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-3 sm:px-5 sm:py-4 md:flex md:justify-between">
+        <a href="#top" className="min-w-0">
+          <Logo size={38} />
         </a>
-        <nav className="hidden items-center gap-2 rounded-full bg-secondary p-1.5 text-sm text-muted-foreground md:flex">
+        <nav className="hidden items-center gap-2 rounded-full bg-secondary p-1.5 text-sm text-muted-foreground lg:flex">
           {[
             { l: "المميزات", h: "#features" },
             { l: "دعم المشاهير", h: "#influencer" },
@@ -139,12 +136,20 @@ function Nav() {
             </a>
           ))}
         </nav>
-        <a
-          href="#download"
-          className="rounded-full bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90"
-        >
-          تحميل التطبيق
-        </a>
+        <div className="flex shrink-0 items-center gap-2">
+          <Link
+            to="/support"
+            className="hidden rounded-full px-3 py-2 text-sm font-bold text-muted-foreground transition-colors hover:text-foreground sm:inline-flex"
+          >
+            الدعم الفني
+          </Link>
+          <a
+            href="#download"
+            className="rounded-full bg-primary px-4 py-2 text-xs font-bold text-primary-foreground transition-opacity hover:opacity-90 sm:px-5 sm:py-2.5 sm:text-sm"
+          >
+            تحميل التطبيق
+          </a>
+        </div>
       </div>
     </header>
   );
@@ -153,9 +158,9 @@ function Nav() {
 function Hero() {
   return (
     <section id="top" className="bg-hero-glow relative overflow-hidden">
-      <div className="mx-auto grid max-w-6xl items-center gap-14 px-5 pb-24 pt-12 md:grid-cols-2 md:pb-32 md:pt-16">
+      <div className="mx-auto grid max-w-6xl items-center gap-12 px-5 pb-16 pt-10 sm:gap-14 md:grid-cols-2 md:pb-32 md:pt-16">
         <div className="order-2 md:order-1">
-          <div className="relative mx-auto w-full max-w-[320px]">
+          <div className="relative mx-auto w-[75%] max-w-[320px] sm:w-full">
             <PhoneFrame>
               <img
                 src={heroShot.url}
@@ -165,23 +170,24 @@ function Hero() {
               />
             </PhoneFrame>
 
-            <div className="float-card absolute -right-6 top-16 flex items-center gap-3 px-4 py-3 md:-right-14">
-              <span className="grid size-10 place-items-center rounded-xl bg-primary-soft text-2xl">🛍️</span>
+            <div className="float-card absolute -right-4 top-16 flex items-center gap-2 px-3 py-2 sm:-right-6 sm:gap-3 sm:px-4 sm:py-3 md:-right-14">
+              <span className="grid size-8 place-items-center rounded-xl bg-primary-soft text-xl sm:size-10 sm:text-2xl">🛍️</span>
               <span className="text-right leading-tight">
-                <span className="block text-[11px] text-muted-foreground">إعلانك وصل</span>
-                <span className="block text-sm font-extrabold">+١٢٠٠ مشاهدة</span>
+                <span className="block text-[10px] text-muted-foreground sm:text-[11px]">إعلانك وصل</span>
+                <span className="block text-xs font-extrabold sm:text-sm">+١٢٠٠ مشاهدة</span>
               </span>
             </div>
 
-            <div className="float-card absolute -left-6 bottom-20 flex items-center gap-3 px-4 py-3 md:-left-14">
-              <span className="grid size-10 place-items-center rounded-xl bg-gold-grad text-lg">⭐</span>
+            <div className="float-card absolute -left-4 bottom-16 flex items-center gap-2 px-3 py-2 sm:-left-6 sm:bottom-20 sm:gap-3 sm:px-4 sm:py-3 md:-left-14">
+              <span className="grid size-8 place-items-center rounded-xl bg-gold-grad text-base sm:size-10 sm:text-lg">⭐</span>
               <span className="text-right leading-tight">
-                <span className="block text-[11px] text-muted-foreground">دعم مشهور</span>
-                <span className="block text-sm font-extrabold">انتشار أوسع</span>
+                <span className="block text-[10px] text-muted-foreground sm:text-[11px]">دعم مشهور</span>
+                <span className="block text-xs font-extrabold sm:text-sm">انتشار أوسع</span>
               </span>
             </div>
           </div>
         </div>
+
 
         <div className="order-1 text-center md:order-2 md:text-right">
           <span className="inline-flex items-center gap-2 rounded-full bg-card/80 px-4 py-1.5 text-xs font-bold text-primary shadow-sm">
