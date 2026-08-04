@@ -193,10 +193,11 @@ function Hero() {
           <span className="inline-flex items-center gap-2 rounded-full bg-card/80 px-4 py-1.5 text-xs font-bold text-primary shadow-sm">
             <span className="size-2 rounded-full bg-primary" /> الأول في السعودية والشرق الأوسط
           </span>
-          <h1 className="mt-6 font-display text-5xl leading-[1.1] md:text-7xl">
+          <h1 className="mt-6 font-display text-[2.25rem] leading-[1.15] sm:text-5xl sm:leading-[1.1] md:text-7xl">
             كل إعلان… <span className="text-gradient-brand">في لمحة!</span>
           </h1>
-          <p className="mt-5 text-lg leading-relaxed text-muted-foreground md:text-xl">
+          <p className="mt-5 text-base leading-relaxed text-muted-foreground sm:text-lg md:text-xl">
+
             لمحة.. يجمع عميلك بإعلانك بكل تفاصيله — صور وفيديو وموقع وتواصل مباشر.
           </p>
 
