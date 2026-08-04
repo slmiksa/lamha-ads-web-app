@@ -16,8 +16,6 @@ import {
   Store,
   Sparkles,
   ArrowLeft,
-  Apple,
-  Play,
   ShieldCheck,
   Heart,
   Eye,
@@ -255,7 +253,7 @@ function Services() {
     { icon: Ticket, title: "خصومات حصرية", desc: "أكواد خصم لكل متجر مع نظام مسح فوري." },
   ];
   return (
-    <section className="mx-auto max-w-6xl px-5 py-20">
+    <section className="mx-auto max-w-6xl px-5 py-14 sm:py-20">
       <SectionTitle kicker="خدماتنا" title="كل اللي يحتاجه إعلانك في مكان واحد" />
       <div className="mt-12 grid grid-cols-2 gap-4 md:grid-cols-4">
         {items.map((i) => (
@@ -286,7 +284,7 @@ function SectionTitle({ kicker, title, desc }: { kicker: string; title: string; 
       <span className="inline-block rounded-full bg-primary-soft px-4 py-1 text-sm font-bold text-primary">
         {kicker}
       </span>
-      <h2 className="mt-4 font-display text-3xl md:text-4xl">{title}</h2>
+      <h2 className="mt-4 font-display text-2xl sm:text-3xl md:text-4xl">{title}</h2>
       {desc && <p className="mt-3 text-muted-foreground">{desc}</p>}
     </div>
   );
@@ -295,7 +293,7 @@ function SectionTitle({ kicker, title, desc }: { kicker: string; title: string; 
 function Features() {
   return (
     <section id="features" className="bg-secondary/60">
-      <div className="mx-auto max-w-6xl px-5 py-20">
+      <div className="mx-auto max-w-6xl px-5 py-14 sm:py-20">
         <SectionTitle
           kicker="المميزات"
           title="كل ما يحتاجه إعلانك… وكل ما يبحث عنه عميلك"
@@ -322,13 +320,13 @@ function Features() {
 
 function Influencer() {
   return (
-    <section id="influencer" className="mx-auto max-w-6xl px-5 py-20">
+    <section id="influencer" className="mx-auto max-w-6xl px-5 py-14 sm:py-20">
       <div className="grid items-center gap-12 md:grid-cols-2">
         <div>
           <span className="inline-flex items-center gap-2 rounded-full bg-gold-grad px-4 py-1.5 text-xs font-bold text-primary-foreground">
             <Sparkles className="size-3.5" /> ميزة جوهرية
           </span>
-          <h2 className="mt-5 font-display text-3xl md:text-4xl">
+          <h2 className="mt-5 font-display text-2xl sm:text-3xl md:text-4xl">
             دع <span className="text-gradient-brand">شخصية مشهورة</span> تدعم إعلانك
           </h2>
           <p className="mt-4 leading-relaxed text-muted-foreground">
@@ -398,7 +396,7 @@ function Influencer() {
 function Content() {
   return (
     <section className="bg-secondary/60">
-      <div className="mx-auto max-w-6xl px-5 py-20">
+      <div className="mx-auto max-w-6xl px-5 py-14 sm:py-20">
         <SectionTitle
           kicker="أكثر من مجرد إعلانات"
           title="بودكاست، تغطيات، ومسابقات"
@@ -424,7 +422,7 @@ function Content() {
 
 function Steps() {
   return (
-    <section id="steps" className="mx-auto max-w-6xl px-5 py-20">
+    <section id="steps" className="mx-auto max-w-6xl px-5 py-14 sm:py-20">
       <SectionTitle kicker="كيف يعمل" title="انشر إعلانك في أربع خطوات" />
       <div className="mt-12 grid gap-5 md:grid-cols-4">
         {steps.map((s) => (
@@ -451,7 +449,7 @@ function Packages() {
   ];
   return (
     <section id="packages" className="bg-secondary/60">
-      <div className="mx-auto max-w-6xl px-5 py-20">
+      <div className="mx-auto max-w-6xl px-5 py-14 sm:py-20">
         <SectionTitle
           kicker="الباقات"
           title="باقة تناسب كل إعلان"
@@ -493,26 +491,22 @@ const coverage = [
 
 function Coverage() {
   return (
-    <section id="coverage" className="mx-auto max-w-6xl px-5 py-20">
-      <div className="grid items-center gap-12 md:grid-cols-2">
-        <div className="relative order-2 md:order-1">
+    <section id="coverage" className="mx-auto max-w-6xl px-5 py-14 sm:py-20">
+      <div className="grid items-center gap-10 md:grid-cols-2 md:gap-12">
+        <div className="relative order-2 mx-auto w-full max-w-md md:order-1 md:max-w-none">
           <SaudiDotMap className="w-full text-muted-foreground" />
           {coverage.map((c, i) => (
-            <div
-              key={c.name}
-              className="absolute"
-              style={{ left: `${c.x}%`, top: `${c.y}%` }}
-            >
-              <span className="absolute -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary p-1.5 ring-4 ring-primary/20" />
+            <div key={c.name} className="absolute" style={{ left: `${c.x}%`, top: `${c.y}%` }}>
+              <span className="absolute size-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary ring-4 ring-primary/20" />
               <span
-                className="absolute whitespace-nowrap rounded-full bg-primary px-3 py-1 text-[11px] font-bold text-primary-foreground shadow-md"
+                className="pointer-events-none absolute hidden whitespace-nowrap rounded-full bg-primary px-2.5 py-1 text-[10px] font-bold text-primary-foreground shadow-md lg:inline-block"
                 style={{
                   transform:
                     i === 0
-                      ? "translate(-112%, -50%)"
+                      ? "translate(14%, -50%)"
                       : i === 1
-                        ? "translate(-112%, -240%)"
-                        : "translate(-112%, 150%)",
+                        ? "translate(14%, -290%)"
+                        : "translate(14%, 200%)",
                 }}
               >
                 {c.name}
@@ -522,10 +516,8 @@ function Coverage() {
         </div>
 
         <div className="order-1 text-center md:order-2 md:text-right">
-          <h2 className="font-display text-3xl md:text-4xl">
-            قريباً في جميع مناطق المملكة
-          </h2>
-          <p className="mt-4 leading-relaxed text-muted-foreground">
+          <h2 className="font-display text-2xl sm:text-3xl md:text-4xl">قريباً في جميع مناطق المملكة</h2>
+          <p className="mt-4 text-sm leading-relaxed text-muted-foreground sm:text-base">
             تطبيق لمحة كأول تطبيق يجمع إعلانات المتاجر والإعلانات الشخصية بكل تفاصيلها يتطلع
             لتغطية كافة مناطق المملكة لأنكم تستحقون الأفضل. توسيع مناطق التغطية يحتاج منا المزيد
             من الوقت والجهد لضمان أعلى مستوى جودة للخدمة، ويمكنك تصفح كافة المناطق المدعومة داخل
@@ -535,9 +527,9 @@ function Coverage() {
             {coverage.map((c) => (
               <li
                 key={c.name}
-                className="inline-flex items-center gap-2 rounded-full bg-primary-soft px-4 py-2 text-sm font-bold text-primary"
+                className="inline-flex items-center gap-2 rounded-full bg-primary-soft px-3.5 py-2 text-xs font-bold text-primary sm:text-sm"
               >
-                <MapPin className="size-4" /> {c.name}
+                <MapPin className="size-4 shrink-0" /> {c.name}
               </li>
             ))}
           </ul>
@@ -556,8 +548,8 @@ function Coverage() {
 function Download() {
   return (
     <section id="download" className="bg-hero-glow">
-      <div className="mx-auto max-w-4xl px-5 py-24 text-center">
-        <h2 className="font-display text-4xl md:text-5xl">حمّل لمحة الآن وابدأ البيع اليوم</h2>
+      <div className="mx-auto max-w-4xl px-5 py-16 sm:py-24 text-center">
+        <h2 className="font-display text-3xl sm:text-4xl md:text-5xl">حمّل لمحة الآن وابدأ البيع اليوم</h2>
         <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
           إعلانك يوصل لآلاف العملاء في منطقتك، وعميلك يلقى كل التفاصيل وأكواد الخصم في مكان واحد.
         </p>
