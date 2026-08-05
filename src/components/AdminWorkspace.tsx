@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Download, ExternalLink, RotateCcw, Save, Upload } from "lucide-react";
+import { Download, ExternalLink, LogOut, RotateCcw, Save, Upload } from "lucide-react";
 import { NodeEditor } from "@/components/ContentEditor";
 import { defaultContent, type SiteContent } from "@/content/defaults";
 import { ContentProvider, useContentCtx } from "@/content/store";
@@ -17,20 +17,25 @@ const SECTIONS: { key: keyof SiteContent; label: string }[] = [
   { key: "footer", label: "التذييل" },
 ];
 
-export default function AdminWorkspace() {
+export default function AdminWorkspace({
+  onLogout,
+  onChangePassword,
+}: {
+  onLogout: () => void;
+  onChangePassword: () => void;
+}) {
   return (
     <ContentProvider>
-      <Panel />
+      <Panel onLogout={onLogout} onChangePassword={onChangePassword} />
     </ContentProvider>
   );
 }
 
-function Panel() {
+function Panel({ onLogout, onChangePassword }: { onLogout: () => void; onChangePassword: () => void }) {
   const { content, setContent, resetContent } = useContentCtx();
   const [draft, setDraft] = useState<SiteContent>(content);
   const [active, setActive] = useState<keyof SiteContent>("brand");
   const [saved, setSaved] = useState(false);
-  const [newPass, setNewPass] = useState("");
   const [dirty, setDirty] = useState(false);
 
   useEffect(() => {
@@ -97,6 +102,9 @@ function Panel() {
           <button type="button" onClick={save} disabled={!dirty} className="inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-xs font-bold text-primary-foreground disabled:opacity-50">
             <Save className="size-4" /> {saved ? "تم الحفظ ✓" : "حفظ"}
           </button>
+          <button type="button" onClick={onLogout} className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-2 text-xs font-bold">
+            <LogOut className="size-4" /> تسجيل الخروج
+          </button>
         </div>
       </header>
 
@@ -126,17 +134,10 @@ function Panel() {
               <li>اضغط «تصدير content.json» لتنزيل ملف المحتوى.</li>
               <li>ارفع الملف داخل مجلد public_html بجانب index.html ليظهر للجميع.</li>
             </ol>
-            <div className="mt-5 flex flex-wrap items-end gap-2 border-t border-border/60 pt-4">
-              <label className="flex-1">
-                <span className="mb-1 block text-xs font-bold text-muted-foreground">تغيير كلمة مرور اللوحة</span>
-                <input id="admin-new-password" name="new-password" type="password" autoComplete="new-password" value={newPass} onChange={(event) => setNewPass(event.target.value)} className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm" placeholder="كلمة مرور جديدة" />
-              </label>
-              <button type="button" onClick={() => {
-                if (!newPass.trim()) return;
-                window.localStorage.setItem("lamha_admin_pass", newPass.trim());
-                setNewPass("");
-                window.alert("تم تغيير كلمة المرور");
-              }} className="rounded-full bg-secondary px-4 py-2 text-xs font-bold">حفظ الكلمة</button>
+            <div className="mt-5 border-t border-border/60 pt-4">
+              <button type="button" onClick={onChangePassword} className="rounded-full bg-secondary px-4 py-2 text-xs font-bold">
+                تغيير كلمة مرور اللوحة
+              </button>
             </div>
           </div>
         </main>
