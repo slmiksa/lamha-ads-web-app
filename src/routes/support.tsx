@@ -1,7 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Link } from "@tanstack/react-router";
 import { MessageCircle, ShieldCheck, Handshake, ChevronDown, Mail } from "lucide-react";
-import { PageHeader, SiteFooter, StoreButtons, WhatsAppButton, WHATSAPP_URL, CONTACT_EMAIL } from "@/components/site";
+import {
+  PageHeader,
+  SiteFooter,
+  StoreButtons,
+  WhatsAppButton,
+  WHATSAPP_URL,
+  CONTACT_EMAIL,
+} from "@/components/site";
 
 export const Route = createFileRoute("/support")({
   head: () => ({
@@ -160,11 +167,19 @@ function SupportPage() {
         <div className="mt-6 grid gap-4 sm:grid-cols-3">
           {channels.map((c) =>
             c.external ? (
-              <a key={c.title} href={c.href} className="surface-card block p-5 transition-transform hover:-translate-y-0.5">
+              <a
+                key={c.title}
+                href={c.href}
+                className="surface-card block p-5 transition-transform hover:-translate-y-0.5"
+              >
                 <ChannelBody icon={c.icon} title={c.title} desc={c.desc} />
               </a>
             ) : (
-              <Link key={c.title} to="/privacy" className="surface-card block p-5 transition-transform hover:-translate-y-0.5">
+              <Link
+                key={c.title}
+                to="/privacy"
+                className="surface-card block p-5 transition-transform hover:-translate-y-0.5"
+              >
                 <ChannelBody icon={c.icon} title={c.title} desc={c.desc} />
               </Link>
             ),

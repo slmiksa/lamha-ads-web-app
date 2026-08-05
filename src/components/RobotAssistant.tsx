@@ -50,7 +50,10 @@ export function RobotAssistant() {
 function RobotFigure() {
   return (
     <div className="pointer-events-none relative shrink-0">
-      <span className="absolute inset-x-2 bottom-1 h-3 rounded-[50%] bg-foreground/20 blur-md" aria-hidden />
+      <span
+        className="absolute inset-x-2 bottom-1 h-3 rounded-[50%] bg-foreground/20 blur-md"
+        aria-hidden
+      />
       <img
         src="/mascot.png"
         alt="تميمة تطبيق لمحة"
@@ -74,4 +77,3 @@ function RobotFigure() {
     </div>
   );
 }
-
