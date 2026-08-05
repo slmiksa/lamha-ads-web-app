@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 
 export const APP_STORE_URL = "https://apps.apple.com/sa/app/lamha-ads/id6760237672?l=ar";
 export const PLAY_STORE_URL = "";
+export const CONTACT_EMAIL = "info@lamhaads.sa";
 export const WHATSAPP_NUMBER = "966540220275";
 export const WHATSAPP_DISPLAY = "+966 54 022 0275";
 export const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
@@ -116,6 +117,9 @@ export function SiteFooter() {
           </Link>
           <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="hover:text-foreground">
             واتساب
+          </a>
+          <a href={`mailto:${CONTACT_EMAIL}`} dir="ltr" className="hover:text-foreground">
+            {CONTACT_EMAIL}
           </a>
         </nav>
         <p className="text-center">جميع الحقوق محفوظة © {new Date().getFullYear()} تطبيق لمحة</p>
