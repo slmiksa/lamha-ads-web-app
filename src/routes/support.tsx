@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Link } from "@tanstack/react-router";
-import { MessageCircle, ShieldCheck, Handshake, ChevronDown, Mail } from "lucide-react";
-import { PageHeader, SiteFooter, StoreButtons, SUPPORT_EMAIL } from "@/components/site";
+import { MessageCircle, ShieldCheck, Handshake, ChevronDown } from "lucide-react";
+import { PageHeader, SiteFooter, StoreButtons, WhatsAppButton, WHATSAPP_URL, WHATSAPP_DISPLAY } from "@/components/site";
 
 export const Route = createFileRoute("/support")({
   head: () => ({
@@ -107,8 +107,8 @@ const channels = [
   {
     icon: MessageCircle,
     title: "واتساب",
-    desc: "تواصل معنا عبر الواتساب",
-    href: "https://wa.me/966500000000",
+    desc: WHATSAPP_DISPLAY,
+    href: WHATSAPP_URL,
     external: true,
   },
   {
@@ -120,9 +120,9 @@ const channels = [
   },
   {
     icon: Handshake,
-    title: "البريد الإلكتروني",
-    desc: SUPPORT_EMAIL,
-    href: `mailto:${SUPPORT_EMAIL}`,
+    title: "الدعم المباشر",
+    desc: "ردود سريعة عبر الواتساب",
+    href: WHATSAPP_URL,
     external: true,
   },
 ];
@@ -182,12 +182,7 @@ function SupportPage() {
           <Faq items={mediaFaqs} />
         </section>
 
-        <a
-          href={`mailto:${SUPPORT_EMAIL}`}
-          className="mt-12 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-bold text-primary-foreground"
-        >
-          <Mail className="size-4" /> راسلنا على {SUPPORT_EMAIL}
-        </a>
+        <WhatsAppButton className="mt-12" />
       </main>
       <SiteFooter />
     </div>
