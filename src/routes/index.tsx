@@ -184,12 +184,20 @@ function Nav() {
               </a>
             ))}
             <Link
+              to="/partners"
+              onClick={() => setOpen(false)}
+              className="rounded-xl px-3 py-2.5 text-foreground transition-colors hover:bg-secondary"
+            >
+              شركاء النجاح
+            </Link>
+            <Link
               to="/support"
               onClick={() => setOpen(false)}
               className="rounded-xl px-3 py-2.5 text-foreground transition-colors hover:bg-secondary"
             >
               الدعم الفني
             </Link>
+
             <Link
               to="/privacy"
               onClick={() => setOpen(false)}
