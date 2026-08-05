@@ -289,20 +289,12 @@ export const NodeEditor = memo(function NodeEditor({
     const long = LONG_KEYS.has(keyName) || value.length > 90;
     return (
       <Field name={keyName}>
-        {long ? (
-          <textarea
-            value={value}
-            rows={Math.min(10, Math.max(2, Math.ceil(value.length / 70)))}
-            onChange={(e) => onChange(e.target.value)}
-            className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm leading-7"
-          />
-        ) : (
-          <input
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-            className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm"
-          />
-        )}
+        <BufferedText
+          value={value}
+          onCommit={onChange}
+          long={long}
+          rows={Math.min(10, Math.max(2, Math.ceil(value.length / 70)))}
+        />
       </Field>
     );
   }
@@ -404,7 +396,7 @@ export const NodeEditor = memo(function NodeEditor({
   }
 
   return null;
-}
+});
 
 function Field({ name, children }: { name: string; children: React.ReactNode }) {
   return (
