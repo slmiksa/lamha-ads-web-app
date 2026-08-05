@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { defaultContent, type SiteContent } from "@/content/defaults";
-import { useContentCtx } from "@/content/store";
+import { ContentProvider, useContentCtx } from "@/content/store";
 import { NodeEditor } from "@/components/ContentEditor";
 import { Download, RotateCcw, Save, Upload, ExternalLink, Lock } from "lucide-react";
 
@@ -43,7 +43,11 @@ function AdminPanel() {
 
   if (!authReady) return <div className="min-h-screen bg-secondary/40" aria-hidden />;
   if (!authed) return <Gate onOk={() => setAuthed(true)} />;
-  return <Panel />;
+  return (
+    <ContentProvider>
+      <Panel />
+    </ContentProvider>
+  );
 }
 
 function Gate({ onOk }: { onOk: () => void }) {
@@ -98,15 +102,16 @@ function Panel() {
   const [active, setActive] = useState<keyof SiteContent>("brand");
   const [saved, setSaved] = useState(false);
   const [newPass, setNewPass] = useState("");
+  const [dirty, setDirty] = useState(false);
 
   useEffect(() => {
     setDraft(content);
+    setDirty(false);
   }, [content]);
-
-  const dirty = useMemo(() => JSON.stringify(draft) !== JSON.stringify(content), [draft, content]);
 
   const save = () => {
     setContent(draft);
+    setDirty(false);
     setSaved(true);
     setTimeout(() => setSaved(false), 2200);
   };
@@ -125,6 +130,7 @@ function Panel() {
     r.onload = () => {
       try {
         setDraft(JSON.parse(String(r.result)) as SiteContent);
+        setDirty(true);
       } catch {
         alert("ملف غير صالح");
       }
@@ -168,6 +174,7 @@ function Panel() {
               if (confirm("استعادة المحتوى الأصلي وحذف تعديلاتك المحلية؟")) {
                 resetContent();
                 setDraft(defaultContent);
+                setDirty(false);
               }
             }}
             className="inline-flex items-center gap-1.5 rounded-full bg-destructive/10 px-3 py-2 text-xs font-bold text-destructive"
@@ -209,7 +216,10 @@ function Panel() {
               path={String(active)}
               keyName={String(active)}
               value={draft[active]}
-              onChange={(v) => setDraft({ ...draft, [active]: v } as SiteContent)}
+              onChange={(v) => {
+                setDraft((current) => ({ ...current, [active]: v }) as SiteContent);
+                setDirty(true);
+              }}
             />
           </div>
 

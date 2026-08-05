@@ -2,6 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 import { defaultContent, type SiteContent } from "./defaults";
 
 const STORAGE_KEY = "lamha_site_content_v1";
+const MAX_LOCAL_CONTENT_LENGTH = 2_000_000;
 
 function isPlainObject(v: unknown): v is Record<string, unknown> {
   return typeof v === "object" && v !== null && !Array.isArray(v);
@@ -25,6 +26,11 @@ export function deepMerge<T>(base: T, override: unknown): T {
 function readLocal(): Partial<SiteContent> | null {
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
+    if (raw && raw.length > MAX_LOCAL_CONTENT_LENGTH) {
+      window.localStorage.removeItem(STORAGE_KEY);
+      window.localStorage.setItem("lamha_content_recovered", "1");
+      return null;
+    }
     return raw ? (JSON.parse(raw) as Partial<SiteContent>) : null;
   } catch {
     return null;
@@ -50,17 +56,17 @@ export function ContentProvider({ children }: { children: React.ReactNode }) {
     const restore = () => {
       if (!cancelled) setLocal(readLocal());
     };
-    const idleId = window.requestIdleCallback(restore, { timeout: 500 });
+    const idleId = window.setTimeout(restore, 0);
     return () => {
       cancelled = true;
-      window.cancelIdleCallback(idleId);
+      window.clearTimeout(idleId);
     };
   }, []);
 
   // Published content file (upload content.json next to index.html on the server)
   useEffect(() => {
     let alive = true;
-    fetch(`/content.json?v=${Date.now()}`, { cache: "no-store" })
+    fetch("/content.json", { cache: "no-store" })
       .then((r) => {
         const type = r.headers.get("content-type") ?? "";
         return r.ok && type.includes("application/json") ? r.json() : null;
@@ -82,7 +88,13 @@ export function ContentProvider({ children }: { children: React.ReactNode }) {
   const setContent = useCallback((next: SiteContent) => {
     setLocal(next);
     try {
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      const serialized = JSON.stringify(next);
+      if (serialized.length > MAX_LOCAL_CONTENT_LENGTH) {
+        window.localStorage.setItem("lamha_content_too_large", "1");
+        return;
+      }
+      window.localStorage.removeItem("lamha_content_too_large");
+      window.localStorage.setItem(STORAGE_KEY, serialized);
     } catch {
       /* quota */
     }
