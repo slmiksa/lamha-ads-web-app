@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Link } from "@tanstack/react-router";
-import { MessageCircle, ShieldCheck, Handshake, ChevronDown } from "lucide-react";
+import { MessageCircle, ShieldCheck, Handshake, ChevronDown, Mail } from "lucide-react";
 import { PageHeader, SiteFooter, StoreButtons, WhatsAppButton, WHATSAPP_URL, WHATSAPP_DISPLAY, CONTACT_EMAIL } from "@/components/site";
 
 export const Route = createFileRoute("/support")({
