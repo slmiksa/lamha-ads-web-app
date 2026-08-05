@@ -6,10 +6,4 @@
 // You can pass additional config via defineConfig({ vite: { ... }, etc... }) if needed.
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
-export default defineConfig({
-  tanstackStart: {
-    // Prerender every page so the static build (dist/) contains real HTML files.
-    prerender: { enabled: true, crawlLinks: true },
-    pages: [{ path: "/" }, { path: "/privacy" }, { path: "/support" }],
-  },
-});
+export default defineConfig({});
