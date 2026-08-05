@@ -5,8 +5,6 @@ import { NodeEditor } from "@/components/ContentEditor";
 import { defaultContent, type SiteContent } from "@/content/defaults";
 import { ContentProvider, useContentCtx } from "@/content/store";
 
-const PASS_KEY = "lamha_admin_ok";
-
 const SECTIONS: { key: keyof SiteContent; label: string }[] = [
   { key: "brand", label: "الهوية والشعار" },
   { key: "contact", label: "التواصل والمتاجر" },
@@ -139,10 +137,6 @@ function Panel() {
                 setNewPass("");
                 window.alert("تم تغيير كلمة المرور");
               }} className="rounded-full bg-secondary px-4 py-2 text-xs font-bold">حفظ الكلمة</button>
-              <button type="button" onClick={() => {
-                window.localStorage.removeItem(PASS_KEY);
-                window.location.reload();
-              }} className="rounded-full bg-secondary px-4 py-2 text-xs font-bold">خروج</button>
             </div>
           </div>
         </main>
