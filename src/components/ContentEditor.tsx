@@ -281,7 +281,7 @@ function BufferedText({
       {...SAFE_FIELD_PROPS}
       value={v}
       rows={rows}
-      onChange={(e) => setV(e.target.value)}
+      onChange={(e) => change(e.target.value)}
       onBlur={commit}
       className={`${cls} leading-7`}
     />
@@ -289,7 +289,7 @@ function BufferedText({
     <input
       {...SAFE_FIELD_PROPS}
       value={v}
-      onChange={(e) => setV(e.target.value)}
+      onChange={(e) => change(e.target.value)}
       onBlur={commit}
       onKeyDown={(e) => {
         if (e.key === "Enter") (e.target as HTMLInputElement).blur();
