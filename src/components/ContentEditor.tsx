@@ -433,7 +433,7 @@ function IconBtn({
 }
 
 function Collapsible({ title, children }: { title: string; children: React.ReactNode }) {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   return (
     <div className="rounded-2xl border border-border/70">
       <button
