@@ -64,11 +64,11 @@ function RobotFigure() {
       <style>{`
         @keyframes mascotWavePoint {
           0%, 100% { transform: translateY(0) rotate(0deg); }
-          18% { transform: translateY(-7px) rotate(0deg); }
-          38% { transform: translateY(-9px) rotate(-13deg); }
-          58% { transform: translateY(-7px) rotate(0deg); }
-          78% { transform: translateY(0) rotate(0deg); }
-          90% { transform: translateY(-4px) rotate(0deg); }
+          15% { transform: translateY(-6px) rotate(0deg); }
+          35% { transform: translateY(-8px) rotate(-18deg) translateX(-8px); }
+          55% { transform: translateY(-6px) rotate(0deg); }
+          75% { transform: translateY(0) rotate(0deg); }
+          90% { transform: translateY(-3px) rotate(0deg); }
         }
       `}</style>
     </div>
