@@ -53,6 +53,13 @@ ErrorDocument 404 /index.html
 <IfModule mod_headers.c>
   Header set X-Content-Type-Options "nosniff"
   Header set Referrer-Policy "strict-origin-when-cross-origin"
+
+  # لا تحتفظ المتصفحات بنسخة قديمة من صفحات الموقع أو ملف محتوى لوحة التحكم
+  <FilesMatch "^(index\.html|content\.json)$">
+    Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
+    Header set Pragma "no-cache"
+    Header set Expires "0"
+  </FilesMatch>
 </IfModule>
 
 Options -Indexes
