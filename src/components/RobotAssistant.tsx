@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
-import { WHATSAPP_URL, WhatsAppIcon } from "@/components/site";
+import { WhatsAppIcon, useLinks } from "@/components/site";
+import { useContent } from "@/content/store";
 import { X } from "lucide-react";
 
 export function RobotAssistant() {
+  const c = useContent();
+  const { whatsappUrl } = useLinks();
   const [open, setOpen] = useState(false);
   const [dismissed, setDismissed] = useState(false);
 
@@ -11,7 +14,7 @@ export function RobotAssistant() {
     return () => clearTimeout(t);
   }, []);
 
-  if (dismissed) return null;
+  if (dismissed || !c.assistant.enabled) return null;
 
   return (
     <div
@@ -28,36 +31,30 @@ export function RobotAssistant() {
         >
           <X className="size-4" />
         </button>
-        <p className="pl-6 text-sm font-extrabold leading-6">حاب تتواصل معنا؟</p>
-        <p className="mt-1 text-xs text-muted-foreground">فريق لمحة جاهز يرد عليك على الواتساب.</p>
+        <p className="pl-6 text-sm font-extrabold leading-6">{c.assistant.title}</p>
+        <p className="mt-1 text-xs text-muted-foreground">{c.assistant.text}</p>
         <a
-          href={WHATSAPP_URL}
+          href={whatsappUrl}
           target="_blank"
           rel="noopener noreferrer"
           className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-4 py-2.5 text-xs font-bold text-primary-foreground transition-opacity hover:opacity-90"
         >
           <WhatsAppIcon className="size-4 shrink-0" />
-          <span>اضغط هنا</span>
+          <span>{c.assistant.buttonLabel}</span>
         </a>
         <span className="absolute -left-2 bottom-8 hidden size-4 rotate-45 bg-card sm:block" />
       </div>
 
-      <RobotFigure />
-    </div>
-  );
-}
-
-function RobotFigure() {
-  return (
-    <div className="pointer-events-none relative shrink-0">
-      <span className="absolute inset-x-2 bottom-1 h-3 rounded-[50%] bg-foreground/20 blur-md" aria-hidden />
-      <img
-        src="/mascot.png"
-        alt="تميمة تطبيق لمحة"
-        className="relative h-36 w-auto select-none drop-shadow-2xl sm:h-60"
-        style={{ animation: "robotFloat 3s ease-in-out infinite" }}
-      />
-      <style>{`@keyframes robotFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}`}</style>
+      <div className="pointer-events-none relative shrink-0">
+        <span className="absolute inset-x-2 bottom-1 h-3 rounded-[50%] bg-foreground/20 blur-md" aria-hidden />
+        <img
+          src={c.assistant.image}
+          alt="تميمة تطبيق لمحة"
+          className="relative h-36 w-auto select-none drop-shadow-2xl sm:h-60"
+          style={{ animation: "robotFloat 3s ease-in-out infinite" }}
+        />
+        <style>{`@keyframes robotFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}`}</style>
+      </div>
     </div>
   );
 }
