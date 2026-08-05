@@ -212,6 +212,7 @@ function Nav() {
   );
 }
 
+
 function Hero() {
   const [shotIndex, setShotIndex] = useState(0);
   const shot = heroShots[shotIndex] ?? heroShots[0]!;
@@ -233,9 +234,7 @@ function Hero() {
                 {shot.topIcon}
               </span>
               <span className="text-right leading-tight">
-                <span className="block text-[10px] text-muted-foreground sm:text-[11px]">
-                  {shot.topLabel}
-                </span>
+                <span className="block text-[10px] text-muted-foreground sm:text-[11px]">{shot.topLabel}</span>
                 <span className="block text-xs font-extrabold sm:text-sm">{shot.topValue}</span>
               </span>
             </div>
@@ -248,14 +247,14 @@ function Hero() {
                 {shot.bottomIcon}
               </span>
               <span className="text-right leading-tight">
-                <span className="block text-[10px] text-muted-foreground sm:text-[11px]">
-                  {shot.bottomLabel}
-                </span>
+                <span className="block text-[10px] text-muted-foreground sm:text-[11px]">{shot.bottomLabel}</span>
                 <span className="block text-xs font-extrabold sm:text-sm">{shot.bottomValue}</span>
               </span>
             </div>
           </div>
         </div>
+
+
 
         <div className="order-1 text-center md:order-2 md:text-right">
           <span className="inline-flex items-center gap-2 rounded-full bg-card/80 px-4 py-1.5 text-xs font-bold text-primary shadow-sm">
@@ -265,12 +264,16 @@ function Hero() {
             كل إعلان… <span className="text-gradient-brand">في لمحة!</span>
           </h1>
           <p className="mt-5 text-base leading-relaxed text-muted-foreground sm:text-lg md:text-xl">
+
             لمحة.. يجمع عميلك بإعلانك بكل تفاصيله — صور وفيديو وموقع وتواصل مباشر.
           </p>
 
           <div className="mt-6 flex flex-wrap justify-center gap-2 md:justify-start">
             {chips.map((c) => (
-              <span key={c} className="rounded-full bg-card px-4 py-2 text-sm font-bold shadow-sm">
+              <span
+                key={c}
+                className="rounded-full bg-card px-4 py-2 text-sm font-bold shadow-sm"
+              >
                 {c}
               </span>
             ))}
@@ -294,6 +297,7 @@ function Hero() {
     </section>
   );
 }
+
 
 type HeroShot = {
   src: string;
@@ -420,6 +424,7 @@ function PhoneSlideshow({
     const id = setInterval(() => setIndex((i) => (i + 1) % heroShots.length), 3200);
     return () => clearInterval(id);
   }, [setIndex]);
+
 
   return (
     <div className="absolute inset-0">
@@ -580,29 +585,14 @@ function Influencer() {
           </div>
           <div className="mt-5 space-y-3">
             {[
-              {
-                name: "مطعم الذوق الرفيع",
-                cat: "لأشهى الأكلات",
-                city: "مركز القوز",
-                v: "4,014",
-                h: "1,280",
-              },
-              {
-                name: "كوفي لمسة",
-                cat: "قهوة - مشروبات - حلا",
-                city: "مركز القوز",
-                v: "6,420",
-                h: "2,135",
-              },
-              {
-                name: "متجر الاتصالات الذكية",
-                cat: "هواتف وإكسسوارات",
-                city: "محافظة القنفذة",
-                v: "1,112",
-                h: "3,460",
-              },
+              { name: "مطعم الذوق الرفيع", cat: "لأشهى الأكلات", city: "مركز القوز", v: "4,014", h: "1,280" },
+              { name: "كوفي لمسة", cat: "قهوة - مشروبات - حلا", city: "مركز القوز", v: "6,420", h: "2,135" },
+              { name: "متجر الاتصالات الذكية", cat: "هواتف وإكسسوارات", city: "محافظة القنفذة", v: "1,112", h: "3,460" },
             ].map((a) => (
-              <div key={a.name} className="flex items-center gap-4 rounded-2xl bg-secondary/70 p-4">
+              <div
+                key={a.name}
+                className="flex items-center gap-4 rounded-2xl bg-secondary/70 p-4"
+              >
                 <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-primary-soft text-primary">
                   <Store className="size-5" />
                 </span>
@@ -743,14 +733,12 @@ function Coverage() {
         </div>
 
         <div className="order-1 text-center md:order-2 md:text-right">
-          <h2 className="font-display text-2xl sm:text-3xl md:text-4xl">
-            قريباً في جميع مناطق المملكة
-          </h2>
+          <h2 className="font-display text-2xl sm:text-3xl md:text-4xl">قريباً في جميع مناطق المملكة</h2>
           <p className="mt-4 text-sm leading-relaxed text-muted-foreground sm:text-base">
-            تطبيق لمحة كأول تطبيق يجمع إعلانات المتاجر والإعلانات الشخصية بكل تفاصيلها يتطلع لتغطية
-            كافة مناطق المملكة لأنكم تستحقون الأفضل. توسيع مناطق التغطية يحتاج منا المزيد من الوقت
-            والجهد لضمان أعلى مستوى جودة للخدمة، ويمكنك تصفح كافة المناطق المدعومة داخل التطبيق في
-            كل مرة نقوم بالتوسع إلى مناطق جديدة.
+            تطبيق لمحة كأول تطبيق يجمع إعلانات المتاجر والإعلانات الشخصية بكل تفاصيلها يتطلع
+            لتغطية كافة مناطق المملكة لأنكم تستحقون الأفضل. توسيع مناطق التغطية يحتاج منا المزيد
+            من الوقت والجهد لضمان أعلى مستوى جودة للخدمة، ويمكنك تصفح كافة المناطق المدعومة داخل
+            التطبيق في كل مرة نقوم بالتوسع إلى مناطق جديدة.
           </p>
           <ul className="mt-6 flex flex-wrap justify-center gap-2 md:justify-start">
             {coverage.map((c) => (
@@ -778,9 +766,7 @@ function Download() {
   return (
     <section id="download" className="bg-hero-glow">
       <div className="mx-auto max-w-4xl px-5 py-16 sm:py-24 text-center">
-        <h2 className="font-display text-3xl sm:text-4xl md:text-5xl">
-          حمّل لمحة الآن وابدأ البيع اليوم
-        </h2>
+        <h2 className="font-display text-3xl sm:text-4xl md:text-5xl">حمّل لمحة الآن وابدأ البيع اليوم</h2>
         <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
           إعلانك يوصل لآلاف العملاء في منطقتك، وعميلك يلقى كل التفاصيل وأكواد الخصم في مكان واحد.
         </p>

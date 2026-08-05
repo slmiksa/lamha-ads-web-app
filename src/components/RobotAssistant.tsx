@@ -50,34 +50,14 @@ export function RobotAssistant() {
 function RobotFigure() {
   return (
     <div className="pointer-events-none relative shrink-0">
-      <span
-        className="absolute inset-x-2 bottom-1 h-3 rounded-[50%] bg-foreground/20 blur-md"
-        aria-hidden
-      />
+      <span className="absolute inset-x-2 bottom-1 h-3 rounded-[50%] bg-foreground/20 blur-md" aria-hidden />
       <img
         src="/mascot.png"
         alt="تميمة تطبيق لمحة"
         className="relative h-36 w-auto select-none drop-shadow-2xl sm:h-60"
-        style={{
-          animation: "mascotWavePoint 3.4s ease-in-out infinite",
-          transformOrigin: "bottom left",
-          willChange: "transform",
-        }}
+        style={{ animation: "robotFloat 3s ease-in-out infinite" }}
       />
-      <style>{`
-        @media (prefers-reduced-motion: no-preference) {
-          @keyframes mascotWavePoint {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            12% { transform: translateY(-6px) rotate(0deg); }
-            18% { transform: translateY(-6px) rotate(-8deg); }
-            24% { transform: translateY(-6px) rotate(0deg); }
-            34% { transform: translateY(-8px) rotate(18deg) translateX(8px); }
-            56% { transform: translateY(-6px) rotate(18deg) translateX(8px); }
-            76% { transform: translateY(0) rotate(0deg); }
-            90% { transform: translateY(-3px) rotate(0deg); }
-          }
-        }
-      `}</style>
+      <style>{`@keyframes robotFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}`}</style>
     </div>
   );
 }

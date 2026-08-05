@@ -13,8 +13,7 @@ export const Route = createFileRoute("/privacy")({
       { property: "og:title", content: "سياسة الخصوصية — تطبيق لمحة للتسويق والإعلان" },
       {
         property: "og:description",
-        content:
-          "الشروط وسياسة الخصوصية لاستخدام منصة لمحة للتسويق عبر الموقع والتطبيقات المحمولة.",
+        content: "الشروط وسياسة الخصوصية لاستخدام منصة لمحة للتسويق عبر الموقع والتطبيقات المحمولة.",
       },
       { property: "og:type", content: "article" },
       { property: "og:url", content: "/privacy" },
@@ -239,6 +238,8 @@ const en: Section[] = [
   },
 ];
 
+
+
 function Sections({ items }: { items: Section[] }) {
   return (
     <div className="space-y-8">
@@ -246,9 +247,7 @@ function Sections({ items }: { items: Section[] }) {
         <section key={`${s.title}-${i}`}>
           {s.title && <h2 className="font-display text-xl sm:text-2xl">{s.title}</h2>}
           <div className="mt-3 space-y-3 text-sm leading-7 text-muted-foreground sm:text-base">
-            {s.paras?.map((p) => (
-              <p key={p}>{p}</p>
-            ))}
+            {s.paras?.map((p) => <p key={p}>{p}</p>)}
             {s.list && (
               <ul className="list-inside list-disc space-y-1.5">
                 {s.list.map((l) => (
