@@ -50,17 +50,17 @@ export function ContentProvider({ children }: { children: React.ReactNode }) {
     const restore = () => {
       if (!cancelled) setLocal(readLocal());
     };
-    const idleId = window.requestIdleCallback(restore, { timeout: 500 });
+    const idleId = window.setTimeout(restore, 0);
     return () => {
       cancelled = true;
-      window.cancelIdleCallback(idleId);
+      window.clearTimeout(idleId);
     };
   }, []);
 
   // Published content file (upload content.json next to index.html on the server)
   useEffect(() => {
     let alive = true;
-    fetch(`/content.json?v=${Date.now()}`, { cache: "no-store" })
+    fetch("/content.json", { cache: "no-store" })
       .then((r) => {
         const type = r.headers.get("content-type") ?? "";
         return r.ok && type.includes("application/json") ? r.json() : null;
