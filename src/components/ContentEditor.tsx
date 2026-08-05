@@ -117,6 +117,8 @@ const LABELS: Record<string, string> = {
 
 const IMAGE_KEYS = new Set(["logo", "favicon", "ogImage", "image", "img", "src"]);
 const LONG_KEYS = new Set(["desc", "description", "a", "text", "subtitle", "intro", "ogDescription", "note", "lines", "paras", "list", "bullets"]);
+const MAX_IMAGE_DIMENSION = 1280;
+const MAX_IMAGE_FILE_BYTES = 8_000_000;
 
 function label(key: string) {
   return LABELS[key] ?? key;
@@ -135,6 +137,39 @@ function blankLike(sample: unknown): unknown {
   return "";
 }
 
+function compressImage(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    if (file.size > MAX_IMAGE_FILE_BYTES) {
+      reject(new Error("الصورة كبيرة جدًا. الحد الأقصى 8 ميجابايت."));
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onerror = () => reject(new Error("تعذر قراءة الصورة."));
+    reader.onload = () => {
+      const image = new Image();
+      image.onerror = () => reject(new Error("صيغة الصورة غير مدعومة."));
+      image.onload = () => {
+        const scale = Math.min(1, MAX_IMAGE_DIMENSION / Math.max(image.width, image.height));
+        const width = Math.max(1, Math.round(image.width * scale));
+        const height = Math.max(1, Math.round(image.height * scale));
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const context = canvas.getContext("2d");
+        if (!context) {
+          reject(new Error("تعذر تجهيز الصورة."));
+          return;
+        }
+        context.drawImage(image, 0, 0, width, height);
+        resolve(canvas.toDataURL("image/webp", 0.72));
+      };
+      image.src = String(reader.result);
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
 function ImageField({
   value,
   onChange,
@@ -143,8 +178,11 @@ function ImageField({
   onChange: (v: string) => void;
 }) {
   const fileRef = useRef<HTMLInputElement>(null);
+  const [processing, setProcessing] = useState(false);
+  const [error, setError] = useState("");
   return (
-    <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+    <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
       {value && (
         <img
           src={value}
@@ -164,21 +202,31 @@ function ImageField({
         type="file"
         accept="image/*"
         hidden
-        onChange={(e) => {
+        onChange={async (e) => {
           const f = e.target.files?.[0];
           if (!f) return;
-          const reader = new FileReader();
-          reader.onload = () => onChange(String(reader.result));
-          reader.readAsDataURL(f);
+          setProcessing(true);
+          setError("");
+          try {
+            onChange(await compressImage(f));
+          } catch (reason) {
+            setError(reason instanceof Error ? reason.message : "تعذر ضغط الصورة.");
+          } finally {
+            setProcessing(false);
+            e.target.value = "";
+          }
         }}
       />
       <button
         type="button"
         onClick={() => fileRef.current?.click()}
+        disabled={processing}
         className="inline-flex shrink-0 items-center gap-1.5 rounded-xl bg-secondary px-3 py-2 text-xs font-bold"
       >
-        <Upload className="size-4" /> رفع صورة
+        <Upload className="size-4" /> {processing ? "جارٍ الضغط…" : "رفع صورة"}
       </button>
+      </div>
+      {error && <p className="text-xs font-bold text-destructive">{error}</p>}
     </div>
   );
 }
