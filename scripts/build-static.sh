@@ -17,7 +17,7 @@ if [ ! -d dist/client ]; then
 fi
 
 echo "==> 2/4 تشغيل خادم مؤقت لتوليد صفحات HTML"
-npx vite preview --port "$PORT" --strictPort --host 127.0.0.1 > /tmp/lamha-preview.log 2>&1 &
+npx wrangler@latest --cwd dist/server dev --port "$PORT" --ip 127.0.0.1 > /tmp/lamha-preview.log 2>&1 &
 SERVER_PID=$!
 cleanup() { kill "$SERVER_PID" 2>/dev/null || true; rm -rf "$STAGE"; }
 trap cleanup EXIT
