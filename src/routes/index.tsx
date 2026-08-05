@@ -1,45 +1,21 @@
 import { useEffect, useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { SaudiDotMap } from "@/components/SaudiDotMap";
 import { Logo, SiteFooter, StoreButtons } from "@/components/site";
-import { Link } from "@tanstack/react-router";
-import {
-  Megaphone,
-  MapPin,
-  Video,
-  Ticket,
-  QrCode,
-  Bell,
-  Star,
-  Mic,
-  Trophy,
-  Store,
-  Sparkles,
-  ArrowLeft,
-  ShieldCheck,
-  Heart,
-  Eye,
-  Zap,
-  Users,
-  Menu,
-  X,
-} from "lucide-react";
+import { useContent } from "@/content/store";
+import { defaultContent, type SiteContent } from "@/content/defaults";
+import { getIcon } from "@/content/icons";
+import { Megaphone, MapPin, Star, Store, Sparkles, ArrowLeft, ShieldCheck, Heart, Eye, Menu, X } from "lucide-react";
+
+const seo = defaultContent.home.seo;
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "تطبيق لمحة — إعلانات المتاجر والإعلانات الشخصية في مكان واحد" },
-      {
-        name: "description",
-        content:
-          "لمحة هو التطبيق الأول في السعودية والشرق الأوسط الذي يجمع العميل بإعلانات المتاجر والإعلانات الشخصية بالصور والفيديو والموقع، مع أكواد خصم حصرية ودعم المشاهير. حمّل الآن.",
-      },
-      { property: "og:title", content: "تطبيق لمحة — إعلاناتك توصل لكل عميل" },
-      {
-        property: "og:description",
-        content:
-          "إعلانات المتاجر والإعلانات الشخصية بالصور والفيديو والموقع، أكواد خصم حصرية، بودكاست وتغطيات ومسابقات، ودعم إعلانك عبر شخصية مشهورة.",
-      },
+      { title: seo.title },
+      { name: "description", content: seo.description },
+      { property: "og:title", content: seo.ogTitle },
+      { property: "og:description", content: seo.ogDescription },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -47,95 +23,41 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-const chips = ["🏪 متاجر", "💍 دعوات زواج", "🏠 عقارات", "🎁 أكواد خصم"];
-
-const features = [
-  {
-    icon: Megaphone,
-    title: "إعلانات متاجر وإعلانات شخصية",
-    desc: "منصة واحدة تجمع إعلانات المتاجر والخدمات مع الإعلانات الشخصية بكل تفاصيلها.",
-  },
-  {
-    icon: Video,
-    title: "صور وفيديوهات للإعلان",
-    desc: "اعرض منتجك بالصور ومقاطع فيديو تصل لآلاف المتصفحين في قسم المعرض.",
-  },
-  {
-    icon: MapPin,
-    title: "موقع الإعلان على الخريطة",
-    desc: "حدّد موقعك بدقة على الخريطة ليصل العميل إليك مباشرة بدون عناء.",
-  },
-  {
-    icon: Ticket,
-    title: "أكواد خصم حصرية",
-    desc: "لكل متجر أكواد خصم حصرية داخل التطبيق تزيد مبيعاتك وترضي عملاءك.",
-  },
-  {
-    icon: QrCode,
-    title: "نظام مسح الأكواد",
-    desc: "امسح الكود واستفد من العرض فوراً — تجربة سريعة وآمنة داخل المتجر.",
-  },
-  {
-    icon: Bell,
-    title: "إعلانات عبر الإشعارات",
-    desc: "وصول مباشر لجمهورك عبر الإشعارات والإعلانات المميزة في الواجهة.",
-  },
-];
-
-const contentCards = [
-  { icon: Mic, title: "بودكاست ولقاءات", desc: "حوارات مطوّلة مع صنّاع الفكرة وأصحاب المشاريع." },
-  { icon: Video, title: "تغطيات لمحة", desc: "تغطية مباشرة لأبرز الفعاليات والمناسبات في مدينتك." },
-  { icon: Trophy, title: "مسابقات وجوائز", desc: "مسابقات دورية تزيد التفاعل وتقرّبك من الجمهور." },
-];
-
-const steps = [
-  { n: "١", title: "حمّل التطبيق", desc: "متوفر على آيفون وأندرويد مجاناً." },
-  { n: "٢", title: "اختر باقتك", desc: "دعوات زواج، إعلانات عامة، تجارية، عقارية، أو أسر منتجة." },
-  { n: "٣", title: "أضف تفاصيلك", desc: "الاسم، الوصف، رقم التواصل، الموقع، الصور والفيديو." },
-  { n: "٤", title: "انشر ووصّل", desc: "إعلانك يظهر لعملاء منطقتك — ويمكن دعمه عبر شخصية مشهورة." },
-];
-
 function Index() {
+  const c = useContent();
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <Nav />
-      <Hero />
-      <Services />
-      <Features />
-      <Influencer />
-      <Content />
-      <Steps />
-      <Packages />
-      <Coverage />
-      <Download />
+      <Nav c={c} />
+      <Hero c={c} />
+      <Services c={c} />
+      <Features c={c} />
+      <Influencer c={c} />
+      <MediaSection c={c} />
+      <Steps c={c} />
+      <Packages c={c} />
+      <Coverage c={c} />
+      <Download c={c} />
       <SiteFooter />
     </div>
   );
 }
 
-const navLinks = [
-  { l: "المميزات", h: "#features" },
-  { l: "دعم المشاهير", h: "#influencer" },
-  { l: "كيف يعمل", h: "#steps" },
-  { l: "الباقات", h: "#packages" },
-];
-
-function Nav() {
+function Nav({ c }: { c: SiteContent }) {
   const [open, setOpen] = useState(false);
   return (
     <header className="sticky top-0 z-50 bg-background/70 backdrop-blur-xl">
       <div className="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-3 sm:px-5 sm:py-4 md:flex md:justify-between">
         <a href="#top" className="min-w-0">
-          <Logo size={72} />
+          <Logo size={c.brand.logoSizeNav} />
         </a>
         <nav className="hidden items-center gap-2 rounded-full bg-secondary p-1.5 text-sm text-muted-foreground lg:flex">
-          {navLinks.map((i) => (
+          {c.nav.links.map((i) => (
             <a
-              key={i.h}
-              href={i.h}
+              key={i.href}
+              href={i.href}
               className="rounded-full px-4 py-1.5 transition-colors hover:bg-card hover:text-foreground"
             >
-              {i.l}
+              {i.label}
             </a>
           ))}
         </nav>
@@ -144,20 +66,19 @@ function Nav() {
             to="/partners"
             className="hidden rounded-full px-3 py-2 text-sm font-bold text-muted-foreground transition-colors hover:text-foreground sm:inline-flex"
           >
-            شركاء النجاح
+            {c.nav.partnersLabel}
           </Link>
           <Link
             to="/support"
             className="hidden rounded-full px-3 py-2 text-sm font-bold text-muted-foreground transition-colors hover:text-foreground sm:inline-flex"
           >
-            الدعم الفني
+            {c.nav.supportLabel}
           </Link>
-
           <a
             href="#download"
             className="rounded-full bg-primary px-4 py-2 text-xs font-bold text-primary-foreground transition-opacity hover:opacity-90 sm:px-5 sm:py-2.5 sm:text-sm"
           >
-            تحميل التطبيق
+            {c.nav.ctaLabel}
           </a>
           <button
             type="button"
@@ -173,14 +94,14 @@ function Nav() {
       {open && (
         <div className="border-t border-border/60 bg-background/95 px-4 py-3 backdrop-blur-xl lg:hidden">
           <nav className="mx-auto flex max-w-6xl flex-col gap-1 text-sm font-bold">
-            {navLinks.map((i) => (
+            {c.nav.links.map((i) => (
               <a
-                key={i.h}
-                href={i.h}
+                key={i.href}
+                href={i.href}
                 onClick={() => setOpen(false)}
                 className="rounded-xl px-3 py-2.5 text-foreground transition-colors hover:bg-secondary"
               >
-                {i.l}
+                {i.label}
               </a>
             ))}
             <Link
@@ -188,22 +109,21 @@ function Nav() {
               onClick={() => setOpen(false)}
               className="rounded-xl px-3 py-2.5 text-foreground transition-colors hover:bg-secondary"
             >
-              شركاء النجاح
+              {c.nav.partnersLabel}
             </Link>
             <Link
               to="/support"
               onClick={() => setOpen(false)}
               className="rounded-xl px-3 py-2.5 text-foreground transition-colors hover:bg-secondary"
             >
-              الدعم الفني
+              {c.nav.supportLabel}
             </Link>
-
             <Link
               to="/privacy"
               onClick={() => setOpen(false)}
               className="rounded-xl px-3 py-2.5 text-foreground transition-colors hover:bg-secondary"
             >
-              سياسة الخصوصية
+              {c.nav.privacyLabel}
             </Link>
           </nav>
         </div>
@@ -212,10 +132,11 @@ function Nav() {
   );
 }
 
-
-function Hero() {
+function Hero({ c }: { c: SiteContent }) {
+  const h = c.home.hero;
   const [shotIndex, setShotIndex] = useState(0);
-  const shot = heroShots[shotIndex] ?? heroShots[0]!;
+  const shots = h.shots.length ? h.shots : defaultContent.home.hero.shots;
+  const shot = shots[Math.min(shotIndex, shots.length - 1)]!;
 
   return (
     <section id="top" className="bg-hero-glow relative overflow-hidden">
@@ -223,7 +144,7 @@ function Hero() {
         <div className="order-2 md:order-1">
           <div className="relative mx-auto w-[75%] max-w-[320px] sm:w-full">
             <PhoneFrame>
-              <PhoneSlideshow index={shotIndex} setIndex={setShotIndex} />
+              <PhoneSlideshow shots={shots} index={shotIndex} setIndex={setShotIndex} ms={h.slideMs} />
             </PhoneFrame>
 
             <div
@@ -254,27 +175,21 @@ function Hero() {
           </div>
         </div>
 
-
-
         <div className="order-1 text-center md:order-2 md:text-right">
           <span className="inline-flex items-center gap-2 rounded-full bg-card/80 px-4 py-1.5 text-xs font-bold text-primary shadow-sm">
-            <span className="size-2 rounded-full bg-primary" /> الأول في السعودية والشرق الأوسط
+            <span className="size-2 rounded-full bg-primary" /> {h.badge}
           </span>
           <h1 className="mt-6 font-display text-[2.25rem] leading-[1.15] sm:text-5xl sm:leading-[1.1] md:text-7xl">
-            كل إعلان… <span className="text-gradient-brand">في لمحة!</span>
+            {h.titleA} <span className="text-gradient-brand">{h.titleB}</span>
           </h1>
           <p className="mt-5 text-base leading-relaxed text-muted-foreground sm:text-lg md:text-xl">
-
-            لمحة.. يجمع عميلك بإعلانك بكل تفاصيله — صور وفيديو وموقع وتواصل مباشر.
+            {h.subtitle}
           </p>
 
           <div className="mt-6 flex flex-wrap justify-center gap-2 md:justify-start">
-            {chips.map((c) => (
-              <span
-                key={c}
-                className="rounded-full bg-card px-4 py-2 text-sm font-bold shadow-sm"
-              >
-                {c}
+            {h.chips.map((chip, i) => (
+              <span key={i} className="rounded-full bg-card px-4 py-2 text-sm font-bold shadow-sm">
+                {chip}
               </span>
             ))}
           </div>
@@ -285,11 +200,11 @@ function Hero() {
 
           <div className="mt-7 flex flex-wrap items-center justify-center gap-5 text-sm text-muted-foreground md:justify-start">
             <span className="inline-flex items-center gap-2">
-              <ShieldCheck className="size-4 text-primary" /> إعلانات موثقة
+              <ShieldCheck className="size-4 text-primary" /> {h.trust1}
             </span>
             <span className="hidden h-4 w-px bg-border md:block" />
             <span className="inline-flex items-center gap-2">
-              <MapPin className="size-4 text-primary" /> تغطية لكل مدن المملكة
+              <MapPin className="size-4 text-primary" /> {h.trust2}
             </span>
           </div>
         </div>
@@ -298,139 +213,28 @@ function Hero() {
   );
 }
 
-
-type HeroShot = {
-  src: string;
-  alt: string;
-  topIcon: string;
-  topLabel: string;
-  topValue: string;
-  bottomIcon: string;
-  bottomLabel: string;
-  bottomValue: string;
-};
-
-const heroShots: HeroShot[] = [
-  {
-    src: "/hero-app.webp",
-    alt: "الصفحة الرئيسية في تطبيق لمحة مع الإعلانات المميزة",
-    topIcon: "🛍️",
-    topLabel: "الصفحة الرئيسية",
-    topValue: "إعلانات مميزة",
-    bottomIcon: "🎥",
-    bottomLabel: "تغطيات مباشرة",
-    bottomValue: "من قلب الحدث",
-  },
-  {
-    src: "/screens/s1.webp",
-    alt: "تصفح إعلانات الكافيهات والهواتف في تطبيق لمحة",
-    topIcon: "☕",
-    topLabel: "تصفح حسب النشاط",
-    topValue: "كافيهات وجوالات",
-    bottomIcon: "📍",
-    bottomLabel: "قريب منك",
-    bottomValue: "إعلانات منطقتك",
-  },
-  {
-    src: "/screens/s2.webp",
-    alt: "تصنيفات الإعلانات في تطبيق لمحة",
-    topIcon: "🗂️",
-    topLabel: "تصنيفات متنوعة",
-    topValue: "+٢٠ تصنيف",
-    bottomIcon: "🔎",
-    bottomLabel: "وصول أسرع",
-    bottomValue: "لِما تبحث عنه",
-  },
-  {
-    src: "/screens/s3.webp",
-    alt: "اختيار باقة الإعلان في تطبيق لمحة",
-    topIcon: "🎯",
-    topLabel: "اختر باقتك",
-    topValue: "عام أو تجاري",
-    bottomIcon: "🗓️",
-    bottomLabel: "إعلانك ظاهر",
-    bottomValue: "لمدة شهر",
-  },
-  {
-    src: "/screens/s4.webp",
-    alt: "نموذج إضافة إعلان جديد في تطبيق لمحة",
-    topIcon: "📝",
-    topLabel: "أضف إعلانك",
-    topValue: "بخطوات بسيطة",
-    bottomIcon: "⚡",
-    bottomLabel: "نشر سريع",
-    bottomValue: "خلال دقائق",
-  },
-  {
-    src: "/screens/s5.webp",
-    alt: "تحديد موقع الإعلان على الخريطة في تطبيق لمحة",
-    topIcon: "🗺️",
-    topLabel: "حدد موقعك",
-    topValue: "على الخريطة",
-    bottomIcon: "🖼️",
-    bottomLabel: "صورة الغلاف",
-    bottomValue: "تجذب العميل",
-  },
-  {
-    src: "/screens/s6.webp",
-    alt: "إضافة صور وفيديو وترويج عبر شخصية مشهورة",
-    topIcon: "⭐",
-    topLabel: "دعم مشهور",
-    topValue: "انتشار أوسع",
-    bottomIcon: "📸",
-    bottomLabel: "صور وفيديو",
-    bottomValue: "لكل التفاصيل",
-  },
-  {
-    src: "/screens/s7.webp",
-    alt: "تفاصيل الإعلان مع التواصل عبر واتساب والاتصال",
-    topIcon: "💬",
-    topLabel: "تواصل مباشر",
-    topValue: "واتساب واتصال",
-    bottomIcon: "🧭",
-    bottomLabel: "موقع الإعلان",
-    bottomValue: "بالوصول السريع",
-  },
-  {
-    src: "/screens/s8.webp",
-    alt: "معرض الفيديوهات في تطبيق لمحة",
-    topIcon: "▶️",
-    topLabel: "فيديوهات وبودكاست",
-    topValue: "محتوى متجدد",
-    bottomIcon: "🔥",
-    bottomLabel: "مشاهدات أعلى",
-    bottomValue: "تفاعل أكبر",
-  },
-  {
-    src: "/screens/s9.webp",
-    alt: "صفحة حسابي في تطبيق لمحة",
-    topIcon: "👤",
-    topLabel: "حسابي",
-    topValue: "إدارة إعلاناتك",
-    bottomIcon: "❤️",
-    bottomLabel: "المفضلة",
-    bottomValue: "والمدفوعات",
-  },
-];
-
 function PhoneSlideshow({
+  shots,
   index,
   setIndex,
+  ms,
 }: {
+  shots: SiteContent["home"]["hero"]["shots"];
   index: number;
   setIndex: React.Dispatch<React.SetStateAction<number>>;
+  ms: number;
 }) {
+  const len = shots.length;
   useEffect(() => {
-    const id = setInterval(() => setIndex((i) => (i + 1) % heroShots.length), 3200);
+    const id = setInterval(() => setIndex((i) => (i + 1) % len), Math.max(800, ms || 3200));
     return () => clearInterval(id);
-  }, [setIndex]);
-
+  }, [setIndex, len, ms]);
 
   return (
     <div className="absolute inset-0">
-      {heroShots.map((shot, i) => (
+      {shots.map((shot, i) => (
         <img
-          key={shot.src}
+          key={`${shot.src}-${i}`}
           src={shot.src}
           alt={shot.alt}
           className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${
@@ -440,9 +244,9 @@ function PhoneSlideshow({
         />
       ))}
       <div className="absolute bottom-3 left-1/2 z-10 flex -translate-x-1/2 items-center gap-1.5 rounded-full bg-foreground/40 px-2.5 py-1.5 backdrop-blur-sm">
-        {heroShots.map((shot, i) => (
+        {shots.map((shot, i) => (
           <button
-            key={shot.src}
+            key={`dot-${shot.src}-${i}`}
             type="button"
             aria-label={`عرض اللقطة ${i + 1}`}
             onClick={() => setIndex(i)}
@@ -467,44 +271,6 @@ function PhoneFrame({ children }: { children: React.ReactNode }) {
   );
 }
 
-function Services() {
-  const items = [
-    { v: "+٢٠", l: "تصنيف ونشاط" },
-    { v: "١٠٠٪", l: "تفاصيل كاملة للإعلان" },
-    { v: "٢٤/٧", l: "نشر ومتابعة" },
-    { v: "١٠٠٪", l: "إعلانك ظاهر لمدة شهر" },
-  ];
-  const cards = [
-    { icon: Zap, title: "نشر سريع", desc: "أضف إعلانك بدقائق وانشره لعملاء منطقتك." },
-    { icon: Users, title: "وصول أوسع", desc: "إعلانك يظهر للعملاء وللمشاهير المختارين." },
-    { icon: Ticket, title: "خصومات حصرية", desc: "أكواد خصم لكل متجر مع نظام مسح فوري." },
-  ];
-  return (
-    <section className="mx-auto max-w-6xl px-5 py-14 sm:py-20">
-      <SectionTitle kicker="خدماتنا" title="كل اللي يحتاجه إعلانك في مكان واحد" />
-      <div className="mt-12 grid grid-cols-2 gap-4 md:grid-cols-4">
-        {items.map((i) => (
-          <div key={i.l} className="surface-card px-4 py-7 text-center">
-            <div className="font-display text-3xl font-extrabold text-primary">{i.v}</div>
-            <div className="mt-1 text-sm text-muted-foreground">{i.l}</div>
-          </div>
-        ))}
-      </div>
-      <div className="mt-5 grid gap-5 md:grid-cols-3">
-        {cards.map((c) => (
-          <article key={c.title} className="rounded-3xl bg-accent/70 p-7">
-            <span className="grid size-12 place-items-center rounded-2xl bg-card text-primary shadow-sm">
-              <c.icon className="size-6" />
-            </span>
-            <h3 className="mt-5 text-lg">{c.title}</h3>
-            <p className="mt-2 text-sm text-muted-foreground">{c.desc}</p>
-          </article>
-        ))}
-      </div>
-    </section>
-  );
-}
-
 function SectionTitle({ kicker, title, desc }: { kicker: string; title: string; desc?: string }) {
   return (
     <div className="mx-auto max-w-2xl text-center">
@@ -517,56 +283,78 @@ function SectionTitle({ kicker, title, desc }: { kicker: string; title: string; 
   );
 }
 
-function Features() {
+function Services({ c }: { c: SiteContent }) {
+  const s = c.home.services;
+  return (
+    <section className="mx-auto max-w-6xl px-5 py-14 sm:py-20">
+      <SectionTitle kicker={s.kicker} title={s.title} />
+      <div className="mt-12 grid grid-cols-2 gap-4 md:grid-cols-4">
+        {s.stats.map((i, k) => (
+          <div key={k} className="surface-card px-4 py-7 text-center">
+            <div className="font-display text-3xl font-extrabold text-primary">{i.value}</div>
+            <div className="mt-1 text-sm text-muted-foreground">{i.label}</div>
+          </div>
+        ))}
+      </div>
+      <div className="mt-5 grid gap-5 md:grid-cols-3">
+        {s.cards.map((card, k) => {
+          const Icon = getIcon(card.icon);
+          return (
+            <article key={k} className="rounded-3xl bg-accent/70 p-7">
+              <span className="grid size-12 place-items-center rounded-2xl bg-card text-primary shadow-sm">
+                <Icon className="size-6" />
+              </span>
+              <h3 className="mt-5 text-lg">{card.title}</h3>
+              <p className="mt-2 text-sm text-muted-foreground">{card.desc}</p>
+            </article>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
+function Features({ c }: { c: SiteContent }) {
+  const f = c.home.features;
   return (
     <section id="features" className="bg-secondary/60">
       <div className="mx-auto max-w-6xl px-5 py-14 sm:py-20">
-        <SectionTitle
-          kicker="المميزات"
-          title="كل ما يحتاجه إعلانك… وكل ما يبحث عنه عميلك"
-          desc="تجربة إعلانية متكاملة من النشر حتى وصول العميل إلى باب متجرك."
-        />
+        <SectionTitle kicker={f.kicker} title={f.title} desc={f.desc} />
         <div className="mt-12 grid gap-5 md:grid-cols-3">
-          {features.map((f) => (
-            <article
-              key={f.title}
-              className="surface-card group p-7 transition-transform hover:-translate-y-1"
-            >
-              <span className="grid size-12 place-items-center rounded-2xl bg-primary-soft text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-                <f.icon className="size-6" />
-              </span>
-              <h3 className="mt-5 text-lg">{f.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{f.desc}</p>
-            </article>
-          ))}
+          {f.items.map((item, k) => {
+            const Icon = getIcon(item.icon);
+            return (
+              <article key={k} className="surface-card group p-7 transition-transform hover:-translate-y-1">
+                <span className="grid size-12 place-items-center rounded-2xl bg-primary-soft text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
+                  <Icon className="size-6" />
+                </span>
+                <h3 className="mt-5 text-lg">{item.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{item.desc}</p>
+              </article>
+            );
+          })}
         </div>
       </div>
     </section>
   );
 }
 
-function Influencer() {
+function Influencer({ c }: { c: SiteContent }) {
+  const inf = c.home.influencer;
   return (
     <section id="influencer" className="mx-auto max-w-6xl px-5 py-14 sm:py-20">
       <div className="grid items-center gap-12 md:grid-cols-2">
         <div>
           <span className="inline-flex items-center gap-2 rounded-full bg-gold-grad px-4 py-1.5 text-xs font-bold text-primary-foreground">
-            <Sparkles className="size-3.5" /> ميزة جوهرية
+            <Sparkles className="size-3.5" /> {inf.badge}
           </span>
           <h2 className="mt-5 font-display text-2xl sm:text-3xl md:text-4xl">
-            دع <span className="text-gradient-brand">شخصية مشهورة</span> تدعم إعلانك
+            {inf.titleA} <span className="text-gradient-brand">{inf.titleB}</span>
           </h2>
-          <p className="mt-4 leading-relaxed text-muted-foreground">
-            اختر شخصية مؤثرة في منطقتك أثناء نشر إعلانك، ليظهر إعلانك داخل التطبيق وأيضاً لدى
-            المشهور المختار. وصول أوسع، ثقة أكبر، ونتائج أسرع لإعلانك.
-          </p>
+          <p className="mt-4 leading-relaxed text-muted-foreground">{inf.desc}</p>
           <ul className="mt-6 space-y-3 text-sm">
-            {[
-              "قائمة شخصيات موثقة يمكنك تصفحها قبل الاختيار",
-              "انتشار إعلانك في نطاق جمهور المؤثر داخل منطقتك",
-              "تفاعل أعلى وعملاء أكثر لإعلانك المميز",
-            ].map((t) => (
-              <li key={t} className="flex items-start gap-3">
+            {inf.bullets.map((t, i) => (
+              <li key={i} className="flex items-start gap-3">
                 <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-primary-soft text-primary">
                   <Star className="size-3" />
                 </span>
@@ -579,20 +367,13 @@ function Influencer() {
         <div className="surface-card p-6">
           <div className="flex items-center justify-between">
             <span className="rounded-full bg-gold-grad px-3 py-1 text-xs font-bold text-primary-foreground">
-              مميز
+              {inf.cardBadge}
             </span>
-            <span className="text-sm font-bold">إعلان مدعوم</span>
+            <span className="text-sm font-bold">{inf.cardLabel}</span>
           </div>
           <div className="mt-5 space-y-3">
-            {[
-              { name: "مطعم الذوق الرفيع", cat: "لأشهى الأكلات", city: "مركز القوز", v: "4,014", h: "1,280" },
-              { name: "كوفي لمسة", cat: "قهوة - مشروبات - حلا", city: "مركز القوز", v: "6,420", h: "2,135" },
-              { name: "متجر الاتصالات الذكية", cat: "هواتف وإكسسوارات", city: "محافظة القنفذة", v: "1,112", h: "3,460" },
-            ].map((a) => (
-              <div
-                key={a.name}
-                className="flex items-center gap-4 rounded-2xl bg-secondary/70 p-4"
-              >
+            {inf.ads.map((a, i) => (
+              <div key={i} className="flex items-center gap-4 rounded-2xl bg-secondary/70 p-4">
                 <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-primary-soft text-primary">
                   <Store className="size-5" />
                 </span>
@@ -605,10 +386,10 @@ function Influencer() {
                 </div>
                 <div className="flex flex-col items-end gap-1 text-xs text-muted-foreground">
                   <span className="inline-flex items-center gap-1">
-                    <Eye className="size-3.5" /> {a.v}
+                    <Eye className="size-3.5" /> {a.views}
                   </span>
                   <span className="inline-flex items-center gap-1">
-                    <Heart className="size-3.5" /> {a.h}
+                    <Heart className="size-3.5" /> {a.likes}
                   </span>
                 </div>
               </div>
@@ -620,45 +401,46 @@ function Influencer() {
   );
 }
 
-function Content() {
+function MediaSection({ c }: { c: SiteContent }) {
+  const m = c.home.media;
   return (
     <section className="bg-secondary/60">
       <div className="mx-auto max-w-6xl px-5 py-14 sm:py-20">
-        <SectionTitle
-          kicker="أكثر من مجرد إعلانات"
-          title="بودكاست، تغطيات، ومسابقات"
-          desc="محتوى يومي يقرّب المتاجر من عملائها ويجعل التطبيق وجهة يومية."
-        />
+        <SectionTitle kicker={m.kicker} title={m.title} desc={m.desc} />
         <div className="mt-12 grid gap-5 md:grid-cols-3">
-          {contentCards.map((c) => (
-            <article key={c.title} className="surface-card overflow-hidden">
-              <div className="bg-brand p-9 text-primary-foreground">
-                <c.icon className="size-8" />
-              </div>
-              <div className="p-6">
-                <h3 className="text-lg">{c.title}</h3>
-                <p className="mt-2 text-sm text-muted-foreground">{c.desc}</p>
-              </div>
-            </article>
-          ))}
+          {m.items.map((item, k) => {
+            const Icon = getIcon(item.icon);
+            return (
+              <article key={k} className="surface-card overflow-hidden">
+                <div className="bg-brand p-9 text-primary-foreground">
+                  <Icon className="size-8" />
+                </div>
+                <div className="p-6">
+                  <h3 className="text-lg">{item.title}</h3>
+                  <p className="mt-2 text-sm text-muted-foreground">{item.desc}</p>
+                </div>
+              </article>
+            );
+          })}
         </div>
       </div>
     </section>
   );
 }
 
-function Steps() {
+function Steps({ c }: { c: SiteContent }) {
+  const s = c.home.steps;
   return (
     <section id="steps" className="mx-auto max-w-6xl px-5 py-14 sm:py-20">
-      <SectionTitle kicker="كيف يعمل" title="انشر إعلانك في أربع خطوات" />
+      <SectionTitle kicker={s.kicker} title={s.title} />
       <div className="mt-12 grid gap-5 md:grid-cols-4">
-        {steps.map((s) => (
-          <div key={s.n} className="rounded-3xl bg-accent/70 p-7">
+        {s.items.map((step, i) => (
+          <div key={i} className="rounded-3xl bg-accent/70 p-7">
             <span className="grid size-11 place-items-center rounded-2xl bg-brand font-display text-lg font-extrabold text-primary-foreground">
-              {s.n}
+              {step.n}
             </span>
-            <h3 className="mt-4 text-base">{s.title}</h3>
-            <p className="mt-2 text-sm text-muted-foreground">{s.desc}</p>
+            <h3 className="mt-4 text-base">{step.title}</h3>
+            <p className="mt-2 text-sm text-muted-foreground">{step.desc}</p>
           </div>
         ))}
       </div>
@@ -666,29 +448,19 @@ function Steps() {
   );
 }
 
-function Packages() {
-  const packs = [
-    { name: "اعلانات عامة", note: "الإعلانات العامة والشخصية", gold: true },
-    { name: "دعوات الزواج", note: "بطاقة دعوة زواجك لكل مدينتك" },
-    { name: "اعلانات اسر منتجة", note: "مكانك الحقيقي لأسرتك المنتجة", gold: true },
-    { name: "اعلانات تجارية", note: "اعرض إعلانك التجاري وتميّز" },
-    { name: "اعلانات عقارية", note: "عقارك - استراحتك - شقتك" },
-  ];
+function Packages({ c }: { c: SiteContent }) {
+  const p = c.home.packages;
   return (
     <section id="packages" className="bg-secondary/60">
       <div className="mx-auto max-w-6xl px-5 py-14 sm:py-20">
-        <SectionTitle
-          kicker="الباقات"
-          title="باقة تناسب كل إعلان"
-          desc="اختر الباقة المناسبة لنوع إعلانك داخل التطبيق."
-        />
+        <SectionTitle kicker={p.kicker} title={p.title} desc={p.desc} />
         <div className="mt-12 grid gap-5 md:grid-cols-3">
-          {packs.map((p) => (
+          {p.items.map((item, i) => (
             <article
-              key={p.name}
+              key={i}
               className="surface-card p-7"
               style={
-                p.gold
+                item.gold
                   ? { borderColor: "color-mix(in oklab, var(--gold) 55%, transparent)" }
                   : undefined
               }
@@ -698,8 +470,8 @@ function Packages() {
                   <Megaphone className="size-5" />
                 </span>
                 <div>
-                  <h3 className="text-lg">{p.name}</h3>
-                  <p className="mt-2 text-sm text-muted-foreground">{p.note}</p>
+                  <h3 className="text-lg">{item.name}</h3>
+                  <p className="mt-2 text-sm text-muted-foreground">{item.note}</p>
                 </div>
               </div>
             </article>
@@ -710,43 +482,33 @@ function Packages() {
   );
 }
 
-const coverage = [
-  { name: "محافظة القنفذة", x: 26.5, y: 70 },
-  { name: "مركز القوز", x: 31.4, y: 81 },
-  { name: "مركز حلي", x: 36.5, y: 92 },
-];
-
-function Coverage() {
+function Coverage({ c }: { c: SiteContent }) {
+  const cov = c.home.coverage;
   return (
     <section id="coverage" className="mx-auto max-w-6xl px-5 py-14 sm:py-20">
       <div className="grid items-center gap-10 md:grid-cols-2 md:gap-12">
         <div className="relative order-2 mx-auto w-full max-w-md md:order-1 md:max-w-none">
           <SaudiDotMap className="w-full text-muted-foreground" />
-          {coverage.map((c) => (
-            <div key={c.name} className="absolute" style={{ left: `${c.x}%`, top: `${c.y}%` }}>
+          {cov.pins.map((pin, i) => (
+            <div key={i} className="absolute" style={{ left: `${pin.x}%`, top: `${pin.y}%` }}>
               <span className="absolute size-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary ring-4 ring-primary/20" />
               <span className="pointer-events-none absolute bottom-[14px] left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-primary px-2 py-0.5 text-[9px] font-bold text-primary-foreground shadow-md sm:px-2.5 sm:py-1 sm:text-[11px]">
-                {c.name}
+                {pin.name}
               </span>
             </div>
           ))}
         </div>
 
         <div className="order-1 text-center md:order-2 md:text-right">
-          <h2 className="font-display text-2xl sm:text-3xl md:text-4xl">قريباً في جميع مناطق المملكة</h2>
-          <p className="mt-4 text-sm leading-relaxed text-muted-foreground sm:text-base">
-            تطبيق لمحة كأول تطبيق يجمع إعلانات المتاجر والإعلانات الشخصية بكل تفاصيلها يتطلع
-            لتغطية كافة مناطق المملكة لأنكم تستحقون الأفضل. توسيع مناطق التغطية يحتاج منا المزيد
-            من الوقت والجهد لضمان أعلى مستوى جودة للخدمة، ويمكنك تصفح كافة المناطق المدعومة داخل
-            التطبيق في كل مرة نقوم بالتوسع إلى مناطق جديدة.
-          </p>
+          <h2 className="font-display text-2xl sm:text-3xl md:text-4xl">{cov.title}</h2>
+          <p className="mt-4 text-sm leading-relaxed text-muted-foreground sm:text-base">{cov.desc}</p>
           <ul className="mt-6 flex flex-wrap justify-center gap-2 md:justify-start">
-            {coverage.map((c) => (
+            {cov.pins.map((pin, i) => (
               <li
-                key={c.name}
+                key={i}
                 className="inline-flex items-center gap-2 rounded-full bg-primary-soft px-3.5 py-2 text-xs font-bold text-primary sm:text-sm"
               >
-                <MapPin className="size-4 shrink-0" /> {c.name}
+                <MapPin className="size-4 shrink-0" /> {pin.name}
               </li>
             ))}
           </ul>
@@ -754,7 +516,7 @@ function Coverage() {
             href="#download"
             className="mt-7 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90"
           >
-            المناطق المدعومة <ArrowLeft className="size-4" />
+            {cov.ctaLabel} <ArrowLeft className="size-4" />
           </a>
         </div>
       </div>
@@ -762,14 +524,13 @@ function Coverage() {
   );
 }
 
-function Download() {
+function Download({ c }: { c: SiteContent }) {
+  const d = c.home.download;
   return (
     <section id="download" className="bg-hero-glow">
       <div className="mx-auto max-w-4xl px-5 py-16 sm:py-24 text-center">
-        <h2 className="font-display text-3xl sm:text-4xl md:text-5xl">حمّل لمحة الآن وابدأ البيع اليوم</h2>
-        <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
-          إعلانك يوصل لآلاف العملاء في منطقتك، وعميلك يلقى كل التفاصيل وأكواد الخصم في مكان واحد.
-        </p>
+        <h2 className="font-display text-3xl sm:text-4xl md:text-5xl">{d.title}</h2>
+        <p className="mx-auto mt-4 max-w-xl text-muted-foreground">{d.desc}</p>
         <div className="mt-8 flex justify-center">
           <StoreButtons center />
         </div>
