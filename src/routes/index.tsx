@@ -483,9 +483,9 @@ function Packages() {
 }
 
 const coverage = [
-  { name: "محافظة القنفذة", x: 27.5, y: 71.5 },
-  { name: "مركز القوز", x: 31.4, y: 81.5 },
-  { name: "مركز حلي", x: 35.5, y: 91.5 },
+  { name: "محافظة القنفذة", x: 26.5, y: 70 },
+  { name: "مركز القوز", x: 31.4, y: 81 },
+  { name: "مركز حلي", x: 36.5, y: 92 },
 ];
 
 function Coverage() {
@@ -497,7 +497,7 @@ function Coverage() {
           {coverage.map((c) => (
             <div key={c.name} className="absolute" style={{ left: `${c.x}%`, top: `${c.y}%` }}>
               <span className="absolute size-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary ring-4 ring-primary/20" />
-              <span className="pointer-events-none absolute bottom-[12px] left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-primary px-2 py-0.5 text-[9px] font-bold text-primary-foreground shadow-md sm:px-2.5 sm:py-1 sm:text-[11px]">
+              <span className="pointer-events-none absolute bottom-[14px] left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-primary px-2 py-0.5 text-[9px] font-bold text-primary-foreground shadow-md sm:px-2.5 sm:py-1 sm:text-[11px]">
                 {c.name}
               </span>
             </div>
