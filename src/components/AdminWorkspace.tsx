@@ -75,7 +75,7 @@ function Panel({ onLogout, onChangePassword }: { onLogout: () => void; onChangeP
     reader.onload = () => {
       try {
         setDraft(JSON.parse(String(reader.result)) as SiteContent);
-        setDirty(true);
+        markDirty();
       } catch {
         window.alert("ملف غير صالح");
       }
@@ -105,6 +105,8 @@ function Panel({ onLogout, onChangePassword }: { onLogout: () => void; onChangeP
             if (window.confirm("استعادة المحتوى الأصلي وحذف تعديلاتك المحلية؟")) {
               resetContent();
               setDraft(defaultContent);
+              dirtyRef.current = false;
+              touchedRef.current = false;
               setDirty(false);
             }
           }} className="inline-flex items-center gap-1.5 rounded-full bg-destructive/10 px-3 py-2 text-xs font-bold text-destructive">
@@ -134,9 +136,11 @@ function Panel({ onLogout, onChangePassword }: { onLogout: () => void; onChangeP
           <div className="rounded-3xl bg-card p-4 shadow-sm sm:p-5">
             <NodeEditor path={String(active)} keyName={String(active)} value={draft[active]} onChange={(value) => {
               setDraft((current) => ({ ...current, [active]: value }) as SiteContent);
-              setDirty(true);
+              markDirty();
             }} />
           </div>
+
+
 
           <div className="rounded-3xl bg-card p-5 text-sm shadow-sm">
             <h2 className="font-display text-base">النشر على السيرفر</h2>
