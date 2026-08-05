@@ -141,11 +141,18 @@ function Nav() {
         </nav>
         <div className="flex shrink-0 items-center gap-2">
           <Link
+            to="/partners"
+            className="hidden rounded-full px-3 py-2 text-sm font-bold text-muted-foreground transition-colors hover:text-foreground sm:inline-flex"
+          >
+            شركاء النجاح
+          </Link>
+          <Link
             to="/support"
             className="hidden rounded-full px-3 py-2 text-sm font-bold text-muted-foreground transition-colors hover:text-foreground sm:inline-flex"
           >
             الدعم الفني
           </Link>
+
           <a
             href="#download"
             className="rounded-full bg-primary px-4 py-2 text-xs font-bold text-primary-foreground transition-opacity hover:opacity-90 sm:px-5 sm:py-2.5 sm:text-sm"
