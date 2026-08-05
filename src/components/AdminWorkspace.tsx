@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Download, ExternalLink, LogOut, RotateCcw, Save, Upload } from "lucide-react";
 import { NodeEditor } from "@/components/ContentEditor";
