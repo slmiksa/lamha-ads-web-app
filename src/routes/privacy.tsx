@@ -131,6 +131,115 @@ const ar: Section[] = [
   },
 ];
 
+const en: Section[] = [
+  {
+    title: "1. App Overview & Services",
+    paras: [
+      "Lamha Marketing is an electronic platform specialized in displaying classified advertisements (such as services, promotional offers, marriage advertisements, field coverages, podcasts, and other listing types).",
+      "These Terms and Privacy Policy apply to all interactions with Lamha Marketing across its mobile applications, website, and digital media channels.",
+      "Advertisements and media content are published exclusively by the app administration based on requests, contracts, and submissions provided by clients and advertisers.",
+      "The application does not require user account registration for browsing. Complete control, content management, and publishing rights remain restricted to the administrative account owned by the app operator.",
+    ],
+  },
+  {
+    title: "2. Advertisement & Content Responsibility",
+    paras: [
+      "Each advertiser (client) holds full legal, civil, and criminal responsibility for the content, accuracy, legality, and copyright permissions of any materials submitted for publication.",
+      "Lamha Marketing and Lamhat Al-Hadath Advertising Establishment bear no legal, financial, or moral liability for any published advertisements, coverage materials, or podcast statements provided by clients or guests.",
+      "The app is not responsible for any financial, commercial, or personal transactions between users and advertisers, nor for any direct or indirect damages resulting from such interactions.",
+    ],
+  },
+  {
+    title: "3. Publishing & Moderation Policy",
+    paras: [
+      "The app administration reserves the absolute right to reject, edit, or remove any advertisement or content that violates:",
+    ],
+    list: [
+      "Public morals, social norms, and public decency.",
+      "Applicable laws and regulations in the Kingdom of Saudi Arabia (including E-Commerce regulations and audiovisual media rules).",
+      "Inappropriate, misleading, deceptive content, or unauthorized use of third-party intellectual property.",
+      "Any content that may cause financial or reputational harm to users or the platform.",
+    ],
+  },
+  {
+    title: "",
+    paras: [
+      "The app administration reserves the right to reclassify or format the display of any advertisement to fit platform standards without prior notice.",
+    ],
+  },
+  {
+    title: "4. Field Coverage & Media Event Policy",
+    list: [
+      "Scheduling & Coordination: On-site field coverage services (for stores, events, exhibitions, launches, and commercial projects) are conducted based on schedules and specifications agreed upon between the client and the app administration.",
+      "Permits & Authorizations: The client is solely responsible for obtaining all mandatory government permits, venue approvals, and legal authorizations required for event execution and filming. The establishment assumes no liability for unpermitted locations.",
+      "Intellectual Property & Ownership: All original raw footage, edited videos, audio recordings, and visual assets produced during field coverage remain the exclusive intellectual property of Lamhat Al-Hadath Advertising Establishment. The client is granted a non-exclusive license to use the final delivered media for their own promotional purposes only. The client may not resell, alter, or use the material in a manner detrimental to the establishment without prior written consent.",
+      "Promotional Rights: Lamha Marketing reserves the right to publish and broadcast coverage content across its app, platform, and digital channels, and to include portions of the coverage within its corporate portfolio and promotional campaigns.",
+      "Image Rights & Appearances: The client confirms obtaining proper consent from all individuals, staff, or participants appearing within the recorded coverage area. The platform disclaims all liability regarding personal image rights of attendees.",
+    ],
+  },
+  {
+    title: "5. Podcast & Media Production Policy",
+    list: [
+      "Exclusive Content Ownership: All podcast episodes, audio/video recordings, promotional clips, and scripted content produced by the platform are the sole intellectual property of Lamhat Al-Hadath Advertising Establishment and Lamha Marketing.",
+      "Guest & Participant Consent: Participation as a guest or participant in any podcast session constitutes explicit and unconditional consent for video filming, audio recording, and public broadcast across Lamha Marketing platforms without additional financial compensation, unless otherwise agreed upon in writing.",
+      "Editing & Post-Production Rights: The platform administration retains full editorial authority to edit, cut, format, or remove any segment of the podcast to comply with media standards, Saudi regulations, and public decency, without altering the underlying main intent.",
+      "Repurposing & Promotional Snippets: The platform reserves the right to create shorts, reels, quotes, and marketing snippets derived from podcast episodes and distribute them across social networks for promotional purposes.",
+      "Accuracy of Statements: Opinions and claims expressed by podcast guests represent their personal views and do not necessarily reflect the official stance of Lamha Marketing or its management. Guests remain fully responsible for the accuracy of their statements.",
+    ],
+  },
+  {
+    title: "6. Pricing, Payment & Cancellation",
+    paras: [
+      "Service fees for advertisements, field coverages, and podcast production or sponsorships are non-fixed and subject to modification based on season, scope of work, and market demand.",
+      "Payments are processed exclusively via direct bank transfer to the establishment's official account.",
+      "The application does not currently feature in-app payment processing gateways.",
+      "If a client cancels a scheduled field coverage or podcast session less than 24 hours prior to the agreed time, the establishment reserves the right to retain a percentage of the payment to cover operational reservation costs.",
+    ],
+  },
+  {
+    title: "7. Privacy Policy & Data Protection",
+    paras: [
+      "Lamha Marketing respects user privacy and complies with applicable Saudi Personal Data Protection Laws (PDPL).",
+      "The application does not harvest or process personal data from general app viewers or visitors.",
+      "No user account registration is required, and no intrusive behavioral tracking technologies are employed within the app.",
+      "Data provided by advertisers and clients (such as business names, contact details, ad content, media assets, or coverage details) is processed strictly to review, execute, and publish the requested services.",
+      "Client contact details and commercial data are never sold, rented, or disclosed to third parties for commercial exploitation.",
+    ],
+  },
+  {
+    title: "8. Technical Security",
+    paras: [
+      "Appropriate technical security measures are implemented to protect the platform and application against unauthorized access, disruptions, or misuse.",
+      "While reasonable safeguards are maintained, complete protection against all cyber threats or technical risks cannot be guaranteed.",
+      "Accessing and browsing the application and its media content is performed at the user's own responsibility.",
+    ],
+  },
+  {
+    title: "9. Certifications & Legal Registration",
+    paras: [
+      "Trade Name: Lamhat Al-Hadath Advertising Establishment",
+      "Unified Entity Number (700): 7054222174",
+      "Freelance Certification Number: FL-83548418",
+      "Business Platform Certification Number: 0000032128",
+    ],
+  },
+  {
+    title: "10. Policy Updates",
+    paras: [
+      "Lamha Marketing reserves the right to modify, amend, or update these terms and policies at any time without prior notice.",
+      "Continued use of the website, app, or services following any updates constitutes acceptance of the revised Terms and Policies.",
+    ],
+  },
+  {
+    title: "11. Contact Us",
+    paras: [
+      "For any questions or concerns regarding these Terms of Service or Privacy Policy, please contact us at: info@lamhaads.sa",
+    ],
+  },
+];
+
+
+
 function Sections({ items }: { items: Section[] }) {
   return (
     <div className="space-y-8">
