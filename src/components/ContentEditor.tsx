@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import { ChevronDown, Plus, Trash2, ArrowUp, ArrowDown, Upload } from "lucide-react";
 import { ICON_NAMES } from "@/content/icons";
 
@@ -183,7 +183,46 @@ function ImageField({
   );
 }
 
-export function NodeEditor({
+/** Local-buffered text input: typing stays local, parent updates on blur. */
+function BufferedText({
+  value,
+  onCommit,
+  long,
+  rows,
+}: {
+  value: string;
+  onCommit: (v: string) => void;
+  long: boolean;
+  rows: number;
+}) {
+  const [v, setV] = useState(value);
+  useEffect(() => setV(value), [value]);
+  const cls = "w-full rounded-xl border border-border bg-background px-3 py-2 text-sm";
+  const commit = () => {
+    if (v !== value) onCommit(v);
+  };
+  return long ? (
+    <textarea
+      value={v}
+      rows={rows}
+      onChange={(e) => setV(e.target.value)}
+      onBlur={commit}
+      className={`${cls} leading-7`}
+    />
+  ) : (
+    <input
+      value={v}
+      onChange={(e) => setV(e.target.value)}
+      onBlur={commit}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") (e.target as HTMLInputElement).blur();
+      }}
+      className={cls}
+    />
+  );
+}
+
+export const NodeEditor = memo(function NodeEditor({
   path,
   keyName,
   value,
