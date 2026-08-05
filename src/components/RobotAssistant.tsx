@@ -64,9 +64,9 @@ function RobotFigure() {
         <circle cx="73" cy="53" r="7" className="fill-[var(--primary-foreground)]" />
         <circle cx="47" cy="55" r="3" className="fill-[var(--foreground)]" />
         <circle cx="73" cy="55" r="3" className="fill-[var(--foreground)]" />
-        <rect x="30" y="92" width="60" height="52" rx="20" className="fill-[var(--card)]" stroke="var(--primary)" strokeWidth="4" />
-        <rect x="42" y="102" width="36" height="26" rx="10" className="fill-[var(--card)]" />
-        <image href="/logo.png" x="44" y="104" width="32" height="22" preserveAspectRatio="xMidYMid meet" />
+        <rect x="24" y="90" width="72" height="56" rx="20" className="fill-[var(--card)]" stroke="var(--primary)" strokeWidth="4" />
+        <rect x="30" y="96" width="60" height="44" rx="14" fill="#ffffff" />
+        <image href="/logo.png" x="32" y="98" width="56" height="40" preserveAspectRatio="xMidYMid meet" />
 
         <rect x="4" y="96" width="20" height="40" rx="10" className="fill-[var(--primary)]" />
         <rect x="96" y="96" width="20" height="40" rx="10" className="fill-[var(--primary)]" />
