@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import { ChevronDown, Plus, Trash2, ArrowUp, ArrowDown, Upload } from "lucide-react";
 import { ICON_NAMES } from "@/content/icons";
 
@@ -183,7 +183,46 @@ function ImageField({
   );
 }
 
-export function NodeEditor({
+/** Local-buffered text input: typing stays local, parent updates on blur. */
+function BufferedText({
+  value,
+  onCommit,
+  long,
+  rows,
+}: {
+  value: string;
+  onCommit: (v: string) => void;
+  long: boolean;
+  rows: number;
+}) {
+  const [v, setV] = useState(value);
+  useEffect(() => setV(value), [value]);
+  const cls = "w-full rounded-xl border border-border bg-background px-3 py-2 text-sm";
+  const commit = () => {
+    if (v !== value) onCommit(v);
+  };
+  return long ? (
+    <textarea
+      value={v}
+      rows={rows}
+      onChange={(e) => setV(e.target.value)}
+      onBlur={commit}
+      className={`${cls} leading-7`}
+    />
+  ) : (
+    <input
+      value={v}
+      onChange={(e) => setV(e.target.value)}
+      onBlur={commit}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") (e.target as HTMLInputElement).blur();
+      }}
+      className={cls}
+    />
+  );
+}
+
+export const NodeEditor = memo(function NodeEditor({
   path,
   keyName,
   value,
@@ -250,20 +289,12 @@ export function NodeEditor({
     const long = LONG_KEYS.has(keyName) || value.length > 90;
     return (
       <Field name={keyName}>
-        {long ? (
-          <textarea
-            value={value}
-            rows={Math.min(10, Math.max(2, Math.ceil(value.length / 70)))}
-            onChange={(e) => onChange(e.target.value)}
-            className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm leading-7"
-          />
-        ) : (
-          <input
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-            className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm"
-          />
-        )}
+        <BufferedText
+          value={value}
+          onCommit={onChange}
+          long={long}
+          rows={Math.min(10, Math.max(2, Math.ceil(value.length / 70)))}
+        />
       </Field>
     );
   }
@@ -365,7 +396,7 @@ export function NodeEditor({
   }
 
   return null;
-}
+});
 
 function Field({ name, children }: { name: string; children: React.ReactNode }) {
   return (
@@ -402,7 +433,7 @@ function IconBtn({
 }
 
 function Collapsible({ title, children }: { title: string; children: React.ReactNode }) {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   return (
     <div className="rounded-2xl border border-border/70">
       <button

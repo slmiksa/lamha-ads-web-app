@@ -77,9 +77,6 @@ function Gate({ onOk }: { onOk: () => void }) {
         >
           دخول
         </button>
-        <p className="mt-3 text-[11px] text-muted-foreground">
-          كلمة المرور الافتراضية: {DEFAULT_PASSWORD}
-        </p>
       </form>
     </div>
   );
