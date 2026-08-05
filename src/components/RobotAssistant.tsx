@@ -60,7 +60,7 @@ function RobotFigure() {
         className="relative h-36 w-auto select-none drop-shadow-2xl sm:h-60"
         style={{
           animation: "mascotWavePoint 3.4s ease-in-out infinite",
-          transformOrigin: "bottom right",
+          transformOrigin: "bottom left",
           willChange: "transform",
         }}
       />
@@ -68,7 +68,7 @@ function RobotFigure() {
         @keyframes mascotWavePoint {
           0%, 100% { transform: translateY(0) rotate(0deg); }
           15% { transform: translateY(-6px) rotate(0deg); }
-          35% { transform: translateY(-8px) rotate(-18deg) translateX(-8px); }
+          35% { transform: translateY(-8px) rotate(18deg) translateX(8px); }
           55% { transform: translateY(-6px) rotate(0deg); }
           75% { transform: translateY(0) rotate(0deg); }
           90% { transform: translateY(-3px) rotate(0deg); }
