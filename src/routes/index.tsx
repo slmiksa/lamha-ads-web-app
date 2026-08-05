@@ -199,32 +199,46 @@ function Nav() {
 
 
 function Hero() {
+  const [shotIndex, setShotIndex] = useState(0);
+  const shot = heroShots[shotIndex] ?? heroShots[0]!;
+
   return (
     <section id="top" className="bg-hero-glow relative overflow-hidden">
       <div className="mx-auto grid max-w-6xl items-center gap-12 px-5 pb-16 pt-10 sm:gap-14 md:grid-cols-2 md:pb-32 md:pt-16">
         <div className="order-2 md:order-1">
           <div className="relative mx-auto w-[75%] max-w-[320px] sm:w-full">
             <PhoneFrame>
-              <PhoneSlideshow />
+              <PhoneSlideshow index={shotIndex} setIndex={setShotIndex} />
             </PhoneFrame>
 
-            <div className="float-card absolute -right-4 top-16 flex items-center gap-2 px-3 py-2 sm:-right-6 sm:gap-3 sm:px-4 sm:py-3 md:-right-14">
-              <span className="grid size-8 place-items-center rounded-xl bg-primary-soft text-xl sm:size-10 sm:text-2xl">🛍️</span>
+            <div
+              key={`top-${shotIndex}`}
+              className="float-card animate-fade-in absolute -right-4 top-16 flex items-center gap-2 px-3 py-2 sm:-right-6 sm:gap-3 sm:px-4 sm:py-3 md:-right-14"
+            >
+              <span className="grid size-8 place-items-center rounded-xl bg-primary-soft text-xl sm:size-10 sm:text-2xl">
+                {shot.topIcon}
+              </span>
               <span className="text-right leading-tight">
-                <span className="block text-[10px] text-muted-foreground sm:text-[11px]">إعلانك وصل</span>
-                <span className="block text-xs font-extrabold sm:text-sm">+١٢٠٠ مشاهدة</span>
+                <span className="block text-[10px] text-muted-foreground sm:text-[11px]">{shot.topLabel}</span>
+                <span className="block text-xs font-extrabold sm:text-sm">{shot.topValue}</span>
               </span>
             </div>
 
-            <div className="float-card absolute -left-4 bottom-16 flex items-center gap-2 px-3 py-2 sm:-left-6 sm:bottom-20 sm:gap-3 sm:px-4 sm:py-3 md:-left-14">
-              <span className="grid size-8 place-items-center rounded-xl bg-gold-grad text-base sm:size-10 sm:text-lg">⭐</span>
+            <div
+              key={`bottom-${shotIndex}`}
+              className="float-card animate-fade-in absolute -left-4 bottom-16 flex items-center gap-2 px-3 py-2 sm:-left-6 sm:bottom-20 sm:gap-3 sm:px-4 sm:py-3 md:-left-14"
+            >
+              <span className="grid size-8 place-items-center rounded-xl bg-gold-grad text-base sm:size-10 sm:text-lg">
+                {shot.bottomIcon}
+              </span>
               <span className="text-right leading-tight">
-                <span className="block text-[10px] text-muted-foreground sm:text-[11px]">دعم مشهور</span>
-                <span className="block text-xs font-extrabold sm:text-sm">انتشار أوسع</span>
+                <span className="block text-[10px] text-muted-foreground sm:text-[11px]">{shot.bottomLabel}</span>
+                <span className="block text-xs font-extrabold sm:text-sm">{shot.bottomValue}</span>
               </span>
             </div>
           </div>
         </div>
+
 
 
         <div className="order-1 text-center md:order-2 md:text-right">
@@ -270,26 +284,132 @@ function Hero() {
 }
 
 
-const heroShots = [
-  { src: "/hero-app.webp", alt: "الصفحة الرئيسية في تطبيق لمحة مع الإعلانات المميزة" },
-  { src: "/screens/s1.webp", alt: "تصفح إعلانات الكافيهات والهواتف في تطبيق لمحة" },
-  { src: "/screens/s2.webp", alt: "تصنيفات الإعلانات في تطبيق لمحة" },
-  { src: "/screens/s3.webp", alt: "اختيار باقة الإعلان في تطبيق لمحة" },
-  { src: "/screens/s4.webp", alt: "نموذج إضافة إعلان جديد في تطبيق لمحة" },
-  { src: "/screens/s5.webp", alt: "تحديد موقع الإعلان على الخريطة في تطبيق لمحة" },
-  { src: "/screens/s6.webp", alt: "إضافة صور وفيديو وترويج عبر شخصية مشهورة" },
-  { src: "/screens/s7.webp", alt: "تفاصيل الإعلان مع التواصل عبر واتساب والاتصال" },
-  { src: "/screens/s8.webp", alt: "معرض الفيديوهات في تطبيق لمحة" },
-  { src: "/screens/s9.webp", alt: "صفحة حسابي في تطبيق لمحة" },
+type HeroShot = {
+  src: string;
+  alt: string;
+  topIcon: string;
+  topLabel: string;
+  topValue: string;
+  bottomIcon: string;
+  bottomLabel: string;
+  bottomValue: string;
+};
+
+const heroShots: HeroShot[] = [
+  {
+    src: "/hero-app.webp",
+    alt: "الصفحة الرئيسية في تطبيق لمحة مع الإعلانات المميزة",
+    topIcon: "🛍️",
+    topLabel: "الصفحة الرئيسية",
+    topValue: "إعلانات مميزة",
+    bottomIcon: "🎥",
+    bottomLabel: "تغطيات مباشرة",
+    bottomValue: "من قلب الحدث",
+  },
+  {
+    src: "/screens/s1.webp",
+    alt: "تصفح إعلانات الكافيهات والهواتف في تطبيق لمحة",
+    topIcon: "☕",
+    topLabel: "تصفح حسب النشاط",
+    topValue: "كافيهات وجوالات",
+    bottomIcon: "📍",
+    bottomLabel: "قريب منك",
+    bottomValue: "إعلانات منطقتك",
+  },
+  {
+    src: "/screens/s2.webp",
+    alt: "تصنيفات الإعلانات في تطبيق لمحة",
+    topIcon: "🗂️",
+    topLabel: "تصنيفات متنوعة",
+    topValue: "+٢٠ تصنيف",
+    bottomIcon: "🔎",
+    bottomLabel: "وصول أسرع",
+    bottomValue: "لِما تبحث عنه",
+  },
+  {
+    src: "/screens/s3.webp",
+    alt: "اختيار باقة الإعلان في تطبيق لمحة",
+    topIcon: "🎯",
+    topLabel: "اختر باقتك",
+    topValue: "عام أو تجاري",
+    bottomIcon: "🗓️",
+    bottomLabel: "إعلانك ظاهر",
+    bottomValue: "لمدة شهر",
+  },
+  {
+    src: "/screens/s4.webp",
+    alt: "نموذج إضافة إعلان جديد في تطبيق لمحة",
+    topIcon: "📝",
+    topLabel: "أضف إعلانك",
+    topValue: "بخطوات بسيطة",
+    bottomIcon: "⚡",
+    bottomLabel: "نشر سريع",
+    bottomValue: "خلال دقائق",
+  },
+  {
+    src: "/screens/s5.webp",
+    alt: "تحديد موقع الإعلان على الخريطة في تطبيق لمحة",
+    topIcon: "🗺️",
+    topLabel: "حدد موقعك",
+    topValue: "على الخريطة",
+    bottomIcon: "🖼️",
+    bottomLabel: "صورة الغلاف",
+    bottomValue: "تجذب العميل",
+  },
+  {
+    src: "/screens/s6.webp",
+    alt: "إضافة صور وفيديو وترويج عبر شخصية مشهورة",
+    topIcon: "⭐",
+    topLabel: "دعم مشهور",
+    topValue: "انتشار أوسع",
+    bottomIcon: "📸",
+    bottomLabel: "صور وفيديو",
+    bottomValue: "لكل التفاصيل",
+  },
+  {
+    src: "/screens/s7.webp",
+    alt: "تفاصيل الإعلان مع التواصل عبر واتساب والاتصال",
+    topIcon: "💬",
+    topLabel: "تواصل مباشر",
+    topValue: "واتساب واتصال",
+    bottomIcon: "🧭",
+    bottomLabel: "موقع الإعلان",
+    bottomValue: "بالوصول السريع",
+  },
+  {
+    src: "/screens/s8.webp",
+    alt: "معرض الفيديوهات في تطبيق لمحة",
+    topIcon: "▶️",
+    topLabel: "فيديوهات وبودكاست",
+    topValue: "محتوى متجدد",
+    bottomIcon: "🔥",
+    bottomLabel: "مشاهدات أعلى",
+    bottomValue: "تفاعل أكبر",
+  },
+  {
+    src: "/screens/s9.webp",
+    alt: "صفحة حسابي في تطبيق لمحة",
+    topIcon: "👤",
+    topLabel: "حسابي",
+    topValue: "إدارة إعلاناتك",
+    bottomIcon: "❤️",
+    bottomLabel: "المفضلة",
+    bottomValue: "والمدفوعات",
+  },
 ];
 
-function PhoneSlideshow() {
-  const [index, setIndex] = useState(0);
-
+function PhoneSlideshow({
+  index,
+  setIndex,
+}: {
+  index: number;
+  setIndex: React.Dispatch<React.SetStateAction<number>>;
+}) {
   useEffect(() => {
     const id = setInterval(() => setIndex((i) => (i + 1) % heroShots.length), 3200);
     return () => clearInterval(id);
-  }, []);
+  }, [setIndex]);
+
 
   return (
     <div className="absolute inset-0">
