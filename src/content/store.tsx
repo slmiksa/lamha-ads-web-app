@@ -46,14 +46,28 @@ export function ContentProvider({ children }: { children: React.ReactNode }) {
 
   // Keep the server and first browser render identical, then restore local edits.
   useEffect(() => {
-    setLocal(readLocal());
+    let cancelled = false;
+    const restore = () => {
+      if (!cancelled) setLocal(readLocal());
+    };
+    const idleId = "requestIdleCallback" in window
+      ? window.requestIdleCallback(restore, { timeout: 500 })
+      : window.setTimeout(restore, 0);
+    return () => {
+      cancelled = true;
+      if ("cancelIdleCallback" in window) window.cancelIdleCallback(idleId);
+      else window.clearTimeout(idleId);
+    };
   }, []);
 
   // Published content file (upload content.json next to index.html on the server)
   useEffect(() => {
     let alive = true;
-    fetch("/content.json", { cache: "no-cache" })
-      .then((r) => (r.ok ? r.json() : null))
+    fetch(`/content.json?v=${Date.now()}`, { cache: "no-store" })
+      .then((r) => {
+        const type = r.headers.get("content-type") ?? "";
+        return r.ok && type.includes("application/json") ? r.json() : null;
+      })
       .then((d) => {
         if (alive && d && typeof d === "object") setRemote(d as Partial<SiteContent>);
       })

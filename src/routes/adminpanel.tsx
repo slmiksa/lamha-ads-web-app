@@ -6,6 +6,7 @@ import { NodeEditor } from "@/components/ContentEditor";
 import { Download, RotateCcw, Save, Upload, ExternalLink, Lock } from "lucide-react";
 
 export const Route = createFileRoute("/adminpanel")({
+  ssr: false,
   head: () => ({
     meta: [
       { title: "لوحة التحكم — تطبيق لمحة" },
@@ -67,7 +68,10 @@ function Gate({ onOk }: { onOk: () => void }) {
         <h1 className="mt-4 font-display text-xl">لوحة تحكم لمحة</h1>
         <p className="mt-1 text-xs text-muted-foreground">أدخل كلمة المرور للدخول</p>
         <input
+          id="admin-password"
+          name="password"
           type="password"
+          autoComplete="current-password"
           value={v}
           onChange={(e) => {
             setV(e.target.value);
@@ -223,6 +227,10 @@ function Panel() {
                   تغيير كلمة مرور اللوحة
                 </span>
                 <input
+                  id="admin-new-password"
+                  name="new-password"
+                  type="password"
+                  autoComplete="new-password"
                   value={newPass}
                   onChange={(e) => setNewPass(e.target.value)}
                   className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm"
