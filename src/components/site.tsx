@@ -109,12 +109,16 @@ export function SiteFooter() {
           <Link to="/" className="hover:text-foreground">
             الرئيسية
           </Link>
+          <Link to="/partners" className="hover:text-foreground">
+            شركاء النجاح
+          </Link>
           <Link to="/privacy" className="hover:text-foreground">
             سياسة الخصوصية
           </Link>
           <Link to="/support" className="hover:text-foreground">
             الدعم الفني
           </Link>
+
           <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="hover:text-foreground">
             واتساب
           </a>
