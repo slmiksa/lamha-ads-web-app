@@ -143,28 +143,22 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isAdmin = pathname.startsWith("/adminpanel");
 
-  // Keep the admin route isolated from public-site content restoration.
-  // Large locally uploaded images must never block the password screen.
-  if (pathname.startsWith("/adminpanel")) {
-    return (
-      <QueryClientProvider client={queryClient}>
-        <Outlet />
-      </QueryClientProvider>
-    );
-  }
-
+  // The provider stays mounted for every route: during navigation the pathname
+  // updates before the outgoing page unmounts, and public pages call useContent().
   return (
     <QueryClientProvider client={queryClient}>
       <ContentProvider>
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-        <BrandHead />
+        {!isAdmin && <BrandHead />}
         <Outlet />
-        <AssistantSlot />
+        {!isAdmin && <AssistantSlot />}
       </ContentProvider>
     </QueryClientProvider>
   );
 }
+
 
 /** Applies admin-managed favicon / site name / share image at runtime. */
 function BrandHead() {
