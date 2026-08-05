@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { SaudiDotMap } from "@/components/SaudiDotMap";
 import { Logo, SiteFooter, StoreButtons, APP_STORE_URL } from "@/components/site";
