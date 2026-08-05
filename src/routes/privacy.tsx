@@ -159,17 +159,7 @@ function PrivacyPage() {
       <PageHeader title="سياسة الخصوصية" kicker="الشروط والأحكام" />
       <main className="mx-auto max-w-4xl px-5 py-12 sm:py-16">
         <Sections items={ar} />
-        <WhatsAppButton className="mt-4" />
-
-        <hr className="my-12 border-border" />
-
-        <div dir="ltr" className="text-left">
-          <h2 className="font-display text-2xl">Terms &amp; Policies – Lamha Marketing App</h2>
-          <div className="mt-6">
-            <Sections items={en} />
-          </div>
-          <WhatsAppButton className="mt-4" />
-        </div>
+        <WhatsAppButton className="mt-8" />
       </main>
       <SiteFooter />
     </div>
