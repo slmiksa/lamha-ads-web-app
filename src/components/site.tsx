@@ -40,7 +40,7 @@ export function WhatsAppButton({ className = "" }: { className?: string }) {
       className={`inline-flex max-w-full items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90 ${className}`}
     >
       <WhatsAppIcon className="size-5 shrink-0" />
-      <span dir="ltr">راسلنا على واتساب {WHATSAPP_DISPLAY}</span>
+      <span>راسلنا على واتساب</span>
     </a>
   );
 }
