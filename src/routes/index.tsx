@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { SaudiDotMap } from "@/components/SaudiDotMap";
 import { Logo, SiteFooter, StoreButtons, APP_STORE_URL } from "@/components/site";
@@ -159,12 +160,7 @@ function Hero() {
         <div className="order-2 md:order-1">
           <div className="relative mx-auto w-[75%] max-w-[320px] sm:w-full">
             <PhoneFrame>
-              <img
-                src="/hero-app.webp"
-                alt="واجهة تطبيق لمحة تعرض الإعلانات المميزة والتغطيات"
-                className="h-full w-full object-cover"
-                loading="eager"
-              />
+              <PhoneSlideshow />
             </PhoneFrame>
 
             <div className="float-card absolute -right-4 top-16 flex items-center gap-2 px-3 py-2 sm:-right-6 sm:gap-3 sm:px-4 sm:py-3 md:-right-14">
@@ -225,6 +221,58 @@ function Hero() {
         </div>
       </div>
     </section>
+  );
+}
+
+
+const heroShots = [
+  { src: "/hero-app.webp", alt: "الصفحة الرئيسية في تطبيق لمحة مع الإعلانات المميزة" },
+  { src: "/screens/s1.webp", alt: "تصفح إعلانات الكافيهات والهواتف في تطبيق لمحة" },
+  { src: "/screens/s2.webp", alt: "تصنيفات الإعلانات في تطبيق لمحة" },
+  { src: "/screens/s3.webp", alt: "اختيار باقة الإعلان في تطبيق لمحة" },
+  { src: "/screens/s4.webp", alt: "نموذج إضافة إعلان جديد في تطبيق لمحة" },
+  { src: "/screens/s5.webp", alt: "تحديد موقع الإعلان على الخريطة في تطبيق لمحة" },
+  { src: "/screens/s6.webp", alt: "إضافة صور وفيديو وترويج عبر شخصية مشهورة" },
+  { src: "/screens/s7.webp", alt: "تفاصيل الإعلان مع التواصل عبر واتساب والاتصال" },
+  { src: "/screens/s8.webp", alt: "معرض الفيديوهات في تطبيق لمحة" },
+  { src: "/screens/s9.webp", alt: "صفحة حسابي في تطبيق لمحة" },
+];
+
+function PhoneSlideshow() {
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    const id = setInterval(() => setIndex((i) => (i + 1) % heroShots.length), 3200);
+    return () => clearInterval(id);
+  }, []);
+
+  return (
+    <div className="absolute inset-0">
+      {heroShots.map((shot, i) => (
+        <img
+          key={shot.src}
+          src={shot.src}
+          alt={shot.alt}
+          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${
+            i === index ? "opacity-100" : "opacity-0"
+          }`}
+          loading={i === 0 ? "eager" : "lazy"}
+        />
+      ))}
+      <div className="absolute bottom-3 left-1/2 z-10 flex -translate-x-1/2 items-center gap-1.5 rounded-full bg-foreground/40 px-2.5 py-1.5 backdrop-blur-sm">
+        {heroShots.map((shot, i) => (
+          <button
+            key={shot.src}
+            type="button"
+            aria-label={`عرض اللقطة ${i + 1}`}
+            onClick={() => setIndex(i)}
+            className={`h-1.5 rounded-full transition-all ${
+              i === index ? "w-4 bg-background" : "w-1.5 bg-background/50"
+            }`}
+          />
+        ))}
+      </div>
+    </div>
   );
 }
 
