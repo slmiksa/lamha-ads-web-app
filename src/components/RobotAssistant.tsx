@@ -55,9 +55,23 @@ function RobotFigure() {
         src="/mascot.png"
         alt="تميمة تطبيق لمحة"
         className="relative h-36 w-auto select-none drop-shadow-2xl sm:h-60"
-        style={{ animation: "robotFloat 3s ease-in-out infinite" }}
+        style={{
+          animation: "mascotWavePoint 3.4s ease-in-out infinite",
+          transformOrigin: "bottom right",
+          willChange: "transform",
+        }}
       />
-      <style>{`@keyframes robotFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}`}</style>
+      <style>{`
+        @keyframes mascotWavePoint {
+          0%, 100% { transform: translateY(0) rotate(0deg); }
+          18% { transform: translateY(-7px) rotate(0deg); }
+          38% { transform: translateY(-9px) rotate(-13deg); }
+          58% { transform: translateY(-7px) rotate(0deg); }
+          78% { transform: translateY(0) rotate(0deg); }
+          90% { transform: translateY(-4px) rotate(0deg); }
+        }
+      `}</style>
     </div>
   );
 }
+
