@@ -1,21 +1,25 @@
 import { Link } from "@tanstack/react-router";
+import { useContent, useTokens } from "@/content/store";
 
-export const APP_STORE_URL = "https://apps.apple.com/sa/app/lamha-ads/id6760237672?l=ar";
-export const PLAY_STORE_URL = "";
-export const CONTACT_EMAIL = "info@lamhaads.sa";
-export const WHATSAPP_NUMBER = "966590844649";
-export const WHATSAPP_DISPLAY = "+966 59 084 4649";
-export const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
+export function useLinks() {
+  const c = useContent();
+  return {
+    whatsappUrl: `https://wa.me/${c.contact.whatsapp}`,
+    email: c.contact.email,
+  };
+}
 
-export function Logo({ size = 64, withText = false }: { size?: number; withText?: boolean }) {
+export function Logo({ size, withText = false }: { size?: number; withText?: boolean }) {
+  const c = useContent();
+  const s = size ?? c.brand.logoSizeNav;
   return (
     <span className="flex items-center gap-2.5">
       <img
-        src="/logo.png"
-        alt="شعار تطبيق لمحة للتسويق والإعلان"
-        width={size}
-        height={size}
-        style={{ width: size, height: size }}
+        src={c.brand.logo}
+        alt={`شعار ${c.brand.siteName}`}
+        width={s}
+        height={s}
+        style={{ width: s, height: s }}
         className="shrink-0 rounded-2xl object-contain"
       />
       {withText && <span className="font-display text-xl font-extrabold sm:text-2xl">لمحة</span>}
@@ -32,15 +36,17 @@ export function WhatsAppIcon({ className }: { className?: string }) {
 }
 
 export function WhatsAppButton({ className = "" }: { className?: string }) {
+  const c = useContent();
+  const { whatsappUrl } = useLinks();
   return (
     <a
-      href={WHATSAPP_URL}
+      href={whatsappUrl}
       target="_blank"
       rel="noopener noreferrer"
       className={`inline-flex max-w-full items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90 ${className}`}
     >
       <WhatsAppIcon className="size-5 shrink-0" />
-      <span>راسلنا على واتساب</span>
+      <span>{c.contact.whatsappButtonLabel}</span>
     </a>
   );
 }
@@ -65,26 +71,44 @@ export function AppleIcon({ className }: { className?: string }) {
 }
 
 export function StoreButtons({ center = false }: { center?: boolean }) {
+  const c = useContent();
+  const play = c.contact.playStoreUrl.trim();
   return (
     <div
       className={`flex w-full flex-wrap items-center gap-3 ${center ? "justify-center" : ""}`}
       dir="ltr"
     >
-      <div
-        aria-label="تطبيق لمحة على Google Play قريباً"
-        className="relative inline-flex cursor-default items-center gap-3 rounded-2xl border border-foreground/15 bg-foreground px-4 py-2.5 text-background opacity-80 sm:px-5"
-      >
-        <GooglePlayIcon className="size-6 shrink-0 sm:size-7" />
-        <span className="text-left leading-tight">
-          <span className="block text-[9px] uppercase tracking-wide opacity-80 sm:text-[10px]">GET IT ON</span>
-          <span className="block text-base font-semibold leading-tight sm:text-lg">Google Play</span>
-        </span>
-        <span dir="rtl" className="absolute -top-2 left-3 rounded-full bg-[var(--gold)] px-2 py-0.5 text-[10px] font-bold text-foreground">
-          قريباً
-        </span>
-      </div>
+      {play ? (
+        <a
+          href={play}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="تطبيق لمحة على Google Play"
+          className="inline-flex items-center gap-3 rounded-2xl border border-foreground/15 bg-foreground px-4 py-2.5 text-background transition-transform hover:-translate-y-0.5 sm:px-5"
+        >
+          <GooglePlayIcon className="size-6 shrink-0 sm:size-7" />
+          <span className="text-left leading-tight">
+            <span className="block text-[9px] uppercase tracking-wide opacity-80 sm:text-[10px]">GET IT ON</span>
+            <span className="block text-base font-semibold leading-tight sm:text-lg">Google Play</span>
+          </span>
+        </a>
+      ) : (
+        <div
+          aria-label="تطبيق لمحة على Google Play قريباً"
+          className="relative inline-flex cursor-default items-center gap-3 rounded-2xl border border-foreground/15 bg-foreground px-4 py-2.5 text-background opacity-80 sm:px-5"
+        >
+          <GooglePlayIcon className="size-6 shrink-0 sm:size-7" />
+          <span className="text-left leading-tight">
+            <span className="block text-[9px] uppercase tracking-wide opacity-80 sm:text-[10px]">GET IT ON</span>
+            <span className="block text-base font-semibold leading-tight sm:text-lg">Google Play</span>
+          </span>
+          <span dir="rtl" className="absolute -top-2 left-3 rounded-full bg-[var(--gold)] px-2 py-0.5 text-[10px] font-bold text-foreground">
+            {c.contact.playStoreSoonLabel}
+          </span>
+        </div>
+      )}
       <a
-        href={APP_STORE_URL}
+        href={c.contact.appStoreUrl}
         target="_blank"
         rel="noopener noreferrer"
         aria-label="حمّل تطبيق لمحة من App Store"
@@ -101,46 +125,50 @@ export function StoreButtons({ center = false }: { center?: boolean }) {
 }
 
 export function SiteFooter() {
+  const c = useContent();
+  const t = useTokens();
+  const { whatsappUrl, email } = useLinks();
   return (
     <footer className="bg-card">
       <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-5 py-8 text-sm text-muted-foreground md:flex-row">
-        <Logo size={56} />
+        <Logo size={c.brand.logoSizeFooter} />
         <nav className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
           <Link to="/" className="hover:text-foreground">
-            الرئيسية
+            {c.footer.homeLabel}
           </Link>
           <Link to="/partners" className="hover:text-foreground">
-            شركاء النجاح
+            {c.nav.partnersLabel}
           </Link>
           <Link to="/privacy" className="hover:text-foreground">
-            سياسة الخصوصية
+            {c.nav.privacyLabel}
           </Link>
           <Link to="/support" className="hover:text-foreground">
-            الدعم الفني
+            {c.nav.supportLabel}
           </Link>
 
-          <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="hover:text-foreground">
-            واتساب
+          <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="hover:text-foreground">
+            {c.footer.whatsappLabel}
           </a>
-          <a href={`mailto:${CONTACT_EMAIL}`} dir="ltr" className="hover:text-foreground">
-            {CONTACT_EMAIL}
+          <a href={`mailto:${email}`} dir="ltr" className="hover:text-foreground">
+            {email}
           </a>
         </nav>
-        <p className="text-center">جميع الحقوق محفوظة © {new Date().getFullYear()} تطبيق لمحة</p>
+        <p className="text-center">{t(c.footer.copyright)}</p>
       </div>
       <div className="border-t border-border/60 py-5 text-center text-sm font-bold text-foreground">
-        صنع بـ<span className="text-primary">♥</span> في السعودية 🇸🇦
+        {c.footer.madeIn}
       </div>
     </footer>
   );
 }
 
 export function PageHeader({ title, kicker }: { title: string; kicker?: string }) {
+  const c = useContent();
   return (
     <header className="bg-hero-glow">
       <div className="mx-auto max-w-4xl px-5 py-10 sm:py-14">
         <Link to="/" className="inline-flex">
-          <Logo size={80} />
+          <Logo size={c.brand.logoSizeHeader} />
         </Link>
         {kicker && (
           <span className="mt-6 inline-block rounded-full bg-card/80 px-4 py-1 text-xs font-bold text-primary shadow-sm">

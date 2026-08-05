@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminpanelRouteImport } from './routes/adminpanel'
 import { Route as PartnersRouteImport } from './routes/partners'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as SupportRouteImport } from './routes/support'
@@ -17,6 +18,11 @@ import { Route as SupportRouteImport } from './routes/support'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminpanelRoute = AdminpanelRouteImport.update({
+  id: '/adminpanel',
+  path: '/adminpanel',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PartnersRoute = PartnersRouteImport.update({
@@ -37,12 +43,14 @@ const SupportRoute = SupportRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/adminpanel': typeof AdminpanelRoute
   '/partners': typeof PartnersRoute
   '/privacy': typeof PrivacyRoute
   '/support': typeof SupportRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/adminpanel': typeof AdminpanelRoute
   '/partners': typeof PartnersRoute
   '/privacy': typeof PrivacyRoute
   '/support': typeof SupportRoute
@@ -50,20 +58,22 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/adminpanel': typeof AdminpanelRoute
   '/partners': typeof PartnersRoute
   '/privacy': typeof PrivacyRoute
   '/support': typeof SupportRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/partners' | '/privacy' | '/support'
+  fullPaths: '/' | '/adminpanel' | '/partners' | '/privacy' | '/support'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/partners' | '/privacy' | '/support'
-  id: '__root__' | '/' | '/partners' | '/privacy' | '/support'
+  to: '/' | '/adminpanel' | '/partners' | '/privacy' | '/support'
+  id: '__root__' | '/' | '/adminpanel' | '/partners' | '/privacy' | '/support'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminpanelRoute: typeof AdminpanelRoute
   PartnersRoute: typeof PartnersRoute
   PrivacyRoute: typeof PrivacyRoute
   SupportRoute: typeof SupportRoute
@@ -76,6 +86,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/adminpanel': {
+      id: '/adminpanel'
+      path: '/adminpanel'
+      fullPath: '/adminpanel'
+      preLoaderRoute: typeof AdminpanelRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/partners': {
@@ -104,6 +121,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminpanelRoute: AdminpanelRoute,
   PartnersRoute: PartnersRoute,
   PrivacyRoute: PrivacyRoute,
   SupportRoute: SupportRoute,

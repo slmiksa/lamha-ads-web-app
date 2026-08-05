@@ -4,6 +4,7 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
@@ -11,6 +12,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { RobotAssistant } from "../components/RobotAssistant";
+import { ContentProvider, useContent } from "../content/store";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
 function NotFoundComponent() {
@@ -143,9 +145,56 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
-      <RobotAssistant />
+      <ContentProvider>
+        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+        <BrandHead />
+        <Outlet />
+        <AssistantSlot />
+      </ContentProvider>
     </QueryClientProvider>
   );
 }
+
+/** Applies admin-managed favicon / site name / share image at runtime. */
+function BrandHead() {
+  const { brand } = useContent();
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    const set = (selector: string, attr: string, value: string, create: () => HTMLElement) => {
+      let el = document.head.querySelector(selector);
+      if (!el) {
+        el = create();
+        document.head.appendChild(el);
+      }
+      el.setAttribute(attr, value);
+    };
+    set('link[rel="icon"]', "href", brand.favicon, () => {
+      const l = document.createElement("link");
+      l.setAttribute("rel", "icon");
+      return l;
+    });
+    set('link[rel="shortcut icon"]', "href", brand.favicon, () => {
+      const l = document.createElement("link");
+      l.setAttribute("rel", "shortcut icon");
+      return l;
+    });
+    set('meta[property="og:image"]', "content", brand.ogImage, () => {
+      const m = document.createElement("meta");
+      m.setAttribute("property", "og:image");
+      return m;
+    });
+    set('meta[property="og:site_name"]', "content", brand.siteName, () => {
+      const m = document.createElement("meta");
+      m.setAttribute("property", "og:site_name");
+      return m;
+    });
+  }, [brand.favicon, brand.ogImage, brand.siteName]);
+  return null;
+}
+
+function AssistantSlot() {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  if (pathname.startsWith("/adminpanel")) return null;
+  return <RobotAssistant />;
+}
+
