@@ -120,6 +120,15 @@ const LONG_KEYS = new Set(["desc", "description", "a", "text", "subtitle", "intr
 const MAX_IMAGE_DIMENSION = 1280;
 const MAX_IMAGE_FILE_BYTES = 8_000_000;
 
+const SAFE_FIELD_PROPS = {
+  autoComplete: "off",
+  spellCheck: false,
+  translate: "no" as const,
+  "data-lpignore": "true",
+  "data-1p-ignore": "true",
+  "data-form-type": "other",
+};
+
 function label(key: string) {
   return LABELS[key] ?? key;
 }
@@ -191,6 +200,7 @@ function ImageField({
         />
       )}
       <input
+        {...SAFE_FIELD_PROPS}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         dir="ltr"
@@ -198,6 +208,7 @@ function ImageField({
         className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm"
       />
       <input
+        {...SAFE_FIELD_PROPS}
         ref={fileRef}
         type="file"
         accept="image/*"
@@ -251,6 +262,7 @@ function BufferedText({
   };
   return long ? (
     <textarea
+      {...SAFE_FIELD_PROPS}
       value={v}
       rows={rows}
       onChange={(e) => setV(e.target.value)}
@@ -259,6 +271,7 @@ function BufferedText({
     />
   ) : (
     <input
+      {...SAFE_FIELD_PROPS}
       value={v}
       onChange={(e) => setV(e.target.value)}
       onBlur={commit}
@@ -285,6 +298,7 @@ export const NodeEditor = memo(function NodeEditor({
     return (
       <label className="flex items-center gap-2 py-2 text-sm font-bold">
         <input
+          {...SAFE_FIELD_PROPS}
           type="checkbox"
           checked={value}
           onChange={(e) => onChange(e.target.checked)}
@@ -299,6 +313,7 @@ export const NodeEditor = memo(function NodeEditor({
     return (
       <Field name={keyName}>
         <input
+          {...SAFE_FIELD_PROPS}
           type="number"
           step="any"
           value={value}
@@ -321,6 +336,7 @@ export const NodeEditor = memo(function NodeEditor({
       return (
         <Field name={keyName}>
           <select
+            {...SAFE_FIELD_PROPS}
             value={value}
             onChange={(e) => onChange(e.target.value)}
             className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm"
