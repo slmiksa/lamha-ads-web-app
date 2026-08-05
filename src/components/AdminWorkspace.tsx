@@ -37,14 +37,25 @@ function Panel({ onLogout, onChangePassword }: { onLogout: () => void; onChangeP
   const [active, setActive] = useState<keyof SiteContent>("brand");
   const [saved, setSaved] = useState(false);
   const [dirty, setDirty] = useState(false);
+  const dirtyRef = useRef(false);
+  const touchedRef = useRef(false);
 
+  const markDirty = () => {
+    dirtyRef.current = true;
+    touchedRef.current = true;
+    setDirty(true);
+  };
+
+  // Adopt late-arriving content (local restore / content.json) only while untouched,
+  // so background loads can never wipe what the admin is editing.
   useEffect(() => {
+    if (dirtyRef.current || touchedRef.current) return;
     setDraft(content);
-    setDirty(false);
   }, [content]);
 
   const save = () => {
     setContent(draft);
+    dirtyRef.current = false;
     setDirty(false);
     setSaved(true);
     window.setTimeout(() => setSaved(false), 2200);
