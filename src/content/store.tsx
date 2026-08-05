@@ -57,9 +57,14 @@ export function ContentProvider({ children }: { children: React.ReactNode }) {
       if (!cancelled) setLocal(readLocal());
     };
     const idleId = window.setTimeout(restore, 0);
+    // Pick up saves made from the admin panel (same tab or another tab).
+    window.addEventListener("storage", restore);
+    window.addEventListener("lamha:content-updated", restore);
     return () => {
       cancelled = true;
       window.clearTimeout(idleId);
+      window.removeEventListener("storage", restore);
+      window.removeEventListener("lamha:content-updated", restore);
     };
   }, []);
 
