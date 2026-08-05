@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { PageHeader, SiteFooter, SUPPORT_EMAIL } from "@/components/site";
+import { PageHeader, SiteFooter, WhatsAppButton } from "@/components/site";
 
 export const Route = createFileRoute("/privacy")({
   head: () => ({
@@ -210,12 +210,7 @@ function PrivacyPage() {
       <PageHeader title="سياسة الخصوصية" kicker="الشروط والأحكام" />
       <main className="mx-auto max-w-4xl px-5 py-12 sm:py-16">
         <Sections items={ar} />
-        <a
-          href={`mailto:${SUPPORT_EMAIL}`}
-          className="mt-4 inline-block rounded-full bg-primary-soft px-5 py-2.5 text-sm font-bold text-primary"
-        >
-          {SUPPORT_EMAIL}
-        </a>
+        <WhatsAppButton className="mt-4" />
 
         <hr className="my-12 border-border" />
 
@@ -224,12 +219,7 @@ function PrivacyPage() {
           <div className="mt-6">
             <Sections items={en} />
           </div>
-          <a
-            href={`mailto:${SUPPORT_EMAIL}`}
-            className="mt-4 inline-block rounded-full bg-primary-soft px-5 py-2.5 text-sm font-bold text-primary"
-          >
-            {SUPPORT_EMAIL}
-          </a>
+          <WhatsAppButton className="mt-4" />
         </div>
       </main>
       <SiteFooter />

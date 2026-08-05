@@ -1,5 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router";
-import heroShot from "@/assets/IMG_2764.webp.asset.json";
 import { SaudiDotMap } from "@/components/SaudiDotMap";
 import { Logo, SiteFooter, StoreButtons, APP_STORE_URL } from "@/components/site";
 import { Link } from "@tanstack/react-router";
@@ -116,7 +115,7 @@ function Nav() {
     <header className="sticky top-0 z-50 bg-background/70 backdrop-blur-xl">
       <div className="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-3 sm:px-5 sm:py-4 md:flex md:justify-between">
         <a href="#top" className="min-w-0">
-          <Logo size={38} />
+          <Logo size={52} />
         </a>
         <nav className="hidden items-center gap-2 rounded-full bg-secondary p-1.5 text-sm text-muted-foreground lg:flex">
           {[
@@ -161,7 +160,7 @@ function Hero() {
           <div className="relative mx-auto w-[75%] max-w-[320px] sm:w-full">
             <PhoneFrame>
               <img
-                src={heroShot.url}
+                src="/hero-app.webp"
                 alt="واجهة تطبيق لمحة تعرض الإعلانات المميزة والتغطيات"
                 className="h-full w-full object-cover"
                 loading="eager"
@@ -484,9 +483,9 @@ function Packages() {
 }
 
 const coverage = [
-  { name: "محافظة القنفذة", x: 30.64, y: 82.44 },
-  { name: "مركز القوز - محافظة القنفذة", x: 31.38, y: 79.32 },
-  { name: "مركز حلي - محافظة القنفذة", x: 32.48, y: 85.87 },
+  { name: "محافظة القنفذة", x: 26.5, y: 70 },
+  { name: "مركز القوز", x: 31.4, y: 81 },
+  { name: "مركز حلي", x: 36.5, y: 92 },
 ];
 
 function Coverage() {
@@ -495,20 +494,10 @@ function Coverage() {
       <div className="grid items-center gap-10 md:grid-cols-2 md:gap-12">
         <div className="relative order-2 mx-auto w-full max-w-md md:order-1 md:max-w-none">
           <SaudiDotMap className="w-full text-muted-foreground" />
-          {coverage.map((c, i) => (
+          {coverage.map((c) => (
             <div key={c.name} className="absolute" style={{ left: `${c.x}%`, top: `${c.y}%` }}>
               <span className="absolute size-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary ring-4 ring-primary/20" />
-              <span
-                className="pointer-events-none absolute hidden whitespace-nowrap rounded-full bg-primary px-2.5 py-1 text-[10px] font-bold text-primary-foreground shadow-md lg:inline-block"
-                style={{
-                  transform:
-                    i === 0
-                      ? "translate(14%, -50%)"
-                      : i === 1
-                        ? "translate(14%, -290%)"
-                        : "translate(14%, 200%)",
-                }}
-              >
+              <span className="pointer-events-none absolute bottom-[14px] left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-primary px-2 py-0.5 text-[9px] font-bold text-primary-foreground shadow-md sm:px-2.5 sm:py-1 sm:text-[11px]">
                 {c.name}
               </span>
             </div>

@@ -1,23 +1,46 @@
 import { Link } from "@tanstack/react-router";
-import logo from "@/assets/lamha-logo.png.asset.json";
 
 export const APP_STORE_URL = "https://apps.apple.com/sa/app/lamha-ads/id6760237672?l=ar";
 export const PLAY_STORE_URL = "https://lamha.trndsky.com";
-export const SUPPORT_EMAIL = "info@lamha.trndsky.com";
+export const WHATSAPP_NUMBER = "966540220275";
+export const WHATSAPP_DISPLAY = "+966 54 022 0275";
+export const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
 
-export function Logo({ size = 40, withText = true }: { size?: number; withText?: boolean }) {
+export function Logo({ size = 56, withText = true }: { size?: number; withText?: boolean }) {
   return (
     <span className="flex items-center gap-2.5">
       <img
-        src={logo.url}
+        src="/logo.png"
         alt="شعار تطبيق لمحة للتسويق والإعلان"
         width={size}
         height={size}
         style={{ width: size, height: size }}
-        className="shrink-0 rounded-xl object-contain"
+        className="shrink-0 rounded-2xl object-contain"
       />
-      {withText && <span className="font-display text-lg font-extrabold sm:text-xl">لمحة</span>}
+      {withText && <span className="font-display text-xl font-extrabold sm:text-2xl">لمحة</span>}
     </span>
+  );
+}
+
+export function WhatsAppIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 32 32" className={className} fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+      <path d="M16.04 3C9.4 3 4 8.4 4 15.04c0 2.28.64 4.42 1.76 6.25L4 29l7.9-1.7a12 12 0 0 0 4.14.74C22.68 28.04 28 22.7 28 16.04 28 9.4 22.68 3 16.04 3zm0 21.9c-1.3 0-2.58-.28-3.76-.82l-.27-.12-4.7 1.01 1-4.55-.18-.29a9.83 9.83 0 0 1-1.53-5.3c0-5.46 4.44-9.9 9.9-9.9 5.45 0 9.88 4.44 9.88 9.9 0 5.45-4.43 9.9-9.88 9.9zm5.42-7.2c-.3-.15-1.75-.86-2.02-.96-.27-.1-.47-.15-.67.15-.2.3-.77.96-.94 1.16-.17.2-.35.22-.64.08-.3-.15-1.25-.46-2.38-1.47-.88-.78-1.47-1.75-1.64-2.05-.17-.3-.02-.46.13-.6.13-.14.3-.35.44-.53.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.6-.92-2.2-.24-.58-.49-.5-.67-.5h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.01-1.04 2.47s1.07 2.86 1.22 3.06c.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.7.63.71.22 1.36.19 1.87.12.57-.09 1.75-.72 2-1.41.25-.7.25-1.28.17-1.41-.07-.13-.27-.2-.57-.35z" />
+    </svg>
+  );
+}
+
+export function WhatsAppButton({ className = "" }: { className?: string }) {
+  return (
+    <a
+      href={WHATSAPP_URL}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={`inline-flex max-w-full items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90 ${className}`}
+    >
+      <WhatsAppIcon className="size-5 shrink-0" />
+      <span dir="ltr">راسلنا على واتساب {WHATSAPP_DISPLAY}</span>
+    </a>
   );
 }
 
@@ -76,7 +99,7 @@ export function SiteFooter() {
   return (
     <footer className="bg-card">
       <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-5 py-8 text-sm text-muted-foreground md:flex-row">
-        <Logo size={34} />
+        <Logo size={46} />
         <nav className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
           <Link to="/" className="hover:text-foreground">
             الرئيسية
@@ -87,6 +110,9 @@ export function SiteFooter() {
           <Link to="/support" className="hover:text-foreground">
             الدعم الفني
           </Link>
+          <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="hover:text-foreground">
+            واتساب
+          </a>
         </nav>
         <p className="text-center">جميع الحقوق محفوظة © {new Date().getFullYear()} تطبيق لمحة</p>
       </div>
@@ -109,7 +135,7 @@ export function PageHeader({ title, kicker }: { title: string; kicker?: string }
             {kicker}
           </span>
         )}
-        <h1 className="mt-4 font-display text-3xl sm:text-4xl">{title}</h1>
+        <h1 className="mt-4 font-display text-2xl sm:text-4xl">{title}</h1>
       </div>
     </header>
   );
