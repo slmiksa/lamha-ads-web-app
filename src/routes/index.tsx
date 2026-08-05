@@ -199,32 +199,46 @@ function Nav() {
 
 
 function Hero() {
+  const [shotIndex, setShotIndex] = useState(0);
+  const shot = heroShots[shotIndex];
+
   return (
     <section id="top" className="bg-hero-glow relative overflow-hidden">
       <div className="mx-auto grid max-w-6xl items-center gap-12 px-5 pb-16 pt-10 sm:gap-14 md:grid-cols-2 md:pb-32 md:pt-16">
         <div className="order-2 md:order-1">
           <div className="relative mx-auto w-[75%] max-w-[320px] sm:w-full">
             <PhoneFrame>
-              <PhoneSlideshow />
+              <PhoneSlideshow index={shotIndex} setIndex={setShotIndex} />
             </PhoneFrame>
 
-            <div className="float-card absolute -right-4 top-16 flex items-center gap-2 px-3 py-2 sm:-right-6 sm:gap-3 sm:px-4 sm:py-3 md:-right-14">
-              <span className="grid size-8 place-items-center rounded-xl bg-primary-soft text-xl sm:size-10 sm:text-2xl">🛍️</span>
+            <div
+              key={`top-${shotIndex}`}
+              className="float-card animate-fade-in absolute -right-4 top-16 flex items-center gap-2 px-3 py-2 sm:-right-6 sm:gap-3 sm:px-4 sm:py-3 md:-right-14"
+            >
+              <span className="grid size-8 place-items-center rounded-xl bg-primary-soft text-xl sm:size-10 sm:text-2xl">
+                {shot.topIcon}
+              </span>
               <span className="text-right leading-tight">
-                <span className="block text-[10px] text-muted-foreground sm:text-[11px]">إعلانك وصل</span>
-                <span className="block text-xs font-extrabold sm:text-sm">+١٢٠٠ مشاهدة</span>
+                <span className="block text-[10px] text-muted-foreground sm:text-[11px]">{shot.topLabel}</span>
+                <span className="block text-xs font-extrabold sm:text-sm">{shot.topValue}</span>
               </span>
             </div>
 
-            <div className="float-card absolute -left-4 bottom-16 flex items-center gap-2 px-3 py-2 sm:-left-6 sm:bottom-20 sm:gap-3 sm:px-4 sm:py-3 md:-left-14">
-              <span className="grid size-8 place-items-center rounded-xl bg-gold-grad text-base sm:size-10 sm:text-lg">⭐</span>
+            <div
+              key={`bottom-${shotIndex}`}
+              className="float-card animate-fade-in absolute -left-4 bottom-16 flex items-center gap-2 px-3 py-2 sm:-left-6 sm:bottom-20 sm:gap-3 sm:px-4 sm:py-3 md:-left-14"
+            >
+              <span className="grid size-8 place-items-center rounded-xl bg-gold-grad text-base sm:size-10 sm:text-lg">
+                {shot.bottomIcon}
+              </span>
               <span className="text-right leading-tight">
-                <span className="block text-[10px] text-muted-foreground sm:text-[11px]">دعم مشهور</span>
-                <span className="block text-xs font-extrabold sm:text-sm">انتشار أوسع</span>
+                <span className="block text-[10px] text-muted-foreground sm:text-[11px]">{shot.bottomLabel}</span>
+                <span className="block text-xs font-extrabold sm:text-sm">{shot.bottomValue}</span>
               </span>
             </div>
           </div>
         </div>
+
 
 
         <div className="order-1 text-center md:order-2 md:text-right">
