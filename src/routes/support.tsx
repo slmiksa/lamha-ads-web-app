@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Link } from "@tanstack/react-router";
 import { MessageCircle, ShieldCheck, Handshake, ChevronDown } from "lucide-react";
-import { PageHeader, SiteFooter, StoreButtons, WhatsAppButton, WHATSAPP_URL, WHATSAPP_DISPLAY } from "@/components/site";
+import { PageHeader, SiteFooter, StoreButtons, WhatsAppButton, WHATSAPP_URL, WHATSAPP_DISPLAY, CONTACT_EMAIL } from "@/components/site";
 
 export const Route = createFileRoute("/support")({
   head: () => ({
@@ -109,6 +109,13 @@ const channels = [
     title: "واتساب",
     desc: WHATSAPP_DISPLAY,
     href: WHATSAPP_URL,
+    external: true,
+  },
+  {
+    icon: Mail,
+    title: "البريد الإلكتروني",
+    desc: CONTACT_EMAIL,
+    href: `mailto:${CONTACT_EMAIL}`,
     external: true,
   },
   {
