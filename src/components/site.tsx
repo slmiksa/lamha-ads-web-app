@@ -118,6 +118,9 @@ export function SiteFooter() {
           <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="hover:text-foreground">
             واتساب
           </a>
+          <a href={`mailto:${CONTACT_EMAIL}`} dir="ltr" className="hover:text-foreground">
+            {CONTACT_EMAIL}
+          </a>
         </nav>
         <p className="text-center">جميع الحقوق محفوظة © {new Date().getFullYear()} تطبيق لمحة</p>
       </div>
