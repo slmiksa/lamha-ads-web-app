@@ -21,6 +21,8 @@ import {
   Eye,
   Zap,
   Users,
+  Menu,
+  X,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
@@ -636,12 +638,6 @@ function Download() {
         <div className="mt-8 flex justify-center">
           <StoreButtons center />
         </div>
-        <a
-          href={APP_STORE_URL}
-          className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-primary"
-        >
-          تعرف أكثر على التطبيق <ArrowLeft className="size-4" />
-        </a>
       </div>
     </section>
   );
