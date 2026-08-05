@@ -1,6 +1,5 @@
-import { lazy, Suspense, useEffect, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Lock } from "lucide-react";
 
 export const Route = createFileRoute("/adminpanel")({
   ssr: false,
@@ -33,44 +32,59 @@ function AdminPanel() {
 }
 
 function Gate({ onOk }: { onOk: () => void }) {
-  const passwordRef = useRef<HTMLInputElement>(null);
   const [err, setErr] = useState(false);
+
   return (
-    <div className="grid min-h-screen place-items-center bg-secondary/40 px-5">
+    <main className="grid min-h-screen place-items-center bg-background px-5 py-10">
       <form
         onSubmit={(e) => {
           e.preventDefault();
+          const form = new FormData(e.currentTarget);
+          const entered = String(form.get("access-code") ?? "");
           const stored = window.localStorage.getItem("lamha_admin_pass") ?? DEFAULT_PASSWORD;
-          if (passwordRef.current?.value === stored) {
+          if (entered === stored) {
             window.localStorage.setItem(PASS_KEY, "1");
             onOk();
-          } else setErr(true);
+            return;
+          }
+          setErr(true);
         }}
-        className="surface-card w-full max-w-sm p-7 text-center"
+        className="w-full max-w-sm rounded-2xl border border-border bg-card p-6 shadow-sm sm:p-8"
       >
-        <span className="mx-auto grid size-14 place-items-center rounded-full bg-primary-soft text-primary">
-          <Lock className="size-6" />
-        </span>
-        <h1 className="mt-4 font-display text-xl">لوحة تحكم لمحة</h1>
-        <p className="mt-1 text-xs text-muted-foreground">أدخل كلمة المرور للدخول</p>
+        <div className="mb-6 text-center">
+          <img src="/logo.png" alt="شعار لمحة" className="mx-auto h-20 w-20 object-contain" />
+          <h1 className="mt-4 font-display text-xl">لوحة التحكم</h1>
+          <p className="mt-1 text-sm text-muted-foreground">أدخل رمز الدخول للمتابعة</p>
+        </div>
+
+        <label htmlFor="admin-access-code" className="mb-2 block text-sm font-bold">
+          رمز الدخول
+        </label>
         <input
-          id="admin-password"
-          name="password"
-          type="password"
-          autoComplete="current-password"
-          ref={passwordRef}
-          onInput={() => { if (err) setErr(false); }}
-          className="mt-5 w-full rounded-xl border border-border bg-background px-3 py-2.5 text-center"
-          placeholder="كلمة المرور"
+          id="admin-access-code"
+          name="access-code"
+          type="text"
+          inputMode="text"
+          autoComplete="off"
+          autoCapitalize="off"
+          spellCheck={false}
+          onInput={() => {
+            if (err) setErr(false);
+          }}
+          className="password-mask h-12 w-full rounded-lg border border-input bg-background px-4 text-center text-base outline-none transition-shadow focus:border-primary focus:ring-2 focus:ring-primary/20"
+          placeholder="••••••••"
+          required
         />
-        {err && <p className="mt-2 text-xs font-bold text-destructive">كلمة المرور غير صحيحة</p>}
+        <p className={`mt-2 min-h-5 text-center text-xs font-bold text-destructive ${err ? "visible" : "invisible"}`} aria-live="polite">
+          رمز الدخول غير صحيح
+        </p>
         <button
           type="submit"
-          className="mt-4 w-full rounded-full bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground"
+          className="mt-3 h-12 w-full rounded-lg bg-primary px-5 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90"
         >
           دخول
         </button>
       </form>
-    </div>
+    </main>
   );
 }
