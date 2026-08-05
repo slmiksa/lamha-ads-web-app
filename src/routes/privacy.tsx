@@ -269,6 +269,16 @@ function PrivacyPage() {
       <main className="mx-auto max-w-4xl px-5 py-12 sm:py-16">
         <Sections items={ar} />
         <WhatsAppButton className="mt-8" />
+
+        <hr className="my-12 border-border" />
+
+        <div dir="ltr" className="text-left">
+          <h2 className="font-display text-2xl">Terms &amp; Policies – Lamha Ads Marketing App</h2>
+          <div className="mt-6">
+            <Sections items={en} />
+          </div>
+          <WhatsAppButton className="mt-8" />
+        </div>
       </main>
       <SiteFooter />
     </div>
