@@ -284,26 +284,132 @@ function Hero() {
 }
 
 
-const heroShots = [
-  { src: "/hero-app.webp", alt: "الصفحة الرئيسية في تطبيق لمحة مع الإعلانات المميزة" },
-  { src: "/screens/s1.webp", alt: "تصفح إعلانات الكافيهات والهواتف في تطبيق لمحة" },
-  { src: "/screens/s2.webp", alt: "تصنيفات الإعلانات في تطبيق لمحة" },
-  { src: "/screens/s3.webp", alt: "اختيار باقة الإعلان في تطبيق لمحة" },
-  { src: "/screens/s4.webp", alt: "نموذج إضافة إعلان جديد في تطبيق لمحة" },
-  { src: "/screens/s5.webp", alt: "تحديد موقع الإعلان على الخريطة في تطبيق لمحة" },
-  { src: "/screens/s6.webp", alt: "إضافة صور وفيديو وترويج عبر شخصية مشهورة" },
-  { src: "/screens/s7.webp", alt: "تفاصيل الإعلان مع التواصل عبر واتساب والاتصال" },
-  { src: "/screens/s8.webp", alt: "معرض الفيديوهات في تطبيق لمحة" },
-  { src: "/screens/s9.webp", alt: "صفحة حسابي في تطبيق لمحة" },
+type HeroShot = {
+  src: string;
+  alt: string;
+  topIcon: string;
+  topLabel: string;
+  topValue: string;
+  bottomIcon: string;
+  bottomLabel: string;
+  bottomValue: string;
+};
+
+const heroShots: HeroShot[] = [
+  {
+    src: "/hero-app.webp",
+    alt: "الصفحة الرئيسية في تطبيق لمحة مع الإعلانات المميزة",
+    topIcon: "🛍️",
+    topLabel: "الصفحة الرئيسية",
+    topValue: "إعلانات مميزة",
+    bottomIcon: "🎥",
+    bottomLabel: "تغطيات مباشرة",
+    bottomValue: "من قلب الحدث",
+  },
+  {
+    src: "/screens/s1.webp",
+    alt: "تصفح إعلانات الكافيهات والهواتف في تطبيق لمحة",
+    topIcon: "☕",
+    topLabel: "تصفح حسب النشاط",
+    topValue: "كافيهات وجوالات",
+    bottomIcon: "📍",
+    bottomLabel: "قريب منك",
+    bottomValue: "إعلانات منطقتك",
+  },
+  {
+    src: "/screens/s2.webp",
+    alt: "تصنيفات الإعلانات في تطبيق لمحة",
+    topIcon: "🗂️",
+    topLabel: "تصنيفات متنوعة",
+    topValue: "+٢٠ تصنيف",
+    bottomIcon: "🔎",
+    bottomLabel: "وصول أسرع",
+    bottomValue: "لِما تبحث عنه",
+  },
+  {
+    src: "/screens/s3.webp",
+    alt: "اختيار باقة الإعلان في تطبيق لمحة",
+    topIcon: "🎯",
+    topLabel: "اختر باقتك",
+    topValue: "عام أو تجاري",
+    bottomIcon: "🗓️",
+    bottomLabel: "إعلانك ظاهر",
+    bottomValue: "لمدة شهر",
+  },
+  {
+    src: "/screens/s4.webp",
+    alt: "نموذج إضافة إعلان جديد في تطبيق لمحة",
+    topIcon: "📝",
+    topLabel: "أضف إعلانك",
+    topValue: "بخطوات بسيطة",
+    bottomIcon: "⚡",
+    bottomLabel: "نشر سريع",
+    bottomValue: "خلال دقائق",
+  },
+  {
+    src: "/screens/s5.webp",
+    alt: "تحديد موقع الإعلان على الخريطة في تطبيق لمحة",
+    topIcon: "🗺️",
+    topLabel: "حدد موقعك",
+    topValue: "على الخريطة",
+    bottomIcon: "🖼️",
+    bottomLabel: "صورة الغلاف",
+    bottomValue: "تجذب العميل",
+  },
+  {
+    src: "/screens/s6.webp",
+    alt: "إضافة صور وفيديو وترويج عبر شخصية مشهورة",
+    topIcon: "⭐",
+    topLabel: "دعم مشهور",
+    topValue: "انتشار أوسع",
+    bottomIcon: "📸",
+    bottomLabel: "صور وفيديو",
+    bottomValue: "لكل التفاصيل",
+  },
+  {
+    src: "/screens/s7.webp",
+    alt: "تفاصيل الإعلان مع التواصل عبر واتساب والاتصال",
+    topIcon: "💬",
+    topLabel: "تواصل مباشر",
+    topValue: "واتساب واتصال",
+    bottomIcon: "🧭",
+    bottomLabel: "موقع الإعلان",
+    bottomValue: "بالوصول السريع",
+  },
+  {
+    src: "/screens/s8.webp",
+    alt: "معرض الفيديوهات في تطبيق لمحة",
+    topIcon: "▶️",
+    topLabel: "فيديوهات وبودكاست",
+    topValue: "محتوى متجدد",
+    bottomIcon: "🔥",
+    bottomLabel: "مشاهدات أعلى",
+    bottomValue: "تفاعل أكبر",
+  },
+  {
+    src: "/screens/s9.webp",
+    alt: "صفحة حسابي في تطبيق لمحة",
+    topIcon: "👤",
+    topLabel: "حسابي",
+    topValue: "إدارة إعلاناتك",
+    bottomIcon: "❤️",
+    bottomLabel: "المفضلة",
+    bottomValue: "والمدفوعات",
+  },
 ];
 
-function PhoneSlideshow() {
-  const [index, setIndex] = useState(0);
-
+function PhoneSlideshow({
+  index,
+  setIndex,
+}: {
+  index: number;
+  setIndex: React.Dispatch<React.SetStateAction<number>>;
+}) {
   useEffect(() => {
     const id = setInterval(() => setIndex((i) => (i + 1) % heroShots.length), 3200);
     return () => clearInterval(id);
-  }, []);
+  }, [setIndex]);
+
 
   return (
     <div className="absolute inset-0">
