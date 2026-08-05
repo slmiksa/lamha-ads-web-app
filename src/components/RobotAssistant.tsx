@@ -51,7 +51,7 @@ function RobotFigure() {
   return (
     <svg
       viewBox="0 0 120 170"
-      className="pointer-events-none h-40 w-auto shrink-0 drop-shadow-xl sm:h-56"
+      className="pointer-events-none h-32 w-auto shrink-0 drop-shadow-xl sm:h-56"
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden
     >
