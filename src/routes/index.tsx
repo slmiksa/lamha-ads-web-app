@@ -285,7 +285,7 @@ function Hero() {
 
           <div className="mt-7 flex flex-wrap items-center justify-center gap-5 text-sm text-muted-foreground md:justify-start">
             <span className="inline-flex items-center gap-2">
-              <ShieldCheck className="size-4 text-primary" /> إعلانات موثقة ومراجعة
+              <ShieldCheck className="size-4 text-primary" /> إعلانات موثقة
             </span>
             <span className="hidden h-4 w-px bg-border md:block" />
             <span className="inline-flex items-center gap-2">
