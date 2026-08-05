@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { SaudiDotMap } from "@/components/SaudiDotMap";
-import { Logo, SiteFooter, StoreButtons, APP_STORE_URL } from "@/components/site";
+import { Logo, SiteFooter, StoreButtons } from "@/components/site";
 import { Link } from "@tanstack/react-router";
 import {
   Megaphone,
@@ -21,6 +21,8 @@ import {
   Eye,
   Zap,
   Users,
+  Menu,
+  X,
 } from "lucide-react";
 
 export const Route = createFileRoute("/")({
@@ -111,7 +113,15 @@ function Index() {
   );
 }
 
+const navLinks = [
+  { l: "المميزات", h: "#features" },
+  { l: "دعم المشاهير", h: "#influencer" },
+  { l: "كيف يعمل", h: "#steps" },
+  { l: "الباقات", h: "#packages" },
+];
+
 function Nav() {
+  const [open, setOpen] = useState(false);
   return (
     <header className="sticky top-0 z-50 bg-background/70 backdrop-blur-xl">
       <div className="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-3 sm:px-5 sm:py-4 md:flex md:justify-between">
@@ -119,12 +129,7 @@ function Nav() {
           <Logo size={52} />
         </a>
         <nav className="hidden items-center gap-2 rounded-full bg-secondary p-1.5 text-sm text-muted-foreground lg:flex">
-          {[
-            { l: "المميزات", h: "#features" },
-            { l: "دعم المشاهير", h: "#influencer" },
-            { l: "كيف يعمل", h: "#steps" },
-            { l: "الباقات", h: "#packages" },
-          ].map((i) => (
+          {navLinks.map((i) => (
             <a
               key={i.h}
               href={i.h}
@@ -147,11 +152,51 @@ function Nav() {
           >
             تحميل التطبيق
           </a>
+          <button
+            type="button"
+            aria-label="القائمة"
+            aria-expanded={open}
+            onClick={() => setOpen((v) => !v)}
+            className="grid size-10 shrink-0 place-items-center rounded-full bg-secondary text-foreground lg:hidden"
+          >
+            {open ? <X className="size-5" /> : <Menu className="size-5" />}
+          </button>
         </div>
       </div>
+      {open && (
+        <div className="border-t border-border/60 bg-background/95 px-4 py-3 backdrop-blur-xl lg:hidden">
+          <nav className="mx-auto flex max-w-6xl flex-col gap-1 text-sm font-bold">
+            {navLinks.map((i) => (
+              <a
+                key={i.h}
+                href={i.h}
+                onClick={() => setOpen(false)}
+                className="rounded-xl px-3 py-2.5 text-foreground transition-colors hover:bg-secondary"
+              >
+                {i.l}
+              </a>
+            ))}
+            <Link
+              to="/support"
+              onClick={() => setOpen(false)}
+              className="rounded-xl px-3 py-2.5 text-foreground transition-colors hover:bg-secondary"
+            >
+              الدعم الفني
+            </Link>
+            <Link
+              to="/privacy"
+              onClick={() => setOpen(false)}
+              className="rounded-xl px-3 py-2.5 text-foreground transition-colors hover:bg-secondary"
+            >
+              سياسة الخصوصية
+            </Link>
+          </nav>
+        </div>
+      )}
     </header>
   );
 }
+
 
 function Hero() {
   return (
@@ -593,12 +638,6 @@ function Download() {
         <div className="mt-8 flex justify-center">
           <StoreButtons center />
         </div>
-        <a
-          href={APP_STORE_URL}
-          className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-primary"
-        >
-          تعرف أكثر على التطبيق <ArrowLeft className="size-4" />
-        </a>
       </div>
     </section>
   );
