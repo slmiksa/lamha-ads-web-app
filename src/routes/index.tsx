@@ -285,7 +285,7 @@ function Hero() {
 
           <div className="mt-7 flex flex-wrap items-center justify-center gap-5 text-sm text-muted-foreground md:justify-start">
             <span className="inline-flex items-center gap-2">
-              <ShieldCheck className="size-4 text-primary" /> إعلانات موثقة ومراجعة
+              <ShieldCheck className="size-4 text-primary" /> إعلانات موثقة
             </span>
             <span className="hidden h-4 w-px bg-border md:block" />
             <span className="inline-flex items-center gap-2">
@@ -585,9 +585,9 @@ function Influencer() {
           </div>
           <div className="mt-5 space-y-3">
             {[
-              { name: "الأميرة للمناسبات", cat: "لأشهى الأكلات", city: "مركز القوز", v: 40, h: 14 },
-              { name: "كوفي كيناف", cat: "قهوة - مشروبات - حلا", city: "مركز القوز", v: 64, h: 20 },
-              { name: "سعد للاتصالات", cat: "هواتف وإكسسوارات", city: "محافظة القنفذة", v: 11, h: 12 },
+              { name: "مطعم الذوق الرفيع", cat: "لأشهى الأكلات", city: "مركز القوز", v: "4,014", h: "1,280" },
+              { name: "كوفي لمسة", cat: "قهوة - مشروبات - حلا", city: "مركز القوز", v: "6,420", h: "2,135" },
+              { name: "متجر الاتصالات الذكية", cat: "هواتف وإكسسوارات", city: "محافظة القنفذة", v: "1,112", h: "3,460" },
             ].map((a) => (
               <div
                 key={a.name}
