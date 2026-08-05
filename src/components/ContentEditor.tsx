@@ -255,10 +255,26 @@ function BufferedText({
   rows: number;
 }) {
   const [v, setV] = useState(value);
-  useEffect(() => setV(value), [value]);
+  const latest = useRef(value);
+  const timer = useRef<number | null>(null);
+  useEffect(() => {
+    setV(value);
+    latest.current = value;
+  }, [value]);
+  useEffect(() => () => {
+    if (timer.current) window.clearTimeout(timer.current);
+  }, []);
   const cls = "w-full rounded-xl border border-border bg-background px-3 py-2 text-sm";
   const commit = () => {
-    if (v !== value) onCommit(v);
+    if (timer.current) window.clearTimeout(timer.current);
+    if (latest.current !== value) onCommit(latest.current);
+  };
+  // Debounced commit so edits are never lost if the field never blurs.
+  const change = (next: string) => {
+    setV(next);
+    latest.current = next;
+    if (timer.current) window.clearTimeout(timer.current);
+    timer.current = window.setTimeout(() => onCommit(next), 400);
   };
   return long ? (
     <textarea
