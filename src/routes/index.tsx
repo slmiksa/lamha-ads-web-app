@@ -200,7 +200,7 @@ function Nav() {
 
 function Hero() {
   const [shotIndex, setShotIndex] = useState(0);
-  const shot = heroShots[shotIndex];
+  const shot = heroShots[shotIndex] ?? heroShots[0]!;
 
   return (
     <section id="top" className="bg-hero-glow relative overflow-hidden">
