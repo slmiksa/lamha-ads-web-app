@@ -57,9 +57,14 @@ export function ContentProvider({ children }: { children: React.ReactNode }) {
       if (!cancelled) setLocal(readLocal());
     };
     const idleId = window.setTimeout(restore, 0);
+    // Pick up saves made from the admin panel (same tab or another tab).
+    window.addEventListener("storage", restore);
+    window.addEventListener("lamha:content-updated", restore);
     return () => {
       cancelled = true;
       window.clearTimeout(idleId);
+      window.removeEventListener("storage", restore);
+      window.removeEventListener("lamha:content-updated", restore);
     };
   }, []);
 
@@ -91,12 +96,14 @@ export function ContentProvider({ children }: { children: React.ReactNode }) {
       const serialized = JSON.stringify(next);
       if (serialized.length > MAX_LOCAL_CONTENT_LENGTH) {
         window.localStorage.setItem("lamha_content_too_large", "1");
+        window.alert("حجم المحتوى كبير جدًا (صور ضخمة). قلّل حجم الصور ثم احفظ مرة أخرى.");
         return;
       }
       window.localStorage.removeItem("lamha_content_too_large");
       window.localStorage.setItem(STORAGE_KEY, serialized);
+      window.dispatchEvent(new Event("lamha:content-updated"));
     } catch {
-      /* quota */
+      window.alert("تعذّر الحفظ: مساحة التخزين في المتصفح ممتلئة.");
     }
   }, []);
 
@@ -104,6 +111,7 @@ export function ContentProvider({ children }: { children: React.ReactNode }) {
     setLocal(null);
     try {
       window.localStorage.removeItem(STORAGE_KEY);
+      window.dispatchEvent(new Event("lamha:content-updated"));
     } catch {
       /* ignore */
     }
