@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "build:static": "NITRO_PRESET=static vite build && rm -rf dist && cp -r .output/public dist"
+    "build:static": "bash scripts/build-static.sh"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
