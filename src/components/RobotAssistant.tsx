@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { WHATSAPP_URL, WHATSAPP_DISPLAY, WhatsAppIcon } from "@/components/site";
+import { WHATSAPP_URL, WhatsAppIcon } from "@/components/site";
 import { X } from "lucide-react";
 
 export function RobotAssistant() {
@@ -37,7 +37,7 @@ export function RobotAssistant() {
           className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-4 py-2.5 text-xs font-bold text-primary-foreground transition-opacity hover:opacity-90"
         >
           <WhatsAppIcon className="size-4 shrink-0" />
-          <span dir="ltr">{WHATSAPP_DISPLAY}</span>
+          <span>اضغط هنا</span>
         </a>
         <span className="absolute -left-2 bottom-8 hidden size-4 rotate-45 bg-card sm:block" />
       </div>

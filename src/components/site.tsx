@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 
 export const APP_STORE_URL = "https://apps.apple.com/sa/app/lamha-ads/id6760237672?l=ar";
-export const PLAY_STORE_URL = "https://lamha.trndsky.com";
+export const PLAY_STORE_URL = "";
 export const WHATSAPP_NUMBER = "966540220275";
 export const WHATSAPP_DISPLAY = "+966 54 022 0275";
 export const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
@@ -69,19 +69,23 @@ export function StoreButtons({ center = false }: { center?: boolean }) {
       className={`flex w-full flex-wrap items-center gap-3 ${center ? "justify-center" : ""}`}
       dir="ltr"
     >
-      <a
-        href={PLAY_STORE_URL}
-        aria-label="حمّل تطبيق لمحة من Google Play"
-        className="inline-flex items-center gap-3 rounded-2xl border border-foreground/15 bg-foreground px-4 py-2.5 text-background transition-transform hover:-translate-y-0.5 sm:px-5"
+      <div
+        aria-label="تطبيق لمحة على Google Play قريباً"
+        className="relative inline-flex cursor-default items-center gap-3 rounded-2xl border border-foreground/15 bg-foreground px-4 py-2.5 text-background opacity-80 sm:px-5"
       >
         <GooglePlayIcon className="size-6 shrink-0 sm:size-7" />
         <span className="text-left leading-tight">
           <span className="block text-[9px] uppercase tracking-wide opacity-80 sm:text-[10px]">GET IT ON</span>
           <span className="block text-base font-semibold leading-tight sm:text-lg">Google Play</span>
         </span>
-      </a>
+        <span dir="rtl" className="absolute -top-2 left-3 rounded-full bg-[var(--gold)] px-2 py-0.5 text-[10px] font-bold text-foreground">
+          قريباً
+        </span>
+      </div>
       <a
         href={APP_STORE_URL}
+        target="_blank"
+        rel="noopener noreferrer"
         aria-label="حمّل تطبيق لمحة من App Store"
         className="inline-flex items-center gap-3 rounded-2xl border border-foreground/15 bg-foreground px-4 py-2.5 text-background transition-transform hover:-translate-y-0.5 sm:px-5"
       >
