@@ -7,7 +7,7 @@ export const WHATSAPP_NUMBER = "966590844649";
 export const WHATSAPP_DISPLAY = "+966 59 084 4649";
 export const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
 
-export function Logo({ size = 56, withText = true }: { size?: number; withText?: boolean }) {
+export function Logo({ size = 64, withText = false }: { size?: number; withText?: boolean }) {
   return (
     <span className="flex items-center gap-2.5">
       <img
@@ -104,7 +104,7 @@ export function SiteFooter() {
   return (
     <footer className="bg-card">
       <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-5 py-8 text-sm text-muted-foreground md:flex-row">
-        <Logo size={46} />
+        <Logo size={56} />
         <nav className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
           <Link to="/" className="hover:text-foreground">
             الرئيسية
@@ -140,7 +140,7 @@ export function PageHeader({ title, kicker }: { title: string; kicker?: string }
     <header className="bg-hero-glow">
       <div className="mx-auto max-w-4xl px-5 py-10 sm:py-14">
         <Link to="/" className="inline-flex">
-          <Logo />
+          <Logo size={80} />
         </Link>
         {kicker && (
           <span className="mt-6 inline-block rounded-full bg-card/80 px-4 py-1 text-xs font-bold text-primary shadow-sm">
