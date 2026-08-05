@@ -50,13 +50,10 @@ export function ContentProvider({ children }: { children: React.ReactNode }) {
     const restore = () => {
       if (!cancelled) setLocal(readLocal());
     };
-    const idleId = "requestIdleCallback" in window
-      ? window.requestIdleCallback(restore, { timeout: 500 })
-      : window.setTimeout(restore, 0);
+    const idleId = window.requestIdleCallback(restore, { timeout: 500 });
     return () => {
       cancelled = true;
-      if ("cancelIdleCallback" in window) window.cancelIdleCallback(idleId);
-      else window.clearTimeout(idleId);
+      window.cancelIdleCallback(idleId);
     };
   }, []);
 
