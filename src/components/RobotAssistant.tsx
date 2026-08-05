@@ -49,31 +49,15 @@ export function RobotAssistant() {
 
 function RobotFigure() {
   return (
-    <svg
-      viewBox="0 0 120 170"
-      className="pointer-events-none h-32 w-auto shrink-0 drop-shadow-xl sm:h-56"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden
-    >
-      <g className="origin-center" style={{ animation: "robotFloat 3s ease-in-out infinite" }}>
-        <rect x="57" y="6" width="6" height="14" rx="3" fill="currentColor" className="text-primary" />
-        <circle cx="60" cy="6" r="6" className="fill-[var(--gold)]" />
-        <rect x="18" y="20" width="84" height="66" rx="24" className="fill-[var(--primary)]" />
-        <rect x="28" y="32" width="64" height="42" rx="18" className="fill-[var(--foreground)]" />
-        <circle cx="47" cy="53" r="7" className="fill-[var(--primary-foreground)]" />
-        <circle cx="73" cy="53" r="7" className="fill-[var(--primary-foreground)]" />
-        <circle cx="47" cy="55" r="3" className="fill-[var(--foreground)]" />
-        <circle cx="73" cy="55" r="3" className="fill-[var(--foreground)]" />
-        <rect x="24" y="90" width="72" height="56" rx="20" className="fill-[var(--card)]" stroke="var(--primary)" strokeWidth="4" />
-        <rect x="30" y="96" width="60" height="44" rx="14" fill="#ffffff" />
-        <image href="/logo.png" x="32" y="98" width="56" height="40" preserveAspectRatio="xMidYMid meet" />
-
-        <rect x="4" y="96" width="20" height="40" rx="10" className="fill-[var(--primary)]" />
-        <rect x="96" y="96" width="20" height="40" rx="10" className="fill-[var(--primary)]" />
-        <rect x="38" y="146" width="16" height="18" rx="8" className="fill-[var(--foreground)]" />
-        <rect x="66" y="146" width="16" height="18" rx="8" className="fill-[var(--foreground)]" />
-      </g>
+    <div className="pointer-events-none relative shrink-0">
+      <span className="absolute inset-x-2 bottom-1 h-3 rounded-[50%] bg-foreground/20 blur-md" aria-hidden />
+      <img
+        src="/mascot.png"
+        alt="تميمة تطبيق لمحة"
+        className="relative h-36 w-auto select-none drop-shadow-2xl sm:h-60"
+        style={{ animation: "robotFloat 3s ease-in-out infinite" }}
+      />
       <style>{`@keyframes robotFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}`}</style>
-    </svg>
+    </div>
   );
 }
