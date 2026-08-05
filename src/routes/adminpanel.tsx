@@ -68,7 +68,7 @@ function AdminPanel() {
     return (
       <main className="grid min-h-screen place-items-center bg-secondary/30 px-4" dir="rtl">
         <section className="w-full max-w-sm rounded-2xl border border-border bg-card p-7 text-center shadow-sm">
-          <img src="/lamha-logo.png" alt="شعار تطبيق لمحة" className="mx-auto h-24 w-auto object-contain" />
+          <img src="/logo.png" alt="شعار تطبيق لمحة" className="mx-auto h-24 w-auto object-contain" />
           <h1 className="mt-4 font-display text-xl">لوحة تحكم الموقع</h1>
           <button type="button" onClick={login} className="mt-6 w-full rounded-xl bg-primary px-4 py-3 text-sm font-bold text-primary-foreground">
             تسجيل الدخول

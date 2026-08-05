@@ -208,6 +208,7 @@ function ImageField({
         className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm"
       />
       <input
+        {...SAFE_FIELD_PROPS}
         ref={fileRef}
         type="file"
         accept="image/*"
@@ -297,6 +298,7 @@ export const NodeEditor = memo(function NodeEditor({
     return (
       <label className="flex items-center gap-2 py-2 text-sm font-bold">
         <input
+          {...SAFE_FIELD_PROPS}
           type="checkbox"
           checked={value}
           onChange={(e) => onChange(e.target.checked)}
