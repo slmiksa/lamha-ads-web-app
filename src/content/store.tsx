@@ -23,7 +23,6 @@ export function deepMerge<T>(base: T, override: unknown): T {
 }
 
 function readLocal(): Partial<SiteContent> | null {
-  if (typeof window === "undefined") return null;
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
     return raw ? (JSON.parse(raw) as Partial<SiteContent>) : null;
@@ -43,7 +42,12 @@ const ContentContext = createContext<Ctx | null>(null);
 
 export function ContentProvider({ children }: { children: React.ReactNode }) {
   const [remote, setRemote] = useState<Partial<SiteContent> | null>(null);
-  const [local, setLocal] = useState<Partial<SiteContent> | null>(() => readLocal());
+  const [local, setLocal] = useState<Partial<SiteContent> | null>(null);
+
+  // Keep the server and first browser render identical, then restore local edits.
+  useEffect(() => {
+    setLocal(readLocal());
+  }, []);
 
   // Published content file (upload content.json next to index.html on the server)
   useEffect(() => {

@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { defaultContent, type SiteContent } from "@/content/defaults";
 import { useContentCtx } from "@/content/store";
@@ -32,9 +32,15 @@ const SECTIONS: { key: keyof SiteContent; label: string }[] = [
 ];
 
 function AdminPanel() {
-  const [authed, setAuthed] = useState(
-    () => typeof window !== "undefined" && window.localStorage.getItem(PASS_KEY) === "1",
-  );
+  const [authed, setAuthed] = useState(false);
+  const [authReady, setAuthReady] = useState(false);
+
+  useEffect(() => {
+    setAuthed(window.localStorage.getItem(PASS_KEY) === "1");
+    setAuthReady(true);
+  }, []);
+
+  if (!authReady) return <div className="min-h-screen bg-secondary/40" aria-hidden />;
   if (!authed) return <Gate onOk={() => setAuthed(true)} />;
   return <Panel />;
 }
@@ -88,6 +94,10 @@ function Panel() {
   const [active, setActive] = useState<keyof SiteContent>("brand");
   const [saved, setSaved] = useState(false);
   const [newPass, setNewPass] = useState("");
+
+  useEffect(() => {
+    setDraft(content);
+  }, [content]);
 
   const dirty = useMemo(() => JSON.stringify(draft) !== JSON.stringify(content), [draft, content]);
 
