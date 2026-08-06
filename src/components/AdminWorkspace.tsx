@@ -138,7 +138,7 @@ function Panel({ onLogout, onChangePassword }: { onLogout: () => void; onChangeP
 
         <main className="min-w-0 space-y-4" translate="no">
           <div className="rounded-3xl bg-card p-4 shadow-sm sm:p-5">
-            <NodeEditor path={String(active)} keyName={String(active)} value={draft[active]} onChange={(value) => {
+            <NodeEditor key={active} path={String(active)} keyName={String(active)} value={draft[active]} onChange={(value) => {
               setDraft((current) => ({ ...current, [active]: value }) as SiteContent);
               markDirty();
             }} />
