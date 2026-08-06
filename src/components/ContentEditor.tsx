@@ -119,6 +119,7 @@ const IMAGE_KEYS = new Set(["logo", "favicon", "ogImage", "image", "img", "src"]
 const LONG_KEYS = new Set(["desc", "description", "a", "text", "subtitle", "intro", "ogDescription", "note", "lines", "paras", "list", "bullets"]);
 const MAX_IMAGE_DIMENSION = 1280;
 const MAX_IMAGE_FILE_BYTES = 8_000_000;
+const TARGET_IMAGE_DATA_LENGTH = 600_000;
 
 const SAFE_FIELD_PROPS = {
   autoComplete: "off",
@@ -171,7 +172,13 @@ function compressImage(file: File): Promise<string> {
           return;
         }
         context.drawImage(image, 0, 0, width, height);
-        resolve(canvas.toDataURL("image/webp", 0.72));
+        let quality = 0.76;
+        let result = canvas.toDataURL("image/webp", quality);
+        while (result.length > TARGET_IMAGE_DATA_LENGTH && quality > 0.34) {
+          quality -= 0.08;
+          result = canvas.toDataURL("image/webp", quality);
+        }
+        resolve(result);
       };
       image.src = String(reader.result);
     };
@@ -201,8 +208,11 @@ function ImageField({
       )}
       <input
         {...SAFE_FIELD_PROPS}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
+        key={value}
+        defaultValue={value}
+        onBlur={(e) => {
+          if (e.currentTarget.value !== value) onChange(e.currentTarget.value);
+        }}
         dir="ltr"
         placeholder="/logo.png"
         className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm"
