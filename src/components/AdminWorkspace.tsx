@@ -33,6 +33,7 @@ function Panel({ onLogout, onChangePassword }: { onLogout: () => void; onChangeP
   const [saved, setSaved] = useState(false);
   const [saving, setSaving] = useState(false);
   const [dirty, setDirty] = useState(false);
+  const [restoreVersion, setRestoreVersion] = useState(0);
   const draftRef = useRef<SiteContent>(content);
   const dirtyRef = useRef(false);
   const touchedRef = useRef(false);
@@ -49,6 +50,7 @@ function Panel({ onLogout, onChangePassword }: { onLogout: () => void; onChangeP
     if (dirtyRef.current || touchedRef.current) return;
     draftRef.current = content;
     setDraft(content);
+    setRestoreVersion((version) => version + 1);
   }, [content]);
 
   const save = () => {
@@ -145,7 +147,7 @@ function Panel({ onLogout, onChangePassword }: { onLogout: () => void; onChangeP
 
         <main className="min-w-0 space-y-4" translate="no">
           <div className="rounded-3xl bg-card p-4 shadow-sm sm:p-5">
-            <NodeEditor key={active} path={String(active)} keyName={String(active)} value={draft[active]} onChange={(value) => {
+            <NodeEditor key={`${active}-${restoreVersion}`} path={String(active)} keyName={String(active)} value={draft[active]} onChange={(value) => {
               const next = { ...draftRef.current, [active]: value } as SiteContent;
               draftRef.current = next;
               setDraft(next);
