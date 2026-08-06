@@ -54,12 +54,20 @@ function Panel({ onLogout, onChangePassword }: { onLogout: () => void; onChangeP
   }, [content]);
 
   const save = () => {
+    // Commit the currently focused uncontrolled field before persisting.
+    if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+    window.setTimeout(() => {
+      setSaved(true);
+      window.setTimeout(() => setSaved(false), 2200);
+    }, 0);
+  };
+
+  useEffect(() => {
+    if (!saved) return;
     setContent(draft);
     dirtyRef.current = false;
     setDirty(false);
-    setSaved(true);
-    window.setTimeout(() => setSaved(false), 2200);
-  };
+  }, [saved, draft, setContent]);
 
   const exportJson = () => {
     const blob = new Blob([JSON.stringify(draft, null, 2)], { type: "application/json" });
@@ -132,7 +140,7 @@ function Panel({ onLogout, onChangePassword }: { onLogout: () => void; onChangeP
           </nav>
         </aside>
 
-        <main className="space-y-4">
+        <main className="min-w-0 space-y-4" translate="no">
           <div className="rounded-3xl bg-card p-4 shadow-sm sm:p-5">
             <NodeEditor path={String(active)} keyName={String(active)} value={draft[active]} onChange={(value) => {
               setDraft((current) => ({ ...current, [active]: value }) as SiteContent);
