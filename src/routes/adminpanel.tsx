@@ -25,7 +25,7 @@ async function hashPassword(value: string) {
   return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, "0")).join("");
 }
 
-function AdminPanel() {
+export default function AdminPanel() {
   const [ready, setReady] = useState(false);
   const [unlocked, setUnlocked] = useState(false);
 

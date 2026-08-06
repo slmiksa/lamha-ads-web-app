@@ -2,7 +2,9 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 import { defaultContent, type SiteContent } from "./defaults";
 
 const STORAGE_KEY = "lamha_site_content_v1";
-const MAX_LOCAL_CONTENT_LENGTH = 2_000_000;
+const DB_NAME = "lamha_content_db";
+const DB_STORE = "content";
+const DB_VERSION = 1;
 
 function isPlainObject(v: unknown): v is Record<string, unknown> {
   return typeof v === "object" && v !== null && !Array.isArray(v);
@@ -23,18 +25,53 @@ export function deepMerge<T>(base: T, override: unknown): T {
   return (override as T) ?? base;
 }
 
-function readLocal(): Partial<SiteContent> | null {
+function openContentDb(): Promise<IDBDatabase> {
+  return new Promise((resolve, reject) => {
+    const request = window.indexedDB.open(DB_NAME, DB_VERSION);
+    request.onupgradeneeded = () => {
+      const db = request.result;
+      if (!db.objectStoreNames.contains(DB_STORE)) db.createObjectStore(DB_STORE);
+    };
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error ?? new Error("تعذر فتح التخزين المحلي"));
+  });
+}
+
+async function readLocal(): Promise<Partial<SiteContent> | null> {
+  const db = await openContentDb();
+  const stored = await new Promise<Partial<SiteContent> | null>((resolve, reject) => {
+    const request = db.transaction(DB_STORE, "readonly").objectStore(DB_STORE).get(STORAGE_KEY);
+    request.onsuccess = () => resolve((request.result as Partial<SiteContent> | undefined) ?? null);
+    request.onerror = () => reject(request.error);
+  });
+  db.close();
+  if (stored) return stored;
+
+  // Migrate the old synchronous storage once, then remove it permanently.
+  const legacy = window.localStorage.getItem(STORAGE_KEY);
+  if (!legacy) return null;
+  window.localStorage.removeItem(STORAGE_KEY);
   try {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
-    if (raw && raw.length > MAX_LOCAL_CONTENT_LENGTH) {
-      window.localStorage.removeItem(STORAGE_KEY);
-      window.localStorage.setItem("lamha_content_recovered", "1");
-      return null;
-    }
-    return raw ? (JSON.parse(raw) as Partial<SiteContent>) : null;
+    const parsed = JSON.parse(legacy) as Partial<SiteContent>;
+    await writeLocal(parsed);
+    return parsed;
   } catch {
     return null;
   }
+}
+
+async function writeLocal(value: Partial<SiteContent> | null): Promise<void> {
+  const db = await openContentDb();
+  await new Promise<void>((resolve, reject) => {
+    const transaction = db.transaction(DB_STORE, "readwrite");
+    const store = transaction.objectStore(DB_STORE);
+    if (value === null) store.delete(STORAGE_KEY);
+    else store.put(value, STORAGE_KEY);
+    transaction.oncomplete = () => resolve();
+    transaction.onerror = () => reject(transaction.error);
+    transaction.onabort = () => reject(transaction.error);
+  });
+  db.close();
 }
 
 type Ctx = {
@@ -54,7 +91,13 @@ export function ContentProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     let cancelled = false;
     const restore = () => {
-      if (!cancelled) setLocal(readLocal());
+      void readLocal()
+        .then((stored) => {
+          if (!cancelled) setLocal(stored);
+        })
+        .catch(() => {
+          if (!cancelled) setLocal(null);
+        });
     };
     const idleId = window.setTimeout(restore, 0);
     // Pick up saves made from the admin panel (same tab or another tab).
@@ -92,29 +135,16 @@ export function ContentProvider({ children }: { children: React.ReactNode }) {
 
   const setContent = useCallback((next: SiteContent) => {
     setLocal(next);
-    try {
-      const serialized = JSON.stringify(next);
-      if (serialized.length > MAX_LOCAL_CONTENT_LENGTH) {
-        window.localStorage.setItem("lamha_content_too_large", "1");
-        window.alert("حجم المحتوى كبير جدًا (صور ضخمة). قلّل حجم الصور ثم احفظ مرة أخرى.");
-        return;
-      }
-      window.localStorage.removeItem("lamha_content_too_large");
-      window.localStorage.setItem(STORAGE_KEY, serialized);
-      window.dispatchEvent(new Event("lamha:content-updated"));
-    } catch {
-      window.alert("تعذّر الحفظ: مساحة التخزين في المتصفح ممتلئة.");
-    }
+    void writeLocal(next)
+      .then(() => window.dispatchEvent(new Event("lamha:content-updated")))
+      .catch(() => window.alert("تعذّر الحفظ: مساحة التخزين في المتصفح ممتلئة."));
   }, []);
 
   const resetContent = useCallback(() => {
     setLocal(null);
-    try {
-      window.localStorage.removeItem(STORAGE_KEY);
-      window.dispatchEvent(new Event("lamha:content-updated"));
-    } catch {
-      /* ignore */
-    }
+    void writeLocal(null)
+      .then(() => window.dispatchEvent(new Event("lamha:content-updated")))
+      .catch(() => {});
   }, []);
 
   const value = useMemo(
