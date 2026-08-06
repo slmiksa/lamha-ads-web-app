@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { Link } from "@tanstack/react-router";
 import { Download, ExternalLink, LogOut, RotateCcw, Save, Upload } from "lucide-react";
 import { NodeEditor } from "@/components/ContentEditor";
 import { defaultContent, type SiteContent } from "@/content/defaults";
@@ -98,9 +97,9 @@ function Panel({ onLogout, onChangePassword }: { onLogout: () => void; onChangeP
       <header className="sticky top-0 z-40 border-b border-border/60 bg-background/90 backdrop-blur-xl">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-2 px-4 py-3">
           <h1 className="ml-auto font-display text-lg">لوحة تحكم الموقع</h1>
-          <Link to="/" className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-2 text-xs font-bold">
+          <a href="/" className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-2 text-xs font-bold">
             <ExternalLink className="size-4" /> عرض الموقع
-          </Link>
+          </a>
           <button type="button" onClick={exportJson} className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-2 text-xs font-bold">
             <Download className="size-4" /> تصدير content.json
           </button>
