@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef, useState } from "react";
+import { memo, useRef, useState } from "react";
 import { ChevronDown, Plus, Trash2, ArrowUp, ArrowDown, Upload } from "lucide-react";
 import { ICON_NAMES } from "@/content/icons";
 
@@ -242,7 +242,11 @@ function ImageField({
   );
 }
 
-/** Local-buffered text input: typing stays local, parent updates on blur. */
+/**
+ * Uncontrolled fields keep typing entirely inside the browser. Updating the
+ * recursive content tree on each keypress was rebuilding hundreds of editor
+ * nodes and could make mobile browsers and translation extensions lock up.
+ */
 function BufferedText({
   value,
   onCommit,
@@ -254,43 +258,23 @@ function BufferedText({
   long: boolean;
   rows: number;
 }) {
-  const [v, setV] = useState(value);
-  const latest = useRef(value);
-  const timer = useRef<number | null>(null);
-  useEffect(() => {
-    setV(value);
-    latest.current = value;
-  }, [value]);
-  useEffect(() => () => {
-    if (timer.current) window.clearTimeout(timer.current);
-  }, []);
   const cls = "w-full rounded-xl border border-border bg-background px-3 py-2 text-sm";
-  const commit = () => {
-    if (timer.current) window.clearTimeout(timer.current);
-    if (latest.current !== value) onCommit(latest.current);
-  };
-  // Debounced commit so edits are never lost if the field never blurs.
-  const change = (next: string) => {
-    setV(next);
-    latest.current = next;
-    if (timer.current) window.clearTimeout(timer.current);
-    timer.current = window.setTimeout(() => onCommit(next), 400);
+  const commit = (next: string) => {
+    if (next !== value) onCommit(next);
   };
   return long ? (
     <textarea
       {...SAFE_FIELD_PROPS}
-      value={v}
+      defaultValue={value}
       rows={rows}
-      onChange={(e) => change(e.target.value)}
-      onBlur={commit}
+      onBlur={(e) => commit(e.currentTarget.value)}
       className={`${cls} leading-7`}
     />
   ) : (
     <input
       {...SAFE_FIELD_PROPS}
-      value={v}
-      onChange={(e) => change(e.target.value)}
-      onBlur={commit}
+      defaultValue={value}
+      onBlur={(e) => commit(e.currentTarget.value)}
       onKeyDown={(e) => {
         if (e.key === "Enter") (e.target as HTMLInputElement).blur();
       }}
@@ -403,25 +387,13 @@ export const NodeEditor = memo(function NodeEditor({
         </div>
         <div className="space-y-3">
           {value.map((item, i) => (
-            <div key={`${path}-${i}`} className="rounded-2xl bg-secondary/50 p-3">
-              <div className="mb-2 flex items-center justify-between gap-2">
-                <span className="text-xs font-bold text-muted-foreground">#{i + 1}</span>
-                <div className="flex items-center gap-1">
-                  <IconBtn onClick={() => move(i, -1)} title="أعلى">
-                    <ArrowUp className="size-3.5" />
-                  </IconBtn>
-                  <IconBtn onClick={() => move(i, 1)} title="أسفل">
-                    <ArrowDown className="size-3.5" />
-                  </IconBtn>
-                  <IconBtn
-                    danger
-                    title="حذف"
-                    onClick={() => onChange(value.filter((_, j) => j !== i))}
-                  >
-                    <Trash2 className="size-3.5" />
-                  </IconBtn>
-                </div>
-              </div>
+            <ArrayItem
+              key={`${path}-${i}`}
+              number={i + 1}
+              onUp={() => move(i, -1)}
+              onDown={() => move(i, 1)}
+              onDelete={() => onChange(value.filter((_, j) => j !== i))}
+            >
               {typeof item === "object" && item !== null && !Array.isArray(item) ? (
                 <div className="space-y-3">
                   {Object.entries(item as Record<string, unknown>).map(([k, v]) => (
@@ -450,7 +422,7 @@ export const NodeEditor = memo(function NodeEditor({
                   }}
                 />
               )}
-            </div>
+            </ArrayItem>
           ))}
         </div>
       </div>
@@ -477,6 +449,49 @@ export const NodeEditor = memo(function NodeEditor({
 
   return null;
 });
+
+function ArrayItem({
+  number,
+  onUp,
+  onDown,
+  onDelete,
+  children,
+}: {
+  number: number;
+  onUp: () => void;
+  onDown: () => void;
+  onDelete: () => void;
+  children: React.ReactNode;
+}) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="rounded-2xl bg-secondary/50 p-3">
+      <div className={`flex items-center justify-between gap-2 ${open ? "mb-3" : ""}`}>
+        <button
+          type="button"
+          onClick={() => setOpen((current) => !current)}
+          className="flex min-w-0 flex-1 items-center gap-2 text-right text-xs font-bold text-muted-foreground"
+          aria-expanded={open}
+        >
+          <ChevronDown className={`size-4 shrink-0 transition-transform ${open ? "rotate-180" : ""}`} />
+          العنصر #{number}
+        </button>
+        <div className="flex items-center gap-1">
+          <IconBtn onClick={onUp} title="أعلى">
+            <ArrowUp className="size-3.5" />
+          </IconBtn>
+          <IconBtn onClick={onDown} title="أسفل">
+            <ArrowDown className="size-3.5" />
+          </IconBtn>
+          <IconBtn danger title="حذف" onClick={onDelete}>
+            <Trash2 className="size-3.5" />
+          </IconBtn>
+        </div>
+      </div>
+      {open ? children : null}
+    </div>
+  );
+}
 
 function Field({ name, children }: { name: string; children: React.ReactNode }) {
   return (
