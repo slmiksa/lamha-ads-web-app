@@ -32,6 +32,7 @@ function Panel({ onLogout, onChangePassword }: { onLogout: () => void; onChangeP
   const [draft, setDraft] = useState<SiteContent>(content);
   const [active, setActive] = useState<keyof SiteContent>("brand");
   const [saved, setSaved] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [dirty, setDirty] = useState(false);
   const dirtyRef = useRef(false);
   const touchedRef = useRef(false);
@@ -52,18 +53,19 @@ function Panel({ onLogout, onChangePassword }: { onLogout: () => void; onChangeP
   const save = () => {
     // Commit the currently focused uncontrolled field before persisting.
     if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+    setSaving(true);
     window.setTimeout(() => {
-      setSaved(true);
-      window.setTimeout(() => setSaved(false), 2200);
+      void setContent(draft)
+        .then(() => {
+          setSaved(true);
+          dirtyRef.current = false;
+          setDirty(false);
+          window.setTimeout(() => setSaved(false), 2200);
+        })
+        .catch(() => window.alert("تعذّر الحفظ. تأكد من توفر مساحة تخزين في المتصفح."))
+        .finally(() => setSaving(false));
     }, 0);
   };
-
-  useEffect(() => {
-    if (!saved) return;
-    setContent(draft);
-    dirtyRef.current = false;
-    setDirty(false);
-  }, [saved, draft, setContent]);
 
   const exportJson = () => {
     const blob = new Blob([JSON.stringify(draft, null, 2)], { type: "application/json" });
@@ -107,17 +109,18 @@ function Panel({ onLogout, onChangePassword }: { onLogout: () => void; onChangeP
           </label>
           <button type="button" onClick={() => {
             if (window.confirm("استعادة المحتوى الأصلي وحذف تعديلاتك المحلية؟")) {
-              resetContent();
-              setDraft(defaultContent);
-              dirtyRef.current = false;
-              touchedRef.current = false;
-              setDirty(false);
+              void resetContent().then(() => {
+                setDraft(defaultContent);
+                dirtyRef.current = false;
+                touchedRef.current = false;
+                setDirty(false);
+              });
             }
           }} className="inline-flex items-center gap-1.5 rounded-full bg-destructive/10 px-3 py-2 text-xs font-bold text-destructive">
             <RotateCcw className="size-4" /> استعادة الأصلي
           </button>
-          <button type="button" onClick={save} disabled={!dirty} className="inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-xs font-bold text-primary-foreground disabled:opacity-50">
-            <Save className="size-4" /> {saved ? "تم الحفظ ✓" : "حفظ"}
+          <button type="button" onClick={save} disabled={!dirty || saving} className="inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-xs font-bold text-primary-foreground disabled:opacity-50">
+            <Save className="size-4" /> {saving ? "جارٍ الحفظ…" : saved ? "تم الحفظ ✓" : "حفظ"}
           </button>
           <button type="button" onClick={onLogout} className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-2 text-xs font-bold">
             <LogOut className="size-4" /> تسجيل الخروج

@@ -76,8 +76,8 @@ async function writeLocal(value: Partial<SiteContent> | null): Promise<void> {
 
 type Ctx = {
   content: SiteContent;
-  setContent: (next: SiteContent) => void;
-  resetContent: () => void;
+  setContent: (next: SiteContent) => Promise<void>;
+  resetContent: () => Promise<void>;
   hasLocalChanges: boolean;
 };
 
@@ -90,6 +90,7 @@ export function ContentProvider({ children }: { children: React.ReactNode }) {
   // Keep the server and first browser render identical, then restore local edits.
   useEffect(() => {
     let cancelled = false;
+    const channel = typeof BroadcastChannel === "undefined" ? null : new BroadcastChannel("lamha-content");
     const restore = () => {
       void readLocal()
         .then((stored) => {
@@ -103,11 +104,14 @@ export function ContentProvider({ children }: { children: React.ReactNode }) {
     // Pick up saves made from the admin panel (same tab or another tab).
     window.addEventListener("storage", restore);
     window.addEventListener("lamha:content-updated", restore);
+    channel?.addEventListener("message", restore);
     return () => {
       cancelled = true;
       window.clearTimeout(idleId);
       window.removeEventListener("storage", restore);
       window.removeEventListener("lamha:content-updated", restore);
+      channel?.removeEventListener("message", restore);
+      channel?.close();
     };
   }, []);
 
@@ -133,18 +137,31 @@ export function ContentProvider({ children }: { children: React.ReactNode }) {
     [remote, local],
   );
 
-  const setContent = useCallback((next: SiteContent) => {
+  const setContent = useCallback(async (next: SiteContent) => {
     setLocal(next);
-    void writeLocal(next)
-      .then(() => window.dispatchEvent(new Event("lamha:content-updated")))
-      .catch(() => window.alert("تعذّر الحفظ: مساحة التخزين في المتصفح ممتلئة."));
+    try {
+      await writeLocal(next);
+      window.dispatchEvent(new Event("lamha:content-updated"));
+      if (typeof BroadcastChannel !== "undefined") {
+        const channel = new BroadcastChannel("lamha-content");
+        channel.postMessage("updated");
+        channel.close();
+      }
+    } catch (error) {
+      setLocal(null);
+      throw error;
+    }
   }, []);
 
-  const resetContent = useCallback(() => {
+  const resetContent = useCallback(async () => {
     setLocal(null);
-    void writeLocal(null)
-      .then(() => window.dispatchEvent(new Event("lamha:content-updated")))
-      .catch(() => {});
+    await writeLocal(null);
+    window.dispatchEvent(new Event("lamha:content-updated"));
+    if (typeof BroadcastChannel !== "undefined") {
+      const channel = new BroadcastChannel("lamha-content");
+      channel.postMessage("updated");
+      channel.close();
+    }
   }, []);
 
   const value = useMemo(
