@@ -123,7 +123,7 @@ function Panel({ onLogout, onChangePassword }: { onLogout: () => void; onChangeP
           }} className="inline-flex items-center gap-1.5 rounded-full bg-destructive/10 px-3 py-2 text-xs font-bold text-destructive">
             <RotateCcw className="size-4" /> استعادة الأصلي
           </button>
-          <button type="button" onClick={save} disabled={!dirty || saving} className="inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-xs font-bold text-primary-foreground disabled:opacity-50">
+          <button type="button" onClick={save} disabled={saving} className="inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-xs font-bold text-primary-foreground disabled:opacity-50">
             <Save className="size-4" /> {saving ? "جارٍ الحفظ…" : saved ? "تم الحفظ ✓" : "حفظ"}
           </button>
           <button type="button" onClick={onLogout} className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-2 text-xs font-bold">
