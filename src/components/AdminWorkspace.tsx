@@ -34,6 +34,7 @@ function Panel({ onLogout, onChangePassword }: { onLogout: () => void; onChangeP
   const [saved, setSaved] = useState(false);
   const [saving, setSaving] = useState(false);
   const [dirty, setDirty] = useState(false);
+  const draftRef = useRef<SiteContent>(content);
   const dirtyRef = useRef(false);
   const touchedRef = useRef(false);
 
@@ -47,6 +48,7 @@ function Panel({ onLogout, onChangePassword }: { onLogout: () => void; onChangeP
   // so background loads can never wipe what the admin is editing.
   useEffect(() => {
     if (dirtyRef.current || touchedRef.current) return;
+    draftRef.current = content;
     setDraft(content);
   }, [content]);
 
@@ -55,7 +57,7 @@ function Panel({ onLogout, onChangePassword }: { onLogout: () => void; onChangeP
     if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
     setSaving(true);
     window.setTimeout(() => {
-      void setContent(draft)
+      void setContent(draftRef.current)
         .then(() => {
           setSaved(true);
           dirtyRef.current = false;
@@ -68,7 +70,7 @@ function Panel({ onLogout, onChangePassword }: { onLogout: () => void; onChangeP
   };
 
   const exportJson = () => {
-    const blob = new Blob([JSON.stringify(draft, null, 2)], { type: "application/json" });
+    const blob = new Blob([JSON.stringify(draftRef.current, null, 2)], { type: "application/json" });
     const anchor = document.createElement("a");
     anchor.href = URL.createObjectURL(blob);
     anchor.download = "content.json";
@@ -80,7 +82,9 @@ function Panel({ onLogout, onChangePassword }: { onLogout: () => void; onChangeP
     const reader = new FileReader();
     reader.onload = () => {
       try {
-        setDraft(JSON.parse(String(reader.result)) as SiteContent);
+        const imported = JSON.parse(String(reader.result)) as SiteContent;
+        draftRef.current = imported;
+        setDraft(imported);
         markDirty();
       } catch {
         window.alert("ملف غير صالح");
@@ -111,6 +115,7 @@ function Panel({ onLogout, onChangePassword }: { onLogout: () => void; onChangeP
             if (window.confirm("استعادة المحتوى الأصلي وحذف تعديلاتك المحلية؟")) {
               void resetContent().then(() => {
                 setDraft(defaultContent);
+                draftRef.current = defaultContent;
                 dirtyRef.current = false;
                 touchedRef.current = false;
                 setDirty(false);
@@ -142,7 +147,11 @@ function Panel({ onLogout, onChangePassword }: { onLogout: () => void; onChangeP
         <main className="min-w-0 space-y-4" translate="no">
           <div className="rounded-3xl bg-card p-4 shadow-sm sm:p-5">
             <NodeEditor key={active} path={String(active)} keyName={String(active)} value={draft[active]} onChange={(value) => {
-              setDraft((current) => ({ ...current, [active]: value }) as SiteContent);
+              setDraft((current) => {
+                const next = { ...current, [active]: value } as SiteContent;
+                draftRef.current = next;
+                return next;
+              });
               markDirty();
             }} />
           </div>
@@ -152,7 +161,7 @@ function Panel({ onLogout, onChangePassword }: { onLogout: () => void; onChangeP
           <div className="rounded-3xl bg-card p-5 text-sm shadow-sm">
             <h2 className="font-display text-base">النشر على السيرفر</h2>
             <ol className="mt-3 list-decimal space-y-1.5 pr-5 text-muted-foreground">
-              <li>عدّل ما تريد ثم اضغط «حفظ» — التعديل يظهر مباشرة في متصفحك.</li>
+              <li>عدّل ما تريد ثم اضغط «حفظ» — التعديل يظهر فورًا في هذا المتصفح دون إعادة تحميل.</li>
               <li>اضغط «تصدير content.json» لتنزيل ملف المحتوى.</li>
               <li>ارفع الملف داخل مجلد public_html بجانب index.html ليظهر للجميع.</li>
             </ol>

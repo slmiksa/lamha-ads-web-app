@@ -1,6 +1,6 @@
 import { createRoot } from "react-dom/client";
 
-import AdminPanel from "./routes/adminpanel";
+import AdminPanelGate from "./components/AdminPanelGate";
 import { ContentProvider } from "./content/store";
 import "./styles.css";
 
@@ -12,6 +12,6 @@ if (!rootElement) {
 
 createRoot(rootElement).render(
   <ContentProvider>
-    <AdminPanel />
+    <AdminPanelGate />
   </ContentProvider>,
 );
