@@ -18,12 +18,6 @@ export default defineConfig({
         site: resolve(projectRoot, "index.html"),
         adminpanel: resolve(projectRoot, "adminpanel/index.html"),
       },
-      output: {
-        manualChunks: (id) => {
-          if (id.includes("AdminWorkspace") || id.includes("ContentEditor")) return "admin-editor";
-          return undefined;
-        },
-      },
     },
   },
 });

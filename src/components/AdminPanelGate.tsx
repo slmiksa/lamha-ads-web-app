@@ -1,6 +1,5 @@
-import { lazy, Suspense, useEffect, useState } from "react";
-
-const AdminWorkspace = lazy(() => import("@/components/AdminWorkspace"));
+import { useEffect, useState } from "react";
+import AdminWorkspace from "@/components/AdminWorkspace";
 
 const ADMIN_SESSION_KEY = "lamha_admin_unlocked";
 const ADMIN_PASSWORD_HASH_KEY = "lamha_admin_password_hash";
@@ -65,9 +64,5 @@ export default function AdminPanelGate() {
     );
   }
 
-  return (
-    <Suspense fallback={<div className="grid min-h-screen place-items-center bg-secondary/40 text-sm text-muted-foreground">جارٍ تحميل لوحة التحكم…</div>}>
-      <AdminWorkspace onLogout={logout} onChangePassword={changePassword} />
-    </Suspense>
-  );
+  return <AdminWorkspace onLogout={logout} onChangePassword={changePassword} />;
 }
