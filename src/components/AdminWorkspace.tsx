@@ -3,7 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { Download, ExternalLink, LogOut, RotateCcw, Save, Upload } from "lucide-react";
 import { NodeEditor } from "@/components/ContentEditor";
 import { defaultContent, type SiteContent } from "@/content/defaults";
-import { ContentProvider, useContentCtx } from "@/content/store";
+import { useContentCtx } from "@/content/store";
 
 const SECTIONS: { key: keyof SiteContent; label: string }[] = [
   { key: "brand", label: "الهوية والشعار" },
@@ -24,11 +24,7 @@ export default function AdminWorkspace({
   onLogout: () => void;
   onChangePassword: () => void;
 }) {
-  return (
-    <ContentProvider>
-      <Panel onLogout={onLogout} onChangePassword={onChangePassword} />
-    </ContentProvider>
-  );
+  return <Panel onLogout={onLogout} onChangePassword={onChangePassword} />;
 }
 
 function Panel({ onLogout, onChangePassword }: { onLogout: () => void; onChangePassword: () => void }) {
@@ -142,7 +138,7 @@ function Panel({ onLogout, onChangePassword }: { onLogout: () => void; onChangeP
 
         <main className="min-w-0 space-y-4" translate="no">
           <div className="rounded-3xl bg-card p-4 shadow-sm sm:p-5">
-            <NodeEditor path={String(active)} keyName={String(active)} value={draft[active]} onChange={(value) => {
+            <NodeEditor key={active} path={String(active)} keyName={String(active)} value={draft[active]} onChange={(value) => {
               setDraft((current) => ({ ...current, [active]: value }) as SiteContent);
               markDirty();
             }} />

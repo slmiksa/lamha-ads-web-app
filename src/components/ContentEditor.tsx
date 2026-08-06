@@ -431,7 +431,7 @@ export const NodeEditor = memo(function NodeEditor({
 
   if (value && typeof value === "object") {
     return (
-      <Collapsible title={label(keyName)}>
+      <Collapsible title={label(keyName)} initiallyOpen={!path.includes(".")}>
         <div className="space-y-3">
           {Object.entries(value as Record<string, unknown>).map(([k, v]) => (
             <NodeEditor
@@ -527,8 +527,16 @@ function IconBtn({
   );
 }
 
-function Collapsible({ title, children }: { title: string; children: React.ReactNode }) {
-  const [open, setOpen] = useState(false);
+function Collapsible({
+  title,
+  children,
+  initiallyOpen = false,
+}: {
+  title: string;
+  children: React.ReactNode;
+  initiallyOpen?: boolean;
+}) {
+  const [open, setOpen] = useState(initiallyOpen);
   return (
     <div className="rounded-2xl border border-border/70">
       <button
