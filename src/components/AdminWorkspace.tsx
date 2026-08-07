@@ -134,6 +134,15 @@ function Panel({ onLogout, onChangePassword }: { onLogout: () => void; onChangeP
         </div>
       </header>
 
+      <div className="mx-auto max-w-6xl px-4 pt-4">
+        <p className="rounded-2xl border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-xs font-bold leading-6 text-amber-800">
+          تنبيه مهم: زر «حفظ» يحفظ التعديل داخل هذا المتصفح فقط، لذلك لا يظهر في الجوال أو أجهزة الزوار.
+          لكي يظهر التعديل للجميع: اضغط «حفظ» ثم «نشر (تنزيل content.json)» وارفع الملف داخل مجلد
+          <span className="mx-1 font-mono" dir="ltr">public_html</span>
+          بجانب <span className="mx-1 font-mono" dir="ltr">index.html</span> (استبدل الملف القديم)، ثم حدّث الصفحة في الجوال.
+        </p>
+      </div>
+
       <div className="mx-auto grid max-w-6xl gap-5 px-4 py-6 md:grid-cols-[220px_minmax(0,1fr)]">
         <aside className="h-max rounded-3xl bg-card p-2 shadow-sm md:sticky md:top-24">
           <nav className="flex flex-wrap gap-1 md:flex-col">
