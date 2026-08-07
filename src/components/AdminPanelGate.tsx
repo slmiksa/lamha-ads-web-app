@@ -28,25 +28,35 @@ function sha256Fallback(message: string): string {
 
   const rotr = (x: number, n: number) => (x >>> n) | (x << (32 - n));
   const w = new Uint32Array(64);
+  const at = (arr: number[], i: number) => arr[i] as number;
   for (let i = 0; i < bytes.length; i += 64) {
     for (let t = 0; t < 16; t++) {
       w[t] =
-        ((bytes[i + t * 4] << 24) |
-          (bytes[i + t * 4 + 1] << 16) |
-          (bytes[i + t * 4 + 2] << 8) |
-          bytes[i + t * 4 + 3]) >>>
+        ((at(bytes, i + t * 4) << 24) |
+          (at(bytes, i + t * 4 + 1) << 16) |
+          (at(bytes, i + t * 4 + 2) << 8) |
+          at(bytes, i + t * 4 + 3)) >>>
         0;
     }
     for (let t = 16; t < 64; t++) {
-      const s0 = rotr(w[t - 15], 7) ^ rotr(w[t - 15], 18) ^ (w[t - 15] >>> 3);
-      const s1 = rotr(w[t - 2], 17) ^ rotr(w[t - 2], 19) ^ (w[t - 2] >>> 10);
-      w[t] = (w[t - 16] + s0 + w[t - 7] + s1) >>> 0;
+      const w15 = w[t - 15] as number;
+      const w2 = w[t - 2] as number;
+      const s0 = rotr(w15, 7) ^ rotr(w15, 18) ^ (w15 >>> 3);
+      const s1 = rotr(w2, 17) ^ rotr(w2, 19) ^ (w2 >>> 10);
+      w[t] = ((w[t - 16] as number) + s0 + (w[t - 7] as number) + s1) >>> 0;
     }
-    let [a, b, c, d, e, f, g, h] = H;
+    let a = at(H, 0);
+    let b = at(H, 1);
+    let c = at(H, 2);
+    let d = at(H, 3);
+    let e = at(H, 4);
+    let f = at(H, 5);
+    let g = at(H, 6);
+    let h = at(H, 7);
     for (let t = 0; t < 64; t++) {
       const S1 = rotr(e, 6) ^ rotr(e, 11) ^ rotr(e, 25);
       const ch = (e & f) ^ (~e & g);
-      const temp1 = (h + S1 + ch + K[t] + w[t]) >>> 0;
+      const temp1 = (h + S1 + ch + at(K, t) + (w[t] as number)) >>> 0;
       const S0 = rotr(a, 2) ^ rotr(a, 13) ^ rotr(a, 22);
       const maj = (a & b) ^ (a & c) ^ (b & c);
       const temp2 = (S0 + maj) >>> 0;
@@ -60,7 +70,7 @@ function sha256Fallback(message: string): string {
       a = (temp1 + temp2) >>> 0;
     }
     const next = [a, b, c, d, e, f, g, h];
-    for (let t = 0; t < 8; t++) H[t] = (H[t] + next[t]) >>> 0;
+    for (let t = 0; t < 8; t++) H[t] = (at(H, t) + at(next, t)) >>> 0;
   }
   return H.map((x) => x.toString(16).padStart(8, "0")).join("");
 }
