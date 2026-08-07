@@ -84,5 +84,14 @@
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.56.1",
     "vite": "^8.1.5"
-  }
+  },
+  "browserslist": [
+    "chrome >= 70",
+    "safari >= 12",
+    "firefox >= 68",
+    "edge >= 79",
+    "ios_saf >= 12",
+    "and_chr >= 70",
+    "android >= 6"
+  ]
 }
