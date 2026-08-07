@@ -25,8 +25,20 @@ export function deepMerge<T>(base: T, override: unknown): T {
   return (override as T) ?? base;
 }
 
+function hasIndexedDb(): boolean {
+  try {
+    return typeof window !== "undefined" && !!window.indexedDB;
+  } catch {
+    return false;
+  }
+}
+
 function openContentDb(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
+    if (!hasIndexedDb()) {
+      reject(new Error("IndexedDB غير مدعوم في هذا المتصفح"));
+      return;
+    }
     const request = window.indexedDB.open(DB_NAME, DB_VERSION);
     request.onupgradeneeded = () => {
       const db = request.result;
@@ -34,34 +46,75 @@ function openContentDb(): Promise<IDBDatabase> {
     };
     request.onsuccess = () => resolve(request.result);
     request.onerror = () => reject(request.error ?? new Error("تعذر فتح التخزين المحلي"));
+    request.onblocked = () => reject(new Error("التخزين المحلي مشغول"));
   });
 }
 
-async function readLocal(): Promise<Partial<SiteContent> | null> {
-  const db = await openContentDb();
-  const stored = await new Promise<Partial<SiteContent> | null>((resolve, reject) => {
-    const request = db.transaction(DB_STORE, "readonly").objectStore(DB_STORE).get(STORAGE_KEY);
-    request.onsuccess = () => resolve((request.result as Partial<SiteContent> | undefined) ?? null);
-    request.onerror = () => reject(request.error);
-  });
-  db.close();
-  if (stored) return stored;
-
-  // Migrate the old synchronous storage once, then remove it permanently.
-  const legacy = window.localStorage.getItem(STORAGE_KEY);
-  if (!legacy) return null;
-  window.localStorage.removeItem(STORAGE_KEY);
+function readLegacy(): Partial<SiteContent> | null {
   try {
-    const parsed = JSON.parse(legacy) as Partial<SiteContent>;
-    await writeLocal(parsed);
-    return parsed;
+    const legacy = window.localStorage.getItem(STORAGE_KEY);
+    if (!legacy) return null;
+    return JSON.parse(legacy) as Partial<SiteContent>;
   } catch {
     return null;
   }
 }
 
+async function readLocal(): Promise<Partial<SiteContent> | null> {
+  // Fallback for WebViews / private mode where IndexedDB is unavailable.
+  if (!hasIndexedDb()) return readLegacy();
+
+  let db: IDBDatabase;
+  try {
+    db = await openContentDb();
+  } catch {
+    return readLegacy();
+  }
+  const stored = await new Promise<Partial<SiteContent> | null>((resolve) => {
+    try {
+      const request = db.transaction(DB_STORE, "readonly").objectStore(DB_STORE).get(STORAGE_KEY);
+      request.onsuccess = () => resolve((request.result as Partial<SiteContent> | undefined) ?? null);
+      request.onerror = () => resolve(null);
+    } catch {
+      resolve(null);
+    }
+  });
+  db.close();
+  if (stored) return stored;
+
+  // Migrate the old synchronous storage once, then remove it permanently.
+  const parsed = readLegacy();
+  if (!parsed) return null;
+  try {
+    window.localStorage.removeItem(STORAGE_KEY);
+  } catch {
+    /* ignore */
+  }
+  await writeLocal(parsed);
+  return parsed;
+}
+
+function writeLegacy(value: Partial<SiteContent> | null): void {
+  try {
+    if (value === null) window.localStorage.removeItem(STORAGE_KEY);
+    else window.localStorage.setItem(STORAGE_KEY, JSON.stringify(value));
+  } catch {
+    /* storage full or blocked */
+  }
+}
+
 async function writeLocal(value: Partial<SiteContent> | null): Promise<void> {
-  const db = await openContentDb();
+  if (!hasIndexedDb()) {
+    writeLegacy(value);
+    return;
+  }
+  let db: IDBDatabase;
+  try {
+    db = await openContentDb();
+  } catch {
+    writeLegacy(value);
+    return;
+  }
   await new Promise<void>((resolve, reject) => {
     const transaction = db.transaction(DB_STORE, "readwrite");
     const store = transaction.objectStore(DB_STORE);
