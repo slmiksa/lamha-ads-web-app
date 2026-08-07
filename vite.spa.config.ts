@@ -13,6 +13,9 @@ export default defineConfig({
     outDir: "dist",
     emptyOutDir: true,
     modulePreload: false,
+    // Support older mobile WebViews / Safari, not just the latest browsers.
+    target: ["es2018", "chrome70", "safari12", "firefox68", "edge79"],
+    cssTarget: ["chrome70", "safari12", "firefox68", "edge79"],
     rollupOptions: {
       input: {
         site: resolve(projectRoot, "index.html"),
