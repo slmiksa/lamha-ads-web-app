@@ -186,12 +186,13 @@ export function useContent(): SiteContent {
 export function useTokens() {
   const c = useContent();
   const whatsappUrl = `https://wa.me/${c.contact.whatsapp}`;
+  // split/join keeps this working on older WebViews without String.replaceAll.
   return useCallback(
     (s: string) =>
       s
-        .replaceAll("{whatsapp}", whatsappUrl)
-        .replaceAll("{email}", c.contact.email)
-        .replaceAll("{year}", String(new Date().getFullYear())),
+        .split("{whatsapp}").join(whatsappUrl)
+        .split("{email}").join(c.contact.email)
+        .split("{year}").join(String(new Date().getFullYear())),
     [whatsappUrl, c.contact.email],
   );
 }
