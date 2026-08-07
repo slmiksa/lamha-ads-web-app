@@ -102,8 +102,8 @@ function Panel({ onLogout, onChangePassword }: { onLogout: () => void; onChangeP
           <a href="/" className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-2 text-xs font-bold">
             <ExternalLink className="size-4" /> عرض الموقع
           </a>
-          <button type="button" onClick={exportJson} className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-2 text-xs font-bold">
-            <Download className="size-4" /> تصدير content.json
+          <button type="button" onClick={exportJson} className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-2 text-xs font-bold text-primary">
+            <Download className="size-4" /> نشر (تنزيل content.json)
           </button>
           <label className="inline-flex cursor-pointer items-center gap-1.5 rounded-full bg-secondary px-3 py-2 text-xs font-bold">
             <Upload className="size-4" /> استيراد
