@@ -17,16 +17,18 @@ const SECTIONS: { key: keyof SiteContent; label: string }[] = [
 ];
 
 export default function AdminWorkspace({
+  sessionPassword,
   onLogout,
   onChangePassword,
 }: {
+  sessionPassword: string;
   onLogout: () => void;
   onChangePassword: () => void;
 }) {
-  return <Panel onLogout={onLogout} onChangePassword={onChangePassword} />;
+  return <Panel sessionPassword={sessionPassword} onLogout={onLogout} onChangePassword={onChangePassword} />;
 }
 
-function Panel({ onLogout, onChangePassword }: { onLogout: () => void; onChangePassword: () => void }) {
+function Panel({ sessionPassword, onLogout, onChangePassword }: { sessionPassword: string; onLogout: () => void; onChangePassword: () => void }) {
   const { content, setContent, resetContent } = useContentCtx();
   const [draft, setDraft] = useState<SiteContent>(content);
   const [active, setActive] = useState<keyof SiteContent>("brand");
@@ -53,19 +55,36 @@ function Panel({ onLogout, onChangePassword }: { onLogout: () => void; onChangeP
     setRestoreVersion((version) => version + 1);
   }, [content]);
 
+  const publish = async (next: SiteContent, password: string) => {
+    const response = await fetch("/publish-content.php", {
+      method: "POST",
+      cache: "no-store",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify({ password, content: next }),
+    });
+    const result = await response.json().catch(() => null) as { message?: string } | null;
+    if (!response.ok) throw new Error(result?.message ?? "تعذّر نشر التعديلات على السيرفر");
+  };
+
   const save = () => {
     // Commit the currently focused uncontrolled field before persisting.
     if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
     setSaving(true);
     window.setTimeout(() => {
-      void setContent(draftRef.current)
+      const next = draftRef.current;
+      const password = sessionPassword || window.prompt("أدخل كلمة مرور لوحة التحكم للنشر") || "";
+      void setContent(next)
+        .then(() => publish(next, password))
         .then(() => {
           setSaved(true);
           dirtyRef.current = false;
           setDirty(false);
           window.setTimeout(() => setSaved(false), 2200);
         })
-        .catch(() => window.alert("تعذّر الحفظ. تأكد من توفر مساحة تخزين في المتصفح."))
+        .catch((error: unknown) => {
+          const message = error instanceof Error ? error.message : "تعذّر الحفظ والنشر";
+          window.alert(`${message}\nتم الاحتفاظ بالتعديل في هذا الكمبيوتر، ويمكنك تنزيل content.json ورفعه يدويًا.`);
+        })
         .finally(() => setSaving(false));
     }, 0);
   };
@@ -103,7 +122,7 @@ function Panel({ onLogout, onChangePassword }: { onLogout: () => void; onChangeP
             <ExternalLink className="size-4" /> عرض الموقع
           </a>
           <button type="button" onClick={exportJson} className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-2 text-xs font-bold text-primary">
-            <Download className="size-4" /> نشر (تنزيل content.json)
+            <Download className="size-4" /> تنزيل نسخة احتياطية
           </button>
           <label className="inline-flex cursor-pointer items-center gap-1.5 rounded-full bg-secondary px-3 py-2 text-xs font-bold">
             <Upload className="size-4" /> استيراد
@@ -126,7 +145,7 @@ function Panel({ onLogout, onChangePassword }: { onLogout: () => void; onChangeP
             <RotateCcw className="size-4" /> استعادة الأصلي
           </button>
           <button type="button" onClick={save} disabled={saving} className="inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-xs font-bold text-primary-foreground disabled:opacity-50">
-            <Save className="size-4" /> {saving ? "جارٍ الحفظ…" : saved ? "تم الحفظ ✓" : "حفظ"}
+             <Save className="size-4" /> {saving ? "جارٍ النشر…" : saved ? "تم النشر للجميع ✓" : "حفظ ونشر"}
           </button>
           <button type="button" onClick={onLogout} className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-2 text-xs font-bold">
             <LogOut className="size-4" /> تسجيل الخروج
@@ -136,10 +155,8 @@ function Panel({ onLogout, onChangePassword }: { onLogout: () => void; onChangeP
 
       <div className="mx-auto max-w-6xl px-4 pt-4">
         <p className="rounded-2xl border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-xs font-bold leading-6 text-amber-800">
-          تنبيه مهم: زر «حفظ» يحفظ التعديل داخل هذا المتصفح فقط، لذلك لا يظهر في الجوال أو أجهزة الزوار.
-          لكي يظهر التعديل للجميع: اضغط «حفظ» ثم «نشر (تنزيل content.json)» وارفع الملف داخل مجلد
-          <span className="mx-1 font-mono" dir="ltr">public_html</span>
-          بجانب <span className="mx-1 font-mono" dir="ltr">index.html</span> (استبدل الملف القديم)، ثم حدّث الصفحة في الجوال.
+          زر «حفظ ونشر» يحدّث ملف المحتوى على السيرفر مباشرة، فتظهر التعديلات على الكمبيوتر والجوال. إذا تعذّر النشر، استخدم «تنزيل نسخة احتياطية» وارفعها باسم
+          <span className="mx-1 font-mono" dir="ltr">content.json</span> داخل <span className="mx-1 font-mono" dir="ltr">public_html</span>.
         </p>
       </div>
 
@@ -169,9 +186,9 @@ function Panel({ onLogout, onChangePassword }: { onLogout: () => void; onChangeP
           <div className="rounded-3xl bg-card p-5 text-sm shadow-sm">
             <h2 className="font-display text-base">النشر على السيرفر</h2>
             <ol className="mt-3 list-decimal space-y-1.5 pr-5 text-muted-foreground">
-              <li>عدّل ما تريد ثم اضغط «حفظ» — التعديل يظهر فورًا في هذا المتصفح دون إعادة تحميل.</li>
-              <li>اضغط «تصدير content.json» لتنزيل ملف المحتوى.</li>
-              <li>ارفع الملف داخل مجلد public_html بجانب index.html ليظهر للجميع.</li>
+               <li>عدّل ما تريد ثم اضغط «حفظ ونشر» ليظهر التعديل لجميع الأجهزة.</li>
+               <li>عند ظهور رسالة نجاح، افتح الموقع من الجوال أو أعد تحميله.</li>
+               <li>استخدم «تنزيل نسخة احتياطية» فقط إذا أخبرتك اللوحة أن النشر المباشر تعذّر.</li>
             </ol>
             <div className="mt-5 border-t border-border/60 pt-4">
               <button type="button" onClick={onChangePassword} className="rounded-full bg-secondary px-4 py-2 text-xs font-bold">

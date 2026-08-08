@@ -86,6 +86,7 @@ async function hashPassword(value: string) {
 export default function AdminPanelGate() {
   const [ready, setReady] = useState(false);
   const [unlocked, setUnlocked] = useState(false);
+  const [sessionPassword, setSessionPassword] = useState("");
 
   useEffect(() => {
     setUnlocked(window.sessionStorage.getItem(ADMIN_SESSION_KEY) === "1");
@@ -101,11 +102,13 @@ export default function AdminPanelGate() {
       return;
     }
     window.sessionStorage.setItem(ADMIN_SESSION_KEY, "1");
+    setSessionPassword(password);
     setUnlocked(true);
   };
 
   const logout = () => {
     window.sessionStorage.removeItem(ADMIN_SESSION_KEY);
+    setSessionPassword("");
     setUnlocked(false);
   };
 
@@ -136,5 +139,5 @@ export default function AdminPanelGate() {
     );
   }
 
-  return <AdminWorkspace onLogout={logout} onChangePassword={changePassword} />;
+  return <AdminWorkspace sessionPassword={sessionPassword} onLogout={logout} onChangePassword={changePassword} />;
 }
