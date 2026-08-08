@@ -13,6 +13,9 @@ fi
 # ننسخه صراحة لأن بعض أدوات البناء تتجاهل الملفات المخفية.
 cp public/.htaccess dist/.htaccess
 
+# ضمان وجود ملف المحتوى في كل نسخة مرفوعة حتى لا يبقى ملف قديم على السيرفر.
+cp public/content.json dist/content.json
+
 echo "تم ✅ تم إنشاء dist/index.html و dist/.htaccess"
 echo "للرفع مع ملف .htaccess نفّذ:"
 echo "cp -a dist/. /home/lamhaads.sa/public_html/"
