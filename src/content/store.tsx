@@ -168,20 +168,36 @@ export function ContentProvider({ children }: { children: React.ReactNode }) {
     };
   }, []);
 
-  // Published content file (upload content.json next to index.html on the server)
+  // Published content file (upload content.json next to index.html on the server).
+  // A unique query string is essential on mobile browsers and LiteSpeed/CDN hosts
+  // that may otherwise serve an old JSON response despite cache: "no-store".
   useEffect(() => {
     let alive = true;
-    fetch("/content.json", { cache: "no-store" })
-      .then((r) => {
-        const type = r.headers.get("content-type") ?? "";
-        return r.ok && type.includes("application/json") ? r.json() : null;
+    const loadPublishedContent = () => {
+      const separator = "/content.json".includes("?") ? "&" : "?";
+      fetch(`/content.json${separator}v=${Date.now()}`, {
+        cache: "no-store",
+        headers: { Accept: "application/json" },
       })
-      .then((d) => {
-        if (alive && d && typeof d === "object") setRemote(d as Partial<SiteContent>);
-      })
-      .catch(() => {});
+        .then((r) => {
+          const type = r.headers.get("content-type") ?? "";
+          return r.ok && type.includes("application/json") ? r.json() : null;
+        })
+        .then((d) => {
+          if (alive && d && typeof d === "object") setRemote(d as Partial<SiteContent>);
+        })
+        .catch(() => {});
+    };
+    const refreshWhenVisible = () => {
+      if (document.visibilityState === "visible") loadPublishedContent();
+    };
+    loadPublishedContent();
+    window.addEventListener("pageshow", loadPublishedContent);
+    document.addEventListener("visibilitychange", refreshWhenVisible);
     return () => {
       alive = false;
+      window.removeEventListener("pageshow", loadPublishedContent);
+      document.removeEventListener("visibilitychange", refreshWhenVisible);
     };
   }, []);
 
