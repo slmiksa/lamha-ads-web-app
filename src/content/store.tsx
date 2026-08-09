@@ -136,12 +136,27 @@ type Ctx = {
 
 const ContentContext = createContext<Ctx | null>(null);
 
-export function ContentProvider({ children }: { children: React.ReactNode }) {
+export function ContentProvider({
+  children,
+  enableLocalDrafts = false,
+}: {
+  children: React.ReactNode;
+  /** Only the admin panel keeps a local draft; the public site always mirrors the server file. */
+  enableLocalDrafts?: boolean;
+}) {
   const [remote, setRemote] = useState<Partial<SiteContent> | null>(null);
   const [local, setLocal] = useState<Partial<SiteContent> | null>(null);
 
   // Keep the server and first browser render identical, then restore local edits.
+  // The public site never reads the local draft, so a stale browser copy can no
+  // longer hide freshly published content (no "clear your cookies" step).
   useEffect(() => {
+    if (!enableLocalDrafts) {
+      // Drop any legacy draft that a previous version left on visitors' devices.
+      void writeLocal(null).catch(() => {});
+      setLocal(null);
+      return;
+    }
     let cancelled = false;
     const channel = typeof BroadcastChannel === "undefined" ? null : new BroadcastChannel("lamha-content");
     const restore = () => {
@@ -166,7 +181,7 @@ export function ContentProvider({ children }: { children: React.ReactNode }) {
       channel?.removeEventListener("message", restore);
       channel?.close();
     };
-  }, []);
+  }, [enableLocalDrafts]);
 
   // Published content file (upload content.json next to index.html on the server).
   // A unique query string is essential on mobile browsers and LiteSpeed/CDN hosts

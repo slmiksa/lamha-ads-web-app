@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import AdminWorkspace from "@/components/AdminWorkspace";
 
 const ADMIN_SESSION_KEY = "lamha_admin_unlocked";
-const ADMIN_PASSWORD_HASH_KEY = "lamha_admin_password_hash";
 const DEFAULT_PASSWORD_HASH = "0e2292e0fde71e24022fc18496fd7ba7e25c342b790450ee9897d7bcc6261ce1";
 
 /** Pure-JS SHA-256 — used when crypto.subtle is missing (http:// or old WebViews). */
@@ -83,6 +82,20 @@ async function hashPassword(value: string) {
   return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, "0")).join("");
 }
 
+async function callAdminApi(body: Record<string, unknown>) {
+  const response = await fetch("/publish-content.php", {
+    method: "POST",
+    cache: "no-store",
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    body: JSON.stringify(body),
+  });
+  const type = response.headers.get("content-type") ?? "";
+  if (!type.includes("application/json")) throw new Error("OFFLINE");
+  const result = (await response.json().catch(() => null)) as { ok?: boolean; message?: string } | null;
+  if (!response.ok || !result?.ok) throw new Error(result?.message ?? "تعذّر تنفيذ الطلب");
+  return result;
+}
+
 export default function AdminPanelGate() {
   const [ready, setReady] = useState(false);
   const [unlocked, setUnlocked] = useState(false);
@@ -96,10 +109,20 @@ export default function AdminPanelGate() {
   const login = async () => {
     const password = window.prompt("أدخل كلمة مرور لوحة التحكم");
     if (password === null) return;
-    const expected = window.localStorage.getItem(ADMIN_PASSWORD_HASH_KEY) ?? DEFAULT_PASSWORD_HASH;
-    if ((await hashPassword(password)) !== expected) {
-      window.alert("كلمة المرور غير صحيحة");
-      return;
+    // The server holds the real password; the local hash is only a fallback
+    // when PHP is unavailable (local preview / static hosting without PHP).
+    try {
+      await callAdminApi({ action: "verify", password });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "";
+      if (message !== "OFFLINE") {
+        window.alert(message || "كلمة المرور غير صحيحة");
+        return;
+      }
+      if ((await hashPassword(password)) !== DEFAULT_PASSWORD_HASH) {
+        window.alert("كلمة المرور غير صحيحة");
+        return;
+      }
     }
     window.sessionStorage.setItem(ADMIN_SESSION_KEY, "1");
     setSessionPassword(password);
@@ -113,14 +136,30 @@ export default function AdminPanelGate() {
   };
 
   const changePassword = async () => {
+    const current = sessionPassword || window.prompt("أدخل كلمة المرور الحالية") || "";
+    if (!current) return;
     const password = window.prompt("أدخل كلمة المرور الجديدة");
     if (password === null) return;
     if (password.trim().length < 6) {
       window.alert("يجب أن تتكون كلمة المرور من 6 أحرف على الأقل");
       return;
     }
-    window.localStorage.setItem(ADMIN_PASSWORD_HASH_KEY, await hashPassword(password.trim()));
-    window.alert("تم تغيير كلمة المرور");
+    try {
+      const result = await callAdminApi({
+        action: "change-password",
+        password: current,
+        newPassword: password.trim(),
+      });
+      setSessionPassword(password.trim());
+      window.alert(result.message ?? "تم تغيير كلمة المرور لجميع الأجهزة");
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "";
+      window.alert(
+        message === "OFFLINE"
+          ? "تغيير كلمة المرور يتطلب رفع الموقع على السيرفر (PHP)، ولم يتم أي تغيير."
+          : message || "تعذّر تغيير كلمة المرور",
+      );
+    }
   };
 
   if (!ready) return null;
