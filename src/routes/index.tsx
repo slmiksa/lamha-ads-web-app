@@ -195,7 +195,7 @@ function Hero({ c }: { c: SiteContent }) {
           </div>
 
           <div className="mt-8 flex justify-center">
-            <StoreButtons />
+            <StoreButtons center />
           </div>
 
           <div className="mt-7 flex flex-wrap items-center justify-center gap-5 text-sm text-muted-foreground md:justify-start">
