@@ -194,7 +194,7 @@ function Hero({ c }: { c: SiteContent }) {
             ))}
           </div>
 
-          <div className="mt-8 flex justify-center md:justify-start">
+          <div className="mt-8 flex justify-center">
             <StoreButtons />
           </div>
 
