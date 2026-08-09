@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import AdminWorkspace from "@/components/AdminWorkspace";
 
 const ADMIN_SESSION_KEY = "lamha_admin_unlocked";
-const ADMIN_PASSWORD_HASH_KEY = "lamha_admin_password_hash";
 const DEFAULT_PASSWORD_HASH = "0e2292e0fde71e24022fc18496fd7ba7e25c342b790450ee9897d7bcc6261ce1";
 
 /** Pure-JS SHA-256 — used when crypto.subtle is missing (http:// or old WebViews). */
