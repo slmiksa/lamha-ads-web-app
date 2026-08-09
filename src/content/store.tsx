@@ -136,7 +136,14 @@ type Ctx = {
 
 const ContentContext = createContext<Ctx | null>(null);
 
-export function ContentProvider({ children }: { children: React.ReactNode }) {
+export function ContentProvider({
+  children,
+  enableLocalDrafts = false,
+}: {
+  children: React.ReactNode;
+  /** Only the admin panel keeps a local draft; the public site always mirrors the server file. */
+  enableLocalDrafts?: boolean;
+}) {
   const [remote, setRemote] = useState<Partial<SiteContent> | null>(null);
   const [local, setLocal] = useState<Partial<SiteContent> | null>(null);
 
