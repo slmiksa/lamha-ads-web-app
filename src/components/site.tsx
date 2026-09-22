@@ -139,6 +139,9 @@ export function SiteFooter() {
           <Link to="/partners" className="hover:text-foreground">
             {c.nav.partnersLabel}
           </Link>
+          <Link to="/social-media" className="hover:text-foreground">
+            تابعنا عبر السوشال ميديا
+          </Link>
           <Link to="/privacy" className="hover:text-foreground">
             {c.nav.privacyLabel}
           </Link>

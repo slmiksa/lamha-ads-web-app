@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminpanelRouteImport } from './routes/adminpanel'
 import { Route as PartnersRouteImport } from './routes/partners'
 import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as SocialMediaRouteImport } from './routes/social-media'
 import { Route as SupportRouteImport } from './routes/support'
 
 const IndexRoute = IndexRouteImport.update({
@@ -35,6 +36,11 @@ const PrivacyRoute = PrivacyRouteImport.update({
   path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SocialMediaRoute = SocialMediaRouteImport.update({
+  id: '/social-media',
+  path: '/social-media',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SupportRoute = SupportRouteImport.update({
   id: '/support',
   path: '/support',
@@ -46,6 +52,7 @@ export interface FileRoutesByFullPath {
   '/adminpanel': typeof AdminpanelRoute
   '/partners': typeof PartnersRoute
   '/privacy': typeof PrivacyRoute
+  '/social-media': typeof SocialMediaRoute
   '/support': typeof SupportRoute
 }
 export interface FileRoutesByTo {
@@ -53,6 +60,7 @@ export interface FileRoutesByTo {
   '/adminpanel': typeof AdminpanelRoute
   '/partners': typeof PartnersRoute
   '/privacy': typeof PrivacyRoute
+  '/social-media': typeof SocialMediaRoute
   '/support': typeof SupportRoute
 }
 export interface FileRoutesById {
@@ -61,14 +69,34 @@ export interface FileRoutesById {
   '/adminpanel': typeof AdminpanelRoute
   '/partners': typeof PartnersRoute
   '/privacy': typeof PrivacyRoute
+  '/social-media': typeof SocialMediaRoute
   '/support': typeof SupportRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/adminpanel' | '/partners' | '/privacy' | '/support'
+  fullPaths:
+    | '/'
+    | '/adminpanel'
+    | '/partners'
+    | '/privacy'
+    | '/social-media'
+    | '/support'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/adminpanel' | '/partners' | '/privacy' | '/support'
-  id: '__root__' | '/' | '/adminpanel' | '/partners' | '/privacy' | '/support'
+  to:
+    | '/'
+    | '/adminpanel'
+    | '/partners'
+    | '/privacy'
+    | '/social-media'
+    | '/support'
+  id:
+    | '__root__'
+    | '/'
+    | '/adminpanel'
+    | '/partners'
+    | '/privacy'
+    | '/social-media'
+    | '/support'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -76,6 +104,7 @@ export interface RootRouteChildren {
   AdminpanelRoute: typeof AdminpanelRoute
   PartnersRoute: typeof PartnersRoute
   PrivacyRoute: typeof PrivacyRoute
+  SocialMediaRoute: typeof SocialMediaRoute
   SupportRoute: typeof SupportRoute
 }
 
@@ -109,6 +138,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/social-media': {
+      id: '/social-media'
+      path: '/social-media'
+      fullPath: '/social-media'
+      preLoaderRoute: typeof SocialMediaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/support': {
       id: '/support'
       path: '/support'
@@ -124,6 +160,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminpanelRoute: AdminpanelRoute,
   PartnersRoute: PartnersRoute,
   PrivacyRoute: PrivacyRoute,
+  SocialMediaRoute: SocialMediaRoute,
   SupportRoute: SupportRoute,
 }
 export const routeTree = rootRouteImport

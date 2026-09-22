@@ -199,7 +199,7 @@ function BrandHead() {
 
 function AssistantSlot() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  if (pathname.startsWith("/adminpanel")) return null;
+  if (pathname.startsWith("/adminpanel") || pathname === "/social-media") return null;
   return <RobotAssistant />;
 }
 

@@ -119,6 +119,13 @@ function Nav({ c }: { c: SiteContent }) {
               {c.nav.supportLabel}
             </Link>
             <Link
+              to="/social-media"
+              onClick={() => setOpen(false)}
+              className="rounded-xl px-3 py-2.5 text-foreground transition-colors hover:bg-secondary"
+            >
+              تابعنا عبر السوشال ميديا
+            </Link>
+            <Link
               to="/privacy"
               onClick={() => setOpen(false)}
               className="rounded-xl px-3 py-2.5 text-foreground transition-colors hover:bg-secondary"
