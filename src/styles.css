@@ -33,6 +33,8 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-social-background: var(--social-background);
+  --color-social-foreground: var(--social-foreground);
   --font-sans: "Tajawal", system-ui, sans-serif;
   --font-display: "Cairo", system-ui, sans-serif;
 }
@@ -60,6 +62,8 @@
   --border: oklch(0.9 0.012 160);
   --input: oklch(0.9 0.012 160);
   --ring: oklch(0.62 0.14 158);
+  --social-background: oklch(0.485 0.056 161.6);
+  --social-foreground: oklch(1 0 0);
 
   --gradient-brand: linear-gradient(135deg, oklch(0.68 0.14 158), oklch(0.56 0.13 162));
   --gradient-hero: linear-gradient(
@@ -72,6 +76,7 @@
   --shadow-glow: 0 34px 80px -34px color-mix(in oklab, oklch(0.62 0.14 158) 55%, transparent);
   --shadow-card: 0 18px 45px -30px oklch(0.3 0.05 160 / 45%);
   --shadow-float: 0 14px 34px -16px oklch(0.3 0.05 160 / 30%);
+  --shadow-social: 0 12px 30px -14px oklch(0.1 0.03 160 / 50%);
 }
 
 @layer base {
@@ -133,4 +138,33 @@
 
 @utility glow {
   box-shadow: var(--shadow-glow);
+}
+
+@utility shadow-social {
+  box-shadow: var(--shadow-social);
+}
+
+@layer components {
+  .social-page {
+    background-color: var(--social-background);
+  }
+
+  .social-pattern {
+    background-image: radial-gradient(circle, var(--social-foreground) 1.5px, transparent 1.5px);
+    background-size: 24px 24px;
+  }
+
+  .social-icon-snap {
+    background-color: oklch(0.965 0.19 102);
+    color: oklch(0.145 0 0);
+  }
+
+  .social-icon-dark {
+    background-color: oklch(0.145 0 0);
+    color: oklch(1 0 0);
+  }
+
+  .social-icon-tiktok {
+    box-shadow: inset 3px 0 oklch(0.77 0.13 194), inset -3px 0 oklch(0.65 0.24 20);
+  }
 }
