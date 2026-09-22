@@ -154,7 +154,7 @@ export const defaultContent: SiteContent = {
     whatsappDisplay: "+966 59 084 4649",
     whatsappButtonLabel: "راسلنا على واتساب",
     email: "info@lamhaads.sa",
-    appStoreUrl: "https://apps.apple.com/sa/app/lamha-ads/id6760237672?l=ar",
+    appStoreUrl: "https://apps.apple.com/app/id6760237672",
     playStoreUrl: "",
     playStoreSoonLabel: "قريباً",
   },

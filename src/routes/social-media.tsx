@@ -35,19 +35,19 @@ const TIKTOK_PATH =
 const socials = [
   {
     label: "تابعنا في سناب شات",
-    href: "https://www.snapchat.com/add/lamha",
+    href: "https://snapchat.com/t/K6xnxfZw",
     theme: "social-icon-snap",
     icon: <path d={SNAPCHAT_PATH} />,
   },
   {
     label: "تابعنا في منصة إكس",
-    href: "https://x.com/lamha",
+    href: "https://x.com/lamhaads?s=11",
     theme: "social-icon-dark",
     icon: <path d={X_PATH} />,
   },
   {
     label: "تابعنا في تيك توك",
-    href: "https://www.tiktok.com/@lamha",
+    href: "https://www.tiktok.com/@lamha.ads?_r=1&_t=ZS-99xGPSmqiPo",
     theme: "social-icon-dark social-icon-tiktok",
     icon: <path d={TIKTOK_PATH} />,
   },
