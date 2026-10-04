@@ -63,8 +63,6 @@ ErrorDocument 404 /index.html
     Header always set Pragma "no-cache"
     Header always set Expires "0"
   </FilesMatch>
-  # كل صفحات الموقع (مثل /social-media) تُعرض دائماً بأحدث نسخة
-  Header always set Cache-Control "no-store, no-cache, must-revalidate, max-age=0" "expr=%{CONTENT_TYPE} =~ m#text/html#"
 </IfModule>
 
 # LiteSpeed may cache JSON independently from normal browser cache headers.
