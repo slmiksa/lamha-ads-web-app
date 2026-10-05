@@ -57,25 +57,19 @@ ErrorDocument 404 /index.html
   Header set X-Content-Type-Options "nosniff"
   Header set Referrer-Policy "strict-origin-when-cross-origin"
 
-  # لا تحتفظ المتصفحات بنسخة قديمة من صفحات الموقع أو ملف محتوى لوحة التحكم
-  <FilesMatch "\.(html|json)$">
+  # لا تحتفظ المتصفحات بنسخة قديمة من صفحات الموقع
+  <FilesMatch "\.html$">
     Header always set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
     Header always set Pragma "no-cache"
     Header always set Expires "0"
   </FilesMatch>
 </IfModule>
 
-# LiteSpeed may cache JSON independently from normal browser cache headers.
 <IfModule LiteSpeed>
   CacheDisable public /
   RewriteEngine On
-  RewriteRule \.(json|html)$ - [E=Cache-Control:no-store]
+  RewriteRule \.html$ - [E=Cache-Control:no-store]
   RewriteRule ^[^.]*$ - [E=Cache-Control:no-store]
 </IfModule>
-
-# ملف كلمة مرور لوحة التحكم لا يُقرأ من المتصفح
-<Files "admin-secret.json">
-  Require all denied
-</Files>
 
 Options -Indexes

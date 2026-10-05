@@ -47,7 +47,7 @@ function Panel({ sessionPassword, onLogout, onChangePassword }: { sessionPasswor
     setDirty(true);
   };
 
-  // Adopt late-arriving content (local restore / content.json) only while untouched,
+  // Adopt late-arriving database content only while untouched,
   // so background loads can never wipe what the admin is editing.
   useEffect(() => {
     if (dirtyRef.current || touchedRef.current) return;

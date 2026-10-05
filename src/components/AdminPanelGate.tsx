@@ -4,15 +4,15 @@ import { supabase } from "@/integrations/supabase/client";
 
 const ADMIN_SESSION_KEY = "lamha_admin_unlocked";
 async function callAdminApi(body: Record<string, unknown>) {
-  if (body.action === "verify") {
-    const { data, error } = await supabase.rpc("verify_site_admin_password", { _password: String(body.password ?? "") });
+  if (body["action"] === "verify") {
+    const { data, error } = await supabase.rpc("verify_site_admin_password", { _password: String(body["password"] ?? "") });
     if (error) throw new Error("تعذّر الاتصال بقاعدة البيانات");
     if (!data) throw new Error("كلمة المرور غير صحيحة");
     return { ok: true };
   }
   const { error } = await supabase.rpc("change_site_admin_password", {
-    _current_password: String(body.password ?? ""),
-    _new_password: String(body.newPassword ?? ""),
+    _current_password: String(body["password"] ?? ""),
+    _new_password: String(body["newPassword"] ?? ""),
   });
   if (error) {
     if (error.code === "42501") throw new Error("كلمة المرور الحالية غير صحيحة");
