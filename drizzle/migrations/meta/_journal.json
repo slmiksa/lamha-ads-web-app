@@ -8,6 +8,13 @@
       "when": 1791202548387,
       "tag": "0000_create_site_content_management",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1791202724618,
+      "tag": "0001_strengthen_site_admin_password_hashing",
+      "breakpoints": true
     }
   ]
 }
