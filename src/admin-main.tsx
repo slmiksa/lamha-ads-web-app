@@ -11,7 +11,7 @@ if (!rootElement) {
 }
 
 createRoot(rootElement).render(
-  <ContentProvider enableLocalDrafts>
+  <ContentProvider>
     <AdminPanelGate />
   </ContentProvider>,
 );
