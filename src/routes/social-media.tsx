@@ -76,7 +76,7 @@ function SocialMediaPage() {
             <p className="mt-4 text-lg font-bold text-muted-foreground">صُنع لكم</p>
           </div>
 
-          <div className="rounded-2xl border border-border bg-card p-5 shadow-xl sm:p-8">
+          <div className="min-w-0 rounded-2xl border border-border bg-card p-4 shadow-xl sm:p-8">
             <div className="grid w-full gap-3.5 sm:grid-cols-2">
           {socials.map((social) => (
             <a
@@ -91,7 +91,7 @@ function SocialMediaPage() {
                   {social.icon}
                 </svg>
               </span>
-              <span className="flex-1 text-right text-[15px] font-extrabold text-card-foreground">
+              <span className="min-w-0 flex-1 text-right text-sm font-extrabold text-card-foreground sm:text-[15px]">
                 {social.label}
               </span>
               <ChevronLeft className="size-5 text-card-foreground/30 transition-transform group-hover:-translate-x-1" />

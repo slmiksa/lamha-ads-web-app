@@ -75,7 +75,7 @@ export function StoreButtons({ center = false }: { center?: boolean }) {
   const play = c.contact.playStoreUrl.trim();
   return (
     <div
-      className={`flex w-full flex-wrap items-center gap-3 ${center ? "justify-center" : ""}`}
+      className={`grid w-full max-w-full grid-cols-2 items-stretch gap-2 sm:flex sm:flex-wrap sm:items-center sm:gap-3 ${center ? "justify-center" : ""}`}
       dir="ltr"
     >
       {play ? (
@@ -84,7 +84,7 @@ export function StoreButtons({ center = false }: { center?: boolean }) {
           target="_blank"
           rel="noopener noreferrer"
           aria-label="تطبيق لمحة على Google Play"
-          className="inline-flex items-center gap-3 rounded-2xl border border-foreground/15 bg-foreground px-4 py-2.5 text-background transition-transform hover:-translate-y-0.5 sm:px-5"
+          className="inline-flex min-w-0 items-center justify-center gap-2 rounded-2xl border border-foreground/15 bg-foreground px-2 py-2.5 text-background transition-transform hover:-translate-y-0.5 sm:gap-3 sm:px-5"
         >
           <GooglePlayIcon className="size-6 shrink-0 sm:size-7" />
           <span className="text-left leading-tight">
@@ -95,7 +95,7 @@ export function StoreButtons({ center = false }: { center?: boolean }) {
       ) : (
         <div
           aria-label="تطبيق لمحة على Google Play قريباً"
-          className="relative inline-flex cursor-default items-center gap-3 rounded-2xl border border-foreground/15 bg-foreground px-4 py-2.5 text-background opacity-80 sm:px-5"
+          className="relative inline-flex min-w-0 cursor-default items-center justify-center gap-2 rounded-2xl border border-foreground/15 bg-foreground px-2 py-2.5 text-background opacity-80 sm:gap-3 sm:px-5"
         >
           <GooglePlayIcon className="size-6 shrink-0 sm:size-7" />
           <span className="text-left leading-tight">
@@ -112,7 +112,7 @@ export function StoreButtons({ center = false }: { center?: boolean }) {
         target="_blank"
         rel="noopener noreferrer"
         aria-label="حمّل تطبيق لمحة من App Store"
-        className="inline-flex items-center gap-3 rounded-2xl border border-foreground/15 bg-foreground px-4 py-2.5 text-background transition-transform hover:-translate-y-0.5 sm:px-5"
+        className="inline-flex min-w-0 items-center justify-center gap-2 rounded-2xl border border-foreground/15 bg-foreground px-2 py-2.5 text-background transition-transform hover:-translate-y-0.5 sm:gap-3 sm:px-5"
       >
         <AppleIcon className="size-6 shrink-0 sm:size-7" />
         <span className="text-left leading-tight">
