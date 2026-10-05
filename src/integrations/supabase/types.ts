@@ -14,13 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      site_content: {
+        Row: {
+          content: Json
+          id: string
+          password_hash: string
+          updated_at: string
+        }
+        Insert: {
+          content?: Json
+          id?: string
+          password_hash: string
+          updated_at?: string
+        }
+        Update: {
+          content?: Json
+          id?: string
+          password_hash?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      change_site_admin_password: {
+        Args: { _current_password: string; _new_password: string }
+        Returns: boolean
+      }
+      get_published_site_content: { Args: never; Returns: Json }
+      publish_site_content: {
+        Args: { _content: Json; _password: string }
+        Returns: string
+      }
+      verify_site_admin_password: {
+        Args: { _password: string }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never
