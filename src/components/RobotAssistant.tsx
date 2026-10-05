@@ -18,11 +18,11 @@ export function RobotAssistant() {
 
   return (
     <div
-      className={`pointer-events-none fixed bottom-0 right-0 z-[60] flex max-w-[95vw] items-end gap-2 p-3 transition-all duration-700 sm:gap-3 sm:p-5 ${
-        open ? "translate-x-0 opacity-100" : "translate-x-[120%] opacity-0"
+      className={`pointer-events-none fixed inset-x-0 bottom-0 z-[60] grid grid-cols-[minmax(0,1fr)_auto] items-end gap-1 p-2 transition-all duration-700 sm:left-auto sm:right-0 sm:flex sm:max-w-[95vw] sm:gap-3 sm:p-5 ${
+        open ? "translate-y-0 opacity-100" : "translate-y-[120%] opacity-0"
       }`}
     >
-      <div className="pointer-events-auto surface-card relative w-[15rem] p-4 sm:w-[17rem]">
+      <div className="pointer-events-auto surface-card relative min-w-0 p-3 sm:w-[17rem] sm:p-4">
         <button
           type="button"
           aria-label="إغلاق المساعد"
@@ -50,7 +50,7 @@ export function RobotAssistant() {
         <img
           src={c.assistant.image}
           alt="تميمة تطبيق لمحة"
-          className="relative h-36 w-auto select-none drop-shadow-2xl sm:h-60"
+          className="relative h-28 w-auto select-none drop-shadow-2xl sm:h-60"
           style={{ animation: "robotFloat 3s ease-in-out infinite" }}
         />
         <style>{`@keyframes robotFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}`}</style>

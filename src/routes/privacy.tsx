@@ -24,9 +24,9 @@ function Sections({ items }: { items: PolicySection[] }) {
   return (
     <div className="grid gap-5 md:grid-cols-2">
       {items.map((s, i) => (
-        <section key={`${s.title}-${i}`} className={`rounded-2xl border border-border bg-card p-6 shadow-sm ${i === 0 ? "md:col-span-2" : ""}`}>
+        <section key={`${s.title}-${i}`} className={`min-w-0 overflow-hidden rounded-2xl border border-border bg-card p-5 shadow-sm sm:p-6 ${i === 0 ? "md:col-span-2" : ""}`}>
           {s.title && <h2 className="font-display text-xl sm:text-2xl">{s.title}</h2>}
-          <div className="mt-3 space-y-3 text-sm leading-7 text-muted-foreground sm:text-base">
+          <div className="mt-3 space-y-3 break-words text-sm leading-7 text-muted-foreground sm:text-base">
             {s.paras?.map((p, j) => <p key={j}>{p}</p>)}
             {s.list && (
               <ul className="list-inside list-disc space-y-1.5">

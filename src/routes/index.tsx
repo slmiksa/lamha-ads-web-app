@@ -352,29 +352,29 @@ function Influencer({ c }: { c: SiteContent }) {
   const inf = c.home.influencer;
   return (
     <section id="influencer" className="mx-auto max-w-7xl px-5 py-16 sm:px-6 sm:py-24">
-      <div className="grid items-center gap-12 overflow-hidden rounded-2xl bg-foreground p-7 text-background sm:p-12 md:grid-cols-2">
-        <div>
+      <div className="grid min-w-0 items-center gap-8 overflow-hidden rounded-2xl bg-foreground p-5 text-background sm:gap-12 sm:p-12 md:grid-cols-2">
+        <div className="min-w-0">
           <span className="inline-flex items-center gap-2 rounded-full bg-gold-grad px-4 py-1.5 text-xs font-bold text-primary-foreground">
             <Sparkles className="size-3.5" /> {inf.badge}
           </span>
           <h2 className="mt-5 font-display text-2xl sm:text-3xl md:text-4xl">
             {inf.titleA} <span className="text-gradient-brand">{inf.titleB}</span>
           </h2>
-          <p className="mt-4 leading-relaxed text-background/65">{inf.desc}</p>
+          <p className="mt-4 break-words leading-relaxed text-background/65">{inf.desc}</p>
           <ul className="mt-6 space-y-3 text-sm">
             {inf.bullets.map((t, i) => (
               <li key={i} className="flex items-start gap-3">
                 <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-primary-soft text-primary">
                   <Star className="size-3" />
                 </span>
-                <span className="text-background/70">{t}</span>
+                <span className="min-w-0 break-words text-background/70">{t}</span>
               </li>
             ))}
           </ul>
         </div>
 
-        <div className="rounded-2xl bg-card p-6 text-card-foreground shadow-2xl">
-          <div className="flex items-center justify-between">
+        <div className="min-w-0 rounded-2xl bg-card p-4 text-card-foreground shadow-2xl sm:p-6">
+          <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
             <span className="rounded-full bg-gold-grad px-3 py-1 text-xs font-bold text-primary-foreground">
               {inf.cardBadge}
             </span>
@@ -382,7 +382,7 @@ function Influencer({ c }: { c: SiteContent }) {
           </div>
           <div className="mt-5 space-y-3">
             {inf.ads.map((a, i) => (
-              <div key={i} className="flex items-center gap-4 rounded-2xl bg-secondary/70 p-4">
+              <div key={i} className="grid min-w-0 grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 rounded-2xl bg-secondary/70 p-3 sm:gap-4 sm:p-4">
                 <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-primary-soft text-primary">
                   <Store className="size-5" />
                 </span>
@@ -393,7 +393,7 @@ function Influencer({ c }: { c: SiteContent }) {
                     <MapPin className="size-3 text-primary" /> {a.city}
                   </div>
                 </div>
-                <div className="flex flex-col items-end gap-1 text-xs text-muted-foreground">
+                <div className="shrink-0 text-[10px] text-muted-foreground sm:text-xs">
                   <span className="inline-flex items-center gap-1">
                     <Eye className="size-3.5" /> {a.views}
                   </span>

@@ -117,15 +117,15 @@ function Panel({ sessionPassword, onLogout, onChangePassword }: { sessionPasswor
   return (
     <div className="min-h-screen bg-secondary/30 text-foreground">
       <header className="sticky top-0 z-40 border-b border-border/60 bg-background/90 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-2 px-4 py-3">
-          <h1 className="ml-auto font-display text-lg">لوحة تحكم الموقع</h1>
-          <a href="/" className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-2 text-xs font-bold">
+        <div className="mx-auto grid max-w-6xl grid-cols-2 items-center gap-2 px-3 py-3 sm:flex sm:flex-wrap sm:px-4">
+          <h1 className="col-span-2 min-w-0 text-center font-display text-base sm:col-span-1 sm:ml-auto sm:text-lg">لوحة تحكم الموقع</h1>
+          <a href="/" className="inline-flex min-w-0 items-center justify-center gap-1.5 rounded-xl bg-secondary px-2 py-2 text-xs font-bold sm:rounded-full sm:px-3">
             <ExternalLink className="size-4" /> عرض الموقع
           </a>
-          <button type="button" onClick={exportJson} className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-2 text-xs font-bold text-primary">
+          <button type="button" onClick={exportJson} className="inline-flex min-w-0 items-center justify-center gap-1.5 rounded-xl bg-primary/10 px-2 py-2 text-xs font-bold text-primary sm:rounded-full sm:px-3">
             <Download className="size-4" /> تنزيل نسخة احتياطية
           </button>
-          <label className="inline-flex cursor-pointer items-center gap-1.5 rounded-full bg-secondary px-3 py-2 text-xs font-bold">
+          <label className="inline-flex min-w-0 cursor-pointer items-center justify-center gap-1.5 rounded-xl bg-secondary px-2 py-2 text-xs font-bold sm:rounded-full sm:px-3">
             <Upload className="size-4" /> استيراد
             <input type="file" accept="application/json" hidden onChange={(event) => {
               const file = event.target.files?.[0];
@@ -142,13 +142,13 @@ function Panel({ sessionPassword, onLogout, onChangePassword }: { sessionPasswor
                 setDirty(false);
               });
             }
-          }} className="inline-flex items-center gap-1.5 rounded-full bg-destructive/10 px-3 py-2 text-xs font-bold text-destructive">
+          }} className="inline-flex min-w-0 items-center justify-center gap-1.5 rounded-xl bg-destructive/10 px-2 py-2 text-xs font-bold text-destructive sm:rounded-full sm:px-3">
             <RotateCcw className="size-4" /> استعادة الأصلي
           </button>
-          <button type="button" onClick={save} disabled={saving} className="inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-xs font-bold text-primary-foreground disabled:opacity-50">
+          <button type="button" onClick={save} disabled={saving} className="inline-flex min-w-0 items-center justify-center gap-1.5 rounded-xl bg-primary px-2 py-2 text-xs font-bold text-primary-foreground disabled:opacity-50 sm:rounded-full sm:px-4">
              <Save className="size-4" /> {saving ? "جارٍ النشر…" : saved ? "تم النشر للجميع ✓" : "حفظ ونشر"}
           </button>
-          <button type="button" onClick={onLogout} className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-3 py-2 text-xs font-bold">
+          <button type="button" onClick={onLogout} className="inline-flex min-w-0 items-center justify-center gap-1.5 rounded-xl bg-secondary px-2 py-2 text-xs font-bold sm:rounded-full sm:px-3">
             <LogOut className="size-4" /> تسجيل الخروج
           </button>
         </div>
@@ -162,7 +162,7 @@ function Panel({ sessionPassword, onLogout, onChangePassword }: { sessionPasswor
 
       <div className="mx-auto grid max-w-6xl gap-5 px-4 py-6 md:grid-cols-[220px_minmax(0,1fr)]">
         <aside className="h-max rounded-3xl bg-card p-2 shadow-sm md:sticky md:top-24">
-          <nav className="flex flex-wrap gap-1 md:flex-col">
+          <nav className="grid grid-cols-2 gap-1 sm:grid-cols-3 md:flex md:flex-col">
             {SECTIONS.map((section) => (
               <button key={section.key} type="button" onClick={() => setActive(section.key)} className={`rounded-xl px-3 py-2.5 text-right text-sm font-bold transition-colors ${active === section.key ? "bg-primary text-primary-foreground" : "hover:bg-secondary"}`}>
                 {section.label}
