@@ -148,9 +148,9 @@ function Hero({ c }: { c: SiteContent }) {
   return (
     <section id="top" className="relative overflow-hidden bg-background">
       <div aria-hidden className="mint-grid absolute inset-y-0 left-0 w-1/2 opacity-35" />
-      <div className="relative mx-auto grid min-h-[calc(100vh-76px)] max-w-7xl items-center gap-12 px-5 pb-16 pt-10 sm:px-6 md:grid-cols-2 md:py-20">
+      <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-5 pb-12 pt-8 sm:px-6 sm:pb-16 sm:pt-10 md:grid-cols-2 md:gap-12 md:py-12">
         <div className="order-2 md:order-1">
-          <div className="relative mx-auto w-[76%] max-w-[310px] sm:w-full md:max-w-[330px]">
+          <div className="relative mx-auto h-[270px] w-[68%] max-w-[250px] overflow-hidden sm:h-auto sm:w-full sm:max-w-[300px] sm:overflow-visible md:max-w-[310px]">
             <div aria-hidden className="absolute inset-10 -z-10 rounded-full bg-primary-soft blur-3xl" />
             <PhoneFrame>
               <PhoneSlideshow shots={shots} index={shotIndex} setIndex={setShotIndex} ms={h.slideMs} />
@@ -158,7 +158,7 @@ function Hero({ c }: { c: SiteContent }) {
 
             <div
               key={`top-${shotIndex}`}
-              className="float-card animate-fade-in absolute -right-7 top-16 flex items-center gap-2 border border-border px-3 py-2 sm:-right-12 sm:gap-3 sm:px-4 sm:py-3"
+              className="float-card animate-fade-in absolute -right-5 top-14 flex items-center gap-2 border border-border px-3 py-2 sm:-right-12 sm:gap-3 sm:px-4 sm:py-3"
             >
               <span className="grid size-8 place-items-center rounded-xl bg-primary-soft text-xl sm:size-10 sm:text-2xl">
                 {shot.topIcon}
@@ -171,7 +171,7 @@ function Hero({ c }: { c: SiteContent }) {
 
             <div
               key={`bottom-${shotIndex}`}
-              className="float-card animate-fade-in absolute -left-7 bottom-16 flex items-center gap-2 border border-border px-3 py-2 sm:-left-12 sm:bottom-20 sm:gap-3 sm:px-4 sm:py-3"
+              className="float-card animate-fade-in absolute -left-5 bottom-6 flex items-center gap-2 border border-border px-3 py-2 sm:-left-12 sm:bottom-20 sm:gap-3 sm:px-4 sm:py-3"
             >
               <span className="grid size-8 place-items-center rounded-xl bg-gold-grad text-base sm:size-10 sm:text-lg">
                 {shot.bottomIcon}
