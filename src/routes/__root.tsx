@@ -150,7 +150,7 @@ function RootComponent() {
   // updates before the outgoing page unmounts, and public pages call useContent().
   return (
     <QueryClientProvider client={queryClient}>
-      <ContentProvider enableLocalDrafts={isAdmin}>
+      <ContentProvider>
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         {!isAdmin && <BrandHead />}
         <Outlet />

@@ -3,6 +3,7 @@ import { Download, ExternalLink, LogOut, RotateCcw, Save, Upload } from "lucide-
 import { NodeEditor } from "@/components/ContentEditor";
 import { defaultContent, type SiteContent } from "@/content/defaults";
 import { useContentCtx } from "@/content/store";
+import { supabase } from "@/integrations/supabase/client";
 
 const SECTIONS: { key: keyof SiteContent; label: string }[] = [
   { key: "brand", label: "الهوية والشعار" },
@@ -46,7 +47,7 @@ function Panel({ sessionPassword, onLogout, onChangePassword }: { sessionPasswor
     setDirty(true);
   };
 
-  // Adopt late-arriving content (local restore / content.json) only while untouched,
+  // Adopt late-arriving database content only while untouched,
   // so background loads can never wipe what the admin is editing.
   useEffect(() => {
     if (dirtyRef.current || touchedRef.current) return;
@@ -56,14 +57,14 @@ function Panel({ sessionPassword, onLogout, onChangePassword }: { sessionPasswor
   }, [content]);
 
   const publish = async (next: SiteContent, password: string) => {
-    const response = await fetch("/publish-content.php", {
-      method: "POST",
-      cache: "no-store",
-      headers: { "Content-Type": "application/json", Accept: "application/json" },
-      body: JSON.stringify({ password, content: next }),
+    const { error } = await supabase.rpc("publish_site_content", {
+      _password: password,
+      _content: next,
     });
-    const result = await response.json().catch(() => null) as { message?: string } | null;
-    if (!response.ok) throw new Error(result?.message ?? "تعذّر نشر التعديلات على السيرفر");
+    if (error) {
+      if (error.code === "42501") throw new Error("كلمة مرور لوحة التحكم غير صحيحة");
+      throw new Error("تعذّر حفظ المحتوى في قاعدة البيانات");
+    }
   };
 
   const save = () => {
@@ -83,7 +84,7 @@ function Panel({ sessionPassword, onLogout, onChangePassword }: { sessionPasswor
         })
         .catch((error: unknown) => {
           const message = error instanceof Error ? error.message : "تعذّر الحفظ والنشر";
-          window.alert(`${message}\nتم الاحتفاظ بالتعديل في هذا الكمبيوتر، ويمكنك تنزيل content.json ورفعه يدويًا.`);
+          window.alert(`${message}\nلم تُحفظ التعديلات. نزّل نسخة احتياطية قبل مغادرة الصفحة.`);
         })
         .finally(() => setSaving(false));
     }, 0);
@@ -155,8 +156,7 @@ function Panel({ sessionPassword, onLogout, onChangePassword }: { sessionPasswor
 
       <div className="mx-auto max-w-6xl px-4 pt-4">
         <p className="rounded-2xl border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-xs font-bold leading-6 text-amber-800">
-          زر «حفظ ونشر» يحدّث ملف المحتوى على السيرفر مباشرة، فتظهر التعديلات على الكمبيوتر والجوال. إذا تعذّر النشر، استخدم «تنزيل نسخة احتياطية» وارفعها باسم
-          <span className="mx-1 font-mono" dir="ltr">content.json</span> داخل <span className="mx-1 font-mono" dir="ltr">public_html</span>.
+          زر «حفظ ونشر» يحفظ المحتوى في قاعدة البيانات مباشرة، فتظهر التعديلات على الكمبيوتر والجوال دون مسح الكاش أو الكوكيز.
         </p>
       </div>
 
@@ -184,11 +184,11 @@ function Panel({ sessionPassword, onLogout, onChangePassword }: { sessionPasswor
 
 
           <div className="rounded-3xl bg-card p-5 text-sm shadow-sm">
-            <h2 className="font-display text-base">النشر على السيرفر</h2>
+            <h2 className="font-display text-base">الحفظ في قاعدة البيانات</h2>
             <ol className="mt-3 list-decimal space-y-1.5 pr-5 text-muted-foreground">
                <li>عدّل ما تريد ثم اضغط «حفظ ونشر» ليظهر التعديل لجميع الأجهزة.</li>
                <li>عند ظهور رسالة نجاح، افتح الموقع من الجوال أو أعد تحميله.</li>
-               <li>استخدم «تنزيل نسخة احتياطية» فقط إذا أخبرتك اللوحة أن النشر المباشر تعذّر.</li>
+               <li>استخدم «تنزيل نسخة احتياطية» للاحتفاظ بنسخة إضافية لديك.</li>
             </ol>
             <div className="mt-5 border-t border-border/60 pt-4">
               <button type="button" onClick={onChangePassword} className="rounded-full bg-secondary px-4 py-2 text-xs font-bold">

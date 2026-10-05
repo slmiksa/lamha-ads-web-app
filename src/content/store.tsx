@@ -1,10 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { defaultContent, type SiteContent } from "./defaults";
-
-const STORAGE_KEY = "lamha_site_content_v1";
-const DB_NAME = "lamha_content_db";
-const DB_STORE = "content";
-const DB_VERSION = 1;
+import { supabase } from "@/integrations/supabase/client";
 
 function isPlainObject(v: unknown): v is Record<string, unknown> {
   return typeof v === "object" && v !== null && !Array.isArray(v);
@@ -25,232 +21,51 @@ export function deepMerge<T>(base: T, override: unknown): T {
   return (override as T) ?? base;
 }
 
-function hasIndexedDb(): boolean {
-  try {
-    return typeof window !== "undefined" && !!window.indexedDB;
-  } catch {
-    return false;
-  }
-}
-
-function openContentDb(): Promise<IDBDatabase> {
-  return new Promise((resolve, reject) => {
-    if (!hasIndexedDb()) {
-      reject(new Error("IndexedDB غير مدعوم في هذا المتصفح"));
-      return;
-    }
-    const request = window.indexedDB.open(DB_NAME, DB_VERSION);
-    request.onupgradeneeded = () => {
-      const db = request.result;
-      if (!db.objectStoreNames.contains(DB_STORE)) db.createObjectStore(DB_STORE);
-    };
-    request.onsuccess = () => resolve(request.result);
-    request.onerror = () => reject(request.error ?? new Error("تعذر فتح التخزين المحلي"));
-    request.onblocked = () => reject(new Error("التخزين المحلي مشغول"));
-  });
-}
-
-function readLegacy(): Partial<SiteContent> | null {
-  try {
-    const legacy = window.localStorage.getItem(STORAGE_KEY);
-    if (!legacy) return null;
-    return JSON.parse(legacy) as Partial<SiteContent>;
-  } catch {
-    return null;
-  }
-}
-
-async function readLocal(): Promise<Partial<SiteContent> | null> {
-  // Fallback for WebViews / private mode where IndexedDB is unavailable.
-  if (!hasIndexedDb()) return readLegacy();
-
-  let db: IDBDatabase;
-  try {
-    db = await openContentDb();
-  } catch {
-    return readLegacy();
-  }
-  const stored = await new Promise<Partial<SiteContent> | null>((resolve) => {
-    try {
-      const request = db.transaction(DB_STORE, "readonly").objectStore(DB_STORE).get(STORAGE_KEY);
-      request.onsuccess = () => resolve((request.result as Partial<SiteContent> | undefined) ?? null);
-      request.onerror = () => resolve(null);
-    } catch {
-      resolve(null);
-    }
-  });
-  db.close();
-  if (stored) return stored;
-
-  // Migrate the old synchronous storage once, then remove it permanently.
-  const parsed = readLegacy();
-  if (!parsed) return null;
-  try {
-    window.localStorage.removeItem(STORAGE_KEY);
-  } catch {
-    /* ignore */
-  }
-  await writeLocal(parsed);
-  return parsed;
-}
-
-function writeLegacy(value: Partial<SiteContent> | null): void {
-  try {
-    if (value === null) window.localStorage.removeItem(STORAGE_KEY);
-    else window.localStorage.setItem(STORAGE_KEY, JSON.stringify(value));
-  } catch {
-    /* storage full or blocked */
-  }
-}
-
-async function writeLocal(value: Partial<SiteContent> | null): Promise<void> {
-  if (!hasIndexedDb()) {
-    writeLegacy(value);
-    return;
-  }
-  let db: IDBDatabase;
-  try {
-    db = await openContentDb();
-  } catch {
-    writeLegacy(value);
-    return;
-  }
-  await new Promise<void>((resolve, reject) => {
-    const transaction = db.transaction(DB_STORE, "readwrite");
-    const store = transaction.objectStore(DB_STORE);
-    if (value === null) store.delete(STORAGE_KEY);
-    else store.put(value, STORAGE_KEY);
-    transaction.oncomplete = () => resolve();
-    transaction.onerror = () => reject(transaction.error);
-    transaction.onabort = () => reject(transaction.error);
-  });
-  db.close();
-}
-
 type Ctx = {
   content: SiteContent;
   setContent: (next: SiteContent) => Promise<void>;
   resetContent: () => Promise<void>;
-  hasLocalChanges: boolean;
+  refreshContent: () => Promise<void>;
 };
 
 const ContentContext = createContext<Ctx | null>(null);
 
-export function ContentProvider({
-  children,
-  enableLocalDrafts = false,
-}: {
-  children: React.ReactNode;
-  /** Only the admin panel keeps a local draft; the public site always mirrors the server file. */
-  enableLocalDrafts?: boolean;
-}) {
+export function ContentProvider({ children }: { children: React.ReactNode }) {
   const [remote, setRemote] = useState<Partial<SiteContent> | null>(null);
-  const [local, setLocal] = useState<Partial<SiteContent> | null>(null);
-
-  // Keep the server and first browser render identical, then restore local edits.
-  // The public site never reads the local draft, so a stale browser copy can no
-  // longer hide freshly published content (no "clear your cookies" step).
-  useEffect(() => {
-    if (!enableLocalDrafts) {
-      // Drop any legacy draft that a previous version left on visitors' devices.
-      void writeLocal(null).catch(() => {});
-      setLocal(null);
-      return;
+  const refreshContent = useCallback(async () => {
+    const { data, error } = await supabase.rpc("get_published_site_content");
+    if (error) throw new Error("تعذّر تحميل المحتوى من قاعدة البيانات");
+    if (data && typeof data === "object" && !Array.isArray(data)) {
+      setRemote(data as Partial<SiteContent>);
     }
-    let cancelled = false;
-    const channel = typeof BroadcastChannel === "undefined" ? null : new BroadcastChannel("lamha-content");
-    const restore = () => {
-      void readLocal()
-        .then((stored) => {
-          if (!cancelled) setLocal(stored);
-        })
-        .catch(() => {
-          if (!cancelled) setLocal(null);
-        });
-    };
-    const idleId = window.setTimeout(restore, 0);
-    // Pick up saves made from the admin panel (same tab or another tab).
-    window.addEventListener("storage", restore);
-    window.addEventListener("lamha:content-updated", restore);
-    channel?.addEventListener("message", restore);
-    return () => {
-      cancelled = true;
-      window.clearTimeout(idleId);
-      window.removeEventListener("storage", restore);
-      window.removeEventListener("lamha:content-updated", restore);
-      channel?.removeEventListener("message", restore);
-      channel?.close();
-    };
-  }, [enableLocalDrafts]);
-
-  // Published content file (upload content.json next to index.html on the server).
-  // A unique query string is essential on mobile browsers and LiteSpeed/CDN hosts
-  // that may otherwise serve an old JSON response despite cache: "no-store".
-  useEffect(() => {
-    let alive = true;
-    const loadPublishedContent = () => {
-      const separator = "/content.json".includes("?") ? "&" : "?";
-      fetch(`/content.json${separator}v=${Date.now()}`, {
-        cache: "no-store",
-        headers: { Accept: "application/json" },
-      })
-        .then((r) => {
-          const type = r.headers.get("content-type") ?? "";
-          return r.ok && type.includes("application/json") ? r.json() : null;
-        })
-        .then((d) => {
-          if (alive && d && typeof d === "object") setRemote(d as Partial<SiteContent>);
-        })
-        .catch(() => {});
-    };
-    const refreshWhenVisible = () => {
-      if (document.visibilityState === "visible") loadPublishedContent();
-    };
-    loadPublishedContent();
-    window.addEventListener("pageshow", loadPublishedContent);
-    document.addEventListener("visibilitychange", refreshWhenVisible);
-    return () => {
-      alive = false;
-      window.removeEventListener("pageshow", loadPublishedContent);
-      document.removeEventListener("visibilitychange", refreshWhenVisible);
-    };
   }, []);
 
-  const content = useMemo(
-    () => deepMerge(deepMerge(defaultContent, remote), local),
-    [remote, local],
-  );
+  useEffect(() => {
+    void refreshContent().catch(() => {});
+    const refreshWhenVisible = () => {
+      if (document.visibilityState === "visible") void refreshContent().catch(() => {});
+    };
+    window.addEventListener("pageshow", refreshWhenVisible);
+    document.addEventListener("visibilitychange", refreshWhenVisible);
+    return () => {
+      window.removeEventListener("pageshow", refreshWhenVisible);
+      document.removeEventListener("visibilitychange", refreshWhenVisible);
+    };
+  }, [refreshContent]);
+
+  const content = useMemo(() => deepMerge(defaultContent, remote), [remote]);
 
   const setContent = useCallback(async (next: SiteContent) => {
-    setLocal(next);
-    try {
-      await writeLocal(next);
-      window.dispatchEvent(new Event("lamha:content-updated"));
-      if (typeof BroadcastChannel !== "undefined") {
-        const channel = new BroadcastChannel("lamha-content");
-        channel.postMessage("updated");
-        channel.close();
-      }
-    } catch (error) {
-      setLocal(null);
-      throw error;
-    }
+    setRemote(next);
   }, []);
 
   const resetContent = useCallback(async () => {
-    setLocal(null);
-    await writeLocal(null);
-    window.dispatchEvent(new Event("lamha:content-updated"));
-    if (typeof BroadcastChannel !== "undefined") {
-      const channel = new BroadcastChannel("lamha-content");
-      channel.postMessage("updated");
-      channel.close();
-    }
+    setRemote(defaultContent);
   }, []);
 
   const value = useMemo(
-    () => ({ content, setContent, resetContent, hasLocalChanges: local !== null }),
-    [content, setContent, resetContent, local],
+    () => ({ content, setContent, resetContent, refreshContent }),
+    [content, setContent, resetContent, refreshContent],
   );
 
   return <ContentContext.Provider value={value}>{children}</ContentContext.Provider>;
@@ -281,5 +96,4 @@ export function useTokens() {
   );
 }
 
-export { STORAGE_KEY };
 export type { SiteContent };

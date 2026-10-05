@@ -8,3 +8,5 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Site content and the shared admin password use Lovable Cloud as the only persistent source of truth, because static files and browser storage do not synchronize reliably across deployments and devices.
