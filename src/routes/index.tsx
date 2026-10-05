@@ -45,17 +45,17 @@ function Index() {
 function Nav({ c }: { c: SiteContent }) {
   const [open, setOpen] = useState(false);
   return (
-    <header className="sticky top-0 z-50 bg-background/70 backdrop-blur-xl">
-      <div className="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-3 sm:px-5 sm:py-4 md:flex md:justify-between">
+    <header className="sticky top-0 z-50 border-b border-border/70 bg-background/85 backdrop-blur-xl">
+      <div className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-3 sm:px-6 md:flex md:justify-between">
         <a href="#top" className="min-w-0">
           <Logo size={c.brand.logoSizeNav} />
         </a>
-        <nav className="hidden items-center gap-2 rounded-full bg-secondary p-1.5 text-sm text-muted-foreground lg:flex">
+        <nav className="hidden items-center gap-1 text-sm text-muted-foreground lg:flex">
           {c.nav.links.map((i) => (
             <a
               key={i.href}
               href={i.href}
-              className="rounded-full px-4 py-1.5 transition-colors hover:bg-card hover:text-foreground"
+              className="rounded-xl px-4 py-2 transition-colors hover:bg-primary-soft hover:text-primary"
             >
               {i.label}
             </a>
@@ -146,17 +146,19 @@ function Hero({ c }: { c: SiteContent }) {
   const shot = shots[Math.min(shotIndex, shots.length - 1)]!;
 
   return (
-    <section id="top" className="bg-hero-glow relative overflow-hidden">
-      <div className="mx-auto grid max-w-6xl items-center gap-12 px-5 pb-16 pt-10 sm:gap-14 md:grid-cols-2 md:pb-32 md:pt-16">
+    <section id="top" className="relative overflow-hidden bg-background">
+      <div aria-hidden className="mint-grid absolute inset-y-0 left-0 w-1/2 opacity-35" />
+      <div className="relative mx-auto grid min-h-[calc(100vh-76px)] max-w-7xl items-center gap-12 px-5 pb-16 pt-10 sm:px-6 md:grid-cols-2 md:py-20">
         <div className="order-2 md:order-1">
-          <div className="relative mx-auto w-[75%] max-w-[320px] sm:w-full">
+          <div className="relative mx-auto w-[76%] max-w-[310px] sm:w-full md:max-w-[330px]">
+            <div aria-hidden className="absolute inset-10 -z-10 rounded-full bg-primary-soft blur-3xl" />
             <PhoneFrame>
               <PhoneSlideshow shots={shots} index={shotIndex} setIndex={setShotIndex} ms={h.slideMs} />
             </PhoneFrame>
 
             <div
               key={`top-${shotIndex}`}
-              className="float-card animate-fade-in absolute -right-4 top-16 flex items-center gap-2 px-3 py-2 sm:-right-6 sm:gap-3 sm:px-4 sm:py-3 md:-right-14"
+              className="float-card animate-fade-in absolute -right-7 top-16 flex items-center gap-2 border border-border px-3 py-2 sm:-right-12 sm:gap-3 sm:px-4 sm:py-3"
             >
               <span className="grid size-8 place-items-center rounded-xl bg-primary-soft text-xl sm:size-10 sm:text-2xl">
                 {shot.topIcon}
@@ -169,7 +171,7 @@ function Hero({ c }: { c: SiteContent }) {
 
             <div
               key={`bottom-${shotIndex}`}
-              className="float-card animate-fade-in absolute -left-4 bottom-16 flex items-center gap-2 px-3 py-2 sm:-left-6 sm:bottom-20 sm:gap-3 sm:px-4 sm:py-3 md:-left-14"
+              className="float-card animate-fade-in absolute -left-7 bottom-16 flex items-center gap-2 border border-border px-3 py-2 sm:-left-12 sm:bottom-20 sm:gap-3 sm:px-4 sm:py-3"
             >
               <span className="grid size-8 place-items-center rounded-xl bg-gold-grad text-base sm:size-10 sm:text-lg">
                 {shot.bottomIcon}
@@ -182,14 +184,14 @@ function Hero({ c }: { c: SiteContent }) {
           </div>
         </div>
 
-        <div className="order-1 text-center md:order-2 md:text-right">
-          <span className="inline-flex items-center gap-2 rounded-full bg-card/80 px-4 py-1.5 text-xs font-bold text-primary shadow-sm">
+        <div className="reveal-up order-1 text-center md:order-2 md:text-right">
+          <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary-soft px-4 py-2 text-xs font-bold text-primary">
             <span className="size-2 rounded-full bg-primary" /> {h.badge}
           </span>
-          <h1 className="mt-6 font-display text-[2.25rem] leading-[1.15] sm:text-5xl sm:leading-[1.1] md:text-7xl">
+          <h1 className="mt-7 font-display text-[2.55rem] leading-[1.2] sm:text-6xl md:text-7xl">
             {h.titleA} <span className="text-gradient-brand">{h.titleB}</span>
           </h1>
-          <p className="mt-5 text-base leading-relaxed text-muted-foreground sm:text-lg md:text-xl">
+          <p className="mx-auto mt-6 max-w-xl text-base leading-8 text-muted-foreground sm:text-lg md:mx-0 md:text-xl">
             {h.subtitle}
           </p>
 
@@ -201,7 +203,7 @@ function Hero({ c }: { c: SiteContent }) {
             ))}
           </div>
 
-          <div className="mt-8 flex justify-center">
+          <div className="mt-9 flex justify-center md:justify-start">
             <StoreButtons center />
           </div>
 
@@ -269,7 +271,7 @@ function PhoneSlideshow({
 
 function PhoneFrame({ children }: { children: React.ReactNode }) {
   return (
-    <div className="glow rounded-[2.75rem] border-[6px] border-foreground bg-foreground p-0">
+    <div className="glow rounded-[2.75rem] border-[6px] border-foreground bg-foreground p-0 ring-8 ring-secondary">
       <div className="relative aspect-[9/19.5] overflow-hidden rounded-[2.25rem] bg-card">
         <div className="absolute left-1/2 top-2 z-10 h-6 w-24 -translate-x-1/2 rounded-full bg-foreground" />
         {children}
@@ -284,7 +286,7 @@ function SectionTitle({ kicker, title, desc }: { kicker: string; title: string; 
       <span className="inline-block rounded-full bg-primary-soft px-4 py-1 text-sm font-bold text-primary">
         {kicker}
       </span>
-      <h2 className="mt-4 font-display text-2xl sm:text-3xl md:text-4xl">{title}</h2>
+      <h2 className="mt-4 font-display text-3xl leading-tight sm:text-4xl md:text-5xl">{title}</h2>
       {desc && <p className="mt-3 text-muted-foreground">{desc}</p>}
     </div>
   );
@@ -293,11 +295,11 @@ function SectionTitle({ kicker, title, desc }: { kicker: string; title: string; 
 function Services({ c }: { c: SiteContent }) {
   const s = c.home.services;
   return (
-    <section className="mx-auto max-w-6xl px-5 py-14 sm:py-20">
+    <section className="mx-auto max-w-7xl px-5 py-16 sm:px-6 sm:py-24">
       <SectionTitle kicker={s.kicker} title={s.title} />
-      <div className="mt-12 grid grid-cols-2 gap-4 md:grid-cols-4">
+      <div className="mt-12 grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-5">
         {s.stats.map((i, k) => (
-          <div key={k} className="surface-card px-4 py-7 text-center">
+          <div key={k} className="surface-card px-4 py-8 text-center transition-transform hover:-translate-y-1">
             <div className="font-display text-3xl font-extrabold text-primary">{i.value}</div>
             <div className="mt-1 text-sm text-muted-foreground">{i.label}</div>
           </div>
@@ -307,12 +309,12 @@ function Services({ c }: { c: SiteContent }) {
         {s.cards.map((card, k) => {
           const Icon = getIcon(card.icon);
           return (
-            <article key={k} className="rounded-3xl bg-accent/70 p-7">
-              <span className="grid size-12 place-items-center rounded-2xl bg-card text-primary shadow-sm">
+            <article key={k} className={`relative overflow-hidden rounded-2xl border p-7 ${k === 1 ? "border-primary bg-primary text-primary-foreground md:row-span-2" : "border-border bg-primary-soft"}`}>
+              <span className={`grid size-12 place-items-center rounded-xl shadow-sm ${k === 1 ? "bg-primary-foreground/15 text-primary-foreground" : "bg-card text-primary"}`}>
                 <Icon className="size-6" />
               </span>
               <h3 className="mt-5 text-lg">{card.title}</h3>
-              <p className="mt-2 text-sm text-muted-foreground">{card.desc}</p>
+              <p className={`mt-2 text-sm leading-7 ${k === 1 ? "text-primary-foreground/80" : "text-muted-foreground"}`}>{card.desc}</p>
             </article>
           );
         })}
@@ -324,14 +326,14 @@ function Services({ c }: { c: SiteContent }) {
 function Features({ c }: { c: SiteContent }) {
   const f = c.home.features;
   return (
-    <section id="features" className="bg-secondary/60">
-      <div className="mx-auto max-w-6xl px-5 py-14 sm:py-20">
+    <section id="features" className="border-y border-border bg-secondary/60">
+      <div className="mx-auto max-w-7xl px-5 py-16 sm:px-6 sm:py-24">
         <SectionTitle kicker={f.kicker} title={f.title} desc={f.desc} />
         <div className="mt-12 grid gap-5 md:grid-cols-3">
           {f.items.map((item, k) => {
             const Icon = getIcon(item.icon);
             return (
-              <article key={k} className="surface-card group p-7 transition-transform hover:-translate-y-1">
+              <article key={k} className={`group min-h-56 overflow-hidden rounded-2xl border p-7 transition-all hover:-translate-y-1 hover:shadow-xl ${k === 0 || k === 5 ? "border-primary/20 bg-primary-soft md:col-span-2" : "border-border bg-card"}`}>
                 <span className="grid size-12 place-items-center rounded-2xl bg-primary-soft text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
                   <Icon className="size-6" />
                 </span>
@@ -349,8 +351,8 @@ function Features({ c }: { c: SiteContent }) {
 function Influencer({ c }: { c: SiteContent }) {
   const inf = c.home.influencer;
   return (
-    <section id="influencer" className="mx-auto max-w-6xl px-5 py-14 sm:py-20">
-      <div className="grid items-center gap-12 md:grid-cols-2">
+    <section id="influencer" className="mx-auto max-w-7xl px-5 py-16 sm:px-6 sm:py-24">
+      <div className="grid items-center gap-12 overflow-hidden rounded-2xl bg-foreground p-7 text-background sm:p-12 md:grid-cols-2">
         <div>
           <span className="inline-flex items-center gap-2 rounded-full bg-gold-grad px-4 py-1.5 text-xs font-bold text-primary-foreground">
             <Sparkles className="size-3.5" /> {inf.badge}
@@ -358,20 +360,20 @@ function Influencer({ c }: { c: SiteContent }) {
           <h2 className="mt-5 font-display text-2xl sm:text-3xl md:text-4xl">
             {inf.titleA} <span className="text-gradient-brand">{inf.titleB}</span>
           </h2>
-          <p className="mt-4 leading-relaxed text-muted-foreground">{inf.desc}</p>
+          <p className="mt-4 leading-relaxed text-background/65">{inf.desc}</p>
           <ul className="mt-6 space-y-3 text-sm">
             {inf.bullets.map((t, i) => (
               <li key={i} className="flex items-start gap-3">
                 <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-primary-soft text-primary">
                   <Star className="size-3" />
                 </span>
-                <span className="text-muted-foreground">{t}</span>
+                <span className="text-background/70">{t}</span>
               </li>
             ))}
           </ul>
         </div>
 
-        <div className="surface-card p-6">
+        <div className="rounded-2xl bg-card p-6 text-card-foreground shadow-2xl">
           <div className="flex items-center justify-between">
             <span className="rounded-full bg-gold-grad px-3 py-1 text-xs font-bold text-primary-foreground">
               {inf.cardBadge}
@@ -411,15 +413,15 @@ function Influencer({ c }: { c: SiteContent }) {
 function MediaSection({ c }: { c: SiteContent }) {
   const m = c.home.media;
   return (
-    <section className="bg-secondary/60">
-      <div className="mx-auto max-w-6xl px-5 py-14 sm:py-20">
+    <section className="border-y border-border bg-secondary/60">
+      <div className="mx-auto max-w-7xl px-5 py-16 sm:px-6 sm:py-24">
         <SectionTitle kicker={m.kicker} title={m.title} desc={m.desc} />
         <div className="mt-12 grid gap-5 md:grid-cols-3">
           {m.items.map((item, k) => {
             const Icon = getIcon(item.icon);
             return (
-              <article key={k} className="surface-card overflow-hidden">
-                <div className="bg-brand p-9 text-primary-foreground">
+              <article key={k} className="surface-card group overflow-hidden transition-transform hover:-translate-y-1">
+                <div className="bg-primary-soft p-9 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
                   <Icon className="size-8" />
                 </div>
                 <div className="p-6">
@@ -438,11 +440,11 @@ function MediaSection({ c }: { c: SiteContent }) {
 function Steps({ c }: { c: SiteContent }) {
   const s = c.home.steps;
   return (
-    <section id="steps" className="mx-auto max-w-6xl px-5 py-14 sm:py-20">
+    <section id="steps" className="mx-auto max-w-7xl px-5 py-16 sm:px-6 sm:py-24">
       <SectionTitle kicker={s.kicker} title={s.title} />
       <div className="mt-12 grid gap-5 md:grid-cols-4">
         {s.items.map((step, i) => (
-          <div key={i} className="rounded-3xl bg-accent/70 p-7">
+          <div key={i} className="relative rounded-2xl border border-border bg-card p-7 shadow-sm">
             <span className="grid size-11 place-items-center rounded-2xl bg-brand font-display text-lg font-extrabold text-primary-foreground">
               {step.n}
             </span>
@@ -458,14 +460,14 @@ function Steps({ c }: { c: SiteContent }) {
 function Packages({ c }: { c: SiteContent }) {
   const p = c.home.packages;
   return (
-    <section id="packages" className="bg-secondary/60">
-      <div className="mx-auto max-w-6xl px-5 py-14 sm:py-20">
+    <section id="packages" className="border-y border-border bg-secondary/60">
+      <div className="mx-auto max-w-7xl px-5 py-16 sm:px-6 sm:py-24">
         <SectionTitle kicker={p.kicker} title={p.title} desc={p.desc} />
         <div className="mt-12 grid gap-5 md:grid-cols-3">
           {p.items.map((item, i) => (
             <article
               key={i}
-              className="surface-card p-7"
+              className="surface-card p-7 transition-transform hover:-translate-y-1"
               style={
                 item.gold
                   ? { borderColor: "color-mix(in oklab, var(--gold) 55%, transparent)" }
@@ -492,8 +494,8 @@ function Packages({ c }: { c: SiteContent }) {
 function Coverage({ c }: { c: SiteContent }) {
   const cov = c.home.coverage;
   return (
-    <section id="coverage" className="mx-auto max-w-6xl px-5 py-14 sm:py-20">
-      <div className="grid items-center gap-10 md:grid-cols-2 md:gap-12">
+    <section id="coverage" className="mx-auto max-w-7xl px-5 py-16 sm:px-6 sm:py-24">
+      <div className="grid items-center gap-10 rounded-2xl border border-primary/20 bg-primary-soft p-6 sm:p-10 md:grid-cols-2 md:gap-12">
         <div className="relative order-2 mx-auto w-full max-w-md md:order-1 md:max-w-none">
           <SaudiDotMap className="w-full text-muted-foreground" />
           {cov.pins.map((pin, i) => (
@@ -534,10 +536,10 @@ function Coverage({ c }: { c: SiteContent }) {
 function Download({ c }: { c: SiteContent }) {
   const d = c.home.download;
   return (
-    <section id="download" className="bg-hero-glow">
-      <div className="mx-auto max-w-4xl px-5 py-16 sm:py-24 text-center">
+    <section id="download" className="bg-background px-5 py-12 sm:py-20">
+      <div className="mx-auto max-w-6xl overflow-hidden rounded-2xl bg-primary px-6 py-14 text-center text-primary-foreground sm:px-10 sm:py-20">
         <h2 className="font-display text-3xl sm:text-4xl md:text-5xl">{d.title}</h2>
-        <p className="mx-auto mt-4 max-w-xl text-muted-foreground">{d.desc}</p>
+        <p className="mx-auto mt-4 max-w-xl text-primary-foreground/75">{d.desc}</p>
         <div className="mt-8 flex justify-center">
           <StoreButtons center />
         </div>

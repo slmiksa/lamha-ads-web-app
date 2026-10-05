@@ -129,36 +129,36 @@ export function SiteFooter() {
   const t = useTokens();
   const { whatsappUrl, email } = useLinks();
   return (
-    <footer className="bg-card">
-      <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-5 py-8 text-sm text-muted-foreground md:flex-row">
+    <footer className="border-t border-border bg-foreground text-background">
+      <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 px-5 py-10 text-sm text-background/70 md:flex-row">
         <Logo size={c.brand.logoSizeFooter} />
         <nav className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
-          <Link to="/" className="hover:text-foreground">
+          <Link to="/" className="hover:text-background">
             {c.footer.homeLabel}
           </Link>
-          <Link to="/partners" className="hover:text-foreground">
+          <Link to="/partners" className="hover:text-background">
             {c.nav.partnersLabel}
           </Link>
-          <Link to="/social-media" className="hover:text-foreground">
+          <Link to="/social-media" className="hover:text-background">
             تابعنا عبر السوشال ميديا
           </Link>
-          <Link to="/privacy" className="hover:text-foreground">
+          <Link to="/privacy" className="hover:text-background">
             {c.nav.privacyLabel}
           </Link>
-          <Link to="/support" className="hover:text-foreground">
+          <Link to="/support" className="hover:text-background">
             {c.nav.supportLabel}
           </Link>
 
-          <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="hover:text-foreground">
+          <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="hover:text-background">
             {c.footer.whatsappLabel}
           </a>
-          <a href={`mailto:${email}`} dir="ltr" className="hover:text-foreground">
+          <a href={`mailto:${email}`} dir="ltr" className="hover:text-background">
             {email}
           </a>
         </nav>
         <p className="text-center">{t(c.footer.copyright)}</p>
       </div>
-      <div className="border-t border-border/60 py-5 text-center text-sm font-bold text-foreground">
+      <div className="border-t border-background/10 py-5 text-center text-sm font-bold text-background">
         {c.footer.madeIn}
       </div>
     </footer>
@@ -168,17 +168,18 @@ export function SiteFooter() {
 export function PageHeader({ title, kicker }: { title: string; kicker?: string }) {
   const c = useContent();
   return (
-    <header className="bg-hero-glow">
-      <div className="mx-auto max-w-4xl px-5 py-10 sm:py-14">
-        <Link to="/" className="inline-flex">
+    <header className="relative overflow-hidden border-b border-border bg-hero-glow">
+      <div aria-hidden className="mint-grid absolute inset-0 opacity-35" />
+      <div className="relative mx-auto max-w-7xl px-5 py-8 sm:py-12">
+        <Link to="/" className="inline-flex rounded-2xl bg-card/80 p-2 shadow-sm backdrop-blur-sm">
           <Logo size={c.brand.logoSizeHeader} />
         </Link>
         {kicker && (
-          <span className="mt-6 inline-block rounded-full bg-card/80 px-4 py-1 text-xs font-bold text-primary shadow-sm">
+          <span className="mt-10 inline-block rounded-full border border-primary/20 bg-card/80 px-4 py-1.5 text-xs font-bold text-primary shadow-sm">
             {kicker}
           </span>
         )}
-        <h1 className="mt-4 font-display text-2xl sm:text-4xl">{title}</h1>
+        <h1 className="mt-4 max-w-3xl font-display text-3xl leading-tight sm:text-5xl">{title}</h1>
       </div>
     </header>
   );
