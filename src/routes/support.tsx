@@ -25,7 +25,7 @@ function Faq({ items }: { items: { q: string; a: string }[] }) {
   return (
     <div className="mt-6 space-y-3">
       {items.map((f) => (
-        <details key={f.q} className="surface-card group px-5 py-4">
+        <details key={f.q} className="surface-card group px-6 py-5 open:border-primary/30 open:shadow-md">
           <summary className="flex cursor-pointer list-none items-center justify-between gap-3 text-sm font-bold sm:text-base">
             <span>{f.q}</span>
             <ChevronDown className="size-4 shrink-0 text-primary transition-transform group-open:rotate-180" />
@@ -45,10 +45,10 @@ function SupportPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <PageHeader title={s.headerTitle} kicker={s.kicker} />
-      <main className="mx-auto max-w-4xl px-5 py-12 sm:py-16">
-        <p className="text-muted-foreground">{s.intro}</p>
+      <main className="mx-auto max-w-6xl px-5 py-16 sm:px-6 sm:py-24">
+        <p className="mx-auto max-w-3xl text-center text-lg leading-8 text-muted-foreground">{s.intro}</p>
 
-        <div className="mt-6 grid gap-4 sm:grid-cols-3">
+        <div className="mt-10 grid gap-5 sm:grid-cols-3">
           {s.channels.map((ch) => {
             const href = t(ch.href);
             const body = <ChannelBody icon={ch.icon} title={ch.title} desc={t(ch.desc)} />;
@@ -56,7 +56,7 @@ function SupportPage() {
               <Link
                 key={ch.title}
                 to={href}
-                className="surface-card block p-5 transition-transform hover:-translate-y-0.5"
+                className="surface-card block p-6 transition-all hover:-translate-y-1 hover:border-primary/30 hover:shadow-xl"
               >
                 {body}
               </Link>
@@ -66,7 +66,7 @@ function SupportPage() {
                 href={href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="surface-card block p-5 transition-transform hover:-translate-y-0.5"
+                className="surface-card block p-6 transition-all hover:-translate-y-1 hover:border-primary/30 hover:shadow-xl"
               >
                 {body}
               </a>
@@ -74,7 +74,7 @@ function SupportPage() {
           })}
         </div>
 
-        <div className="mt-10 rounded-3xl bg-accent/70 p-6 text-center sm:p-8">
+        <div className="mt-12 rounded-2xl bg-primary-soft p-7 text-center sm:p-12">
           <h2 className="font-display text-xl sm:text-2xl">{s.downloadTitle}</h2>
           <p className="mt-2 text-sm text-muted-foreground">{s.downloadDesc}</p>
           <div className="mt-5 flex justify-center">
@@ -82,12 +82,12 @@ function SupportPage() {
           </div>
         </div>
 
-        <section className="mt-14">
+        <section className="mt-20 grid gap-8 md:grid-cols-[.7fr_1.3fr]">
           <h2 className="font-display text-2xl">{s.faqTitle}</h2>
           <Faq items={s.faqs} />
         </section>
 
-        <section className="mt-12">
+        <section className="mt-16 grid gap-8 md:grid-cols-[.7fr_1.3fr]">
           <h2 className="font-display text-2xl">{s.mediaTitle}</h2>
           <Faq items={s.mediaFaqs} />
         </section>

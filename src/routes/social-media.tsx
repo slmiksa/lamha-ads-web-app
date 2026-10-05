@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ChevronLeft, Download } from "lucide-react";
-import { StoreButtons } from "@/components/site";
+import { SiteFooter, StoreButtons } from "@/components/site";
 import { useContent } from "@/content/store";
 
 export const Route = createFileRoute("/social-media")({
@@ -63,24 +63,28 @@ function SocialMediaPage() {
   const c = useContent();
 
   return (
-    <main dir="rtl" className="social-page relative min-h-screen overflow-hidden px-5 py-12 text-social-foreground sm:py-16">
-      <div aria-hidden className="social-pattern absolute inset-0 opacity-10" />
-      <div className="relative mx-auto flex min-h-[calc(100vh-6rem)] w-full max-w-sm flex-col items-center">
-        <a href="/" aria-label="العودة إلى الرئيسية" className="block">
-          <img src={c.brand.logo} alt="شعار تطبيق لمحة" className="h-auto w-52 drop-shadow-xl sm:w-60" />
-        </a>
+    <div dir="rtl" className="min-h-screen bg-background text-foreground">
+      <main className="relative overflow-hidden px-5 py-10 sm:py-16">
+        <div aria-hidden className="mint-grid absolute inset-0 opacity-40" />
+        <div className="relative mx-auto grid min-h-[calc(100vh-8rem)] w-full max-w-6xl items-center gap-12 md:grid-cols-[.8fr_1.2fr]">
+          <div className="text-center md:text-right">
+            <a href="/" aria-label="العودة إلى الرئيسية" className="inline-flex rounded-2xl bg-card p-3 shadow-sm">
+              <img src={c.brand.logo} alt="شعار تطبيق لمحة" className="h-auto w-32 sm:w-40" />
+            </a>
+            <span className="mt-8 block text-sm font-extrabold text-primary">حساباتنا الرسمية</span>
+            <h1 className="mt-3 font-display text-4xl font-black leading-tight sm:text-6xl">تابع لمحة<br /><span className="text-primary">وكن أقرب</span></h1>
+            <p className="mt-4 text-lg font-bold text-muted-foreground">صُنع لكم</p>
+          </div>
 
-        <h1 className="mt-5 text-center font-display text-3xl font-black sm:text-4xl">تطبيق لمحة</h1>
-        <p className="mt-1 text-center text-lg font-bold text-social-foreground/70">صُنع لكم</p>
-
-        <div className="mt-9 w-full space-y-3.5">
+          <div className="rounded-2xl border border-border bg-card p-5 shadow-xl sm:p-8">
+            <div className="grid w-full gap-3.5 sm:grid-cols-2">
           {socials.map((social) => (
             <a
               key={social.label}
               href={social.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="group flex min-h-16 w-full items-center gap-3 rounded-2xl bg-card px-2.5 py-2.5 shadow-social transition-transform duration-200 hover:-translate-y-0.5"
+              className="group flex min-h-20 w-full items-center gap-3 rounded-2xl border border-border bg-background px-3 py-3 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-primary/30 hover:shadow-lg"
             >
               <span className={`grid size-11 shrink-0 place-items-center rounded-xl ${social.theme}`}>
                 <svg viewBox="0 0 24 24" className="size-6" fill="currentColor" aria-hidden>
@@ -93,25 +97,24 @@ function SocialMediaPage() {
               <ChevronLeft className="size-5 text-card-foreground/30 transition-transform group-hover:-translate-x-1" />
             </a>
           ))}
-        </div>
+            </div>
 
-        <div className="mt-10 flex w-full items-center gap-3">
-          <span className="h-px flex-1 bg-social-foreground/25" />
+            <div className="mt-8 flex w-full items-center gap-3">
+          <span className="h-px flex-1 bg-border" />
           <span className="inline-flex items-center gap-2 text-sm font-extrabold">
             حمّل التطبيق من هنا
             <Download className="size-4" />
           </span>
-          <span className="h-px flex-1 bg-social-foreground/25" />
+          <span className="h-px flex-1 bg-border" />
         </div>
 
-        <div className="mt-5 w-full rounded-3xl border border-social-foreground/15 bg-social-foreground/10 px-4 py-6 backdrop-blur-sm">
+            <div className="mt-5 w-full rounded-2xl bg-primary-soft px-4 py-6">
           <StoreButtons center />
+            </div>
+          </div>
         </div>
-
-        <p className="mt-auto pt-12 text-center text-xs font-medium text-social-foreground/55">
-          لمحة © {new Date().getFullYear()} — جميع الحقوق محفوظة
-        </p>
+      </main>
+      <SiteFooter />
       </div>
-    </main>
   );
 }
